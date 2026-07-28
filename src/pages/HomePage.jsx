@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup, BackToTop } from '../components/PublicUtils';
-import { HeroSlideshow, useScrollReveal } from '../components/PublicHooks';
+import { HeroSlideshow } from '../components/PublicHooks';
 import hero1 from '../assets/hero-1.jpeg';
 import hero2 from '../assets/hero-2.jpeg';
 import hero3 from '../assets/hero-3.jpeg';
@@ -16,13 +16,11 @@ const HERO_SLIDES = [
 ];
 
 export default function HomePage() {
-  useScrollReveal();
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('revealed');
+          if (entry.isIntersecting) entry.target.classList.add('visible');
         });
       },
       { threshold: 0.1 }

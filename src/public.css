@@ -844,23 +844,56 @@
 }
 
 /* ===== CTA ===== */
-.public-page .cta-section {
-  background: var(--navy);
-  padding: 4rem 0;
+.public-page .cta-banner {
+  background: linear-gradient(135deg, var(--teal), var(--navy));
+  padding: 5rem 0;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.public-page .cta-section h2 {
+.public-page .cta-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 500px;
+  height: 500px;
+  border: 1px solid rgba(201, 168, 76, 0.08);
+  border-radius: 50%;
+}
+
+.public-page .cta-banner h2 {
   font-family: var(--serif);
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
   color: #fff;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 2;
 }
 
-.public-page .cta-section p {
+.public-page .cta-banner p {
   color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
   margin-bottom: 2rem;
-  font-size: 0.95rem;
+  position: relative;
+  z-index: 2;
+}
+
+.public-page .cta-btns {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+.public-page .form-sub {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-bottom: 1.75rem;
 }
 
 /* ===== FOOTER ===== */

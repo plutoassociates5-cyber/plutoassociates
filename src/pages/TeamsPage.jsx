@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup, BackToTop } from '../components/PublicUtils';
-import { HeroSlideshow } from '../components/PublicHooks';
-import hero1 from '../assets/hero-1.jpeg';
 import teamsBg from '../assets/teams-background.jpg';
 import teamSudeep from '../assets/team-sudeep.jpg';
 import teamGhimire from '../assets/team-sujan.jpeg';
@@ -15,7 +13,7 @@ export default function TeamsPage() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('revealed');
+          if (entry.isIntersecting) entry.target.classList.add('visible');
         });
       },
       { threshold: 0.1 }
