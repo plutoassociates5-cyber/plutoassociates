@@ -399,7 +399,7 @@ var SESS_KEY = 'mlp_session';
 
 function getArts() { try { return JSON.parse(localStorage.getItem(ART_KEY)) || []; } catch(e) { return []; } }
 function saveArts(a) { localStorage.setItem(ART_KEY, JSON.stringify(a)); }
-function getCreds() { try { return JSON.parse(localStorage.getItem(CRED_KEY)) || {u:'admin',p:'',n:'Admin'}; } catch(e) { return {u:'admin',p:'',n:'Admin'}; } }
+function getCreds() { try { return JSON.parse(localStorage.getItem(CRED_KEY)) || {u:'pluto',p:'pluto@2025',n:'Admin'}; } catch(e) { return {u:'pluto',p:'pluto@2025',n:'Admin'}; } }
 function uid() { return 'p' + Date.now().toString(36) + Math.random().toString(36).substr(2,5); }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
