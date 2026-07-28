@@ -40,6 +40,9 @@
   overflow-x: hidden;
 }
 
+.public-page a { text-decoration: none; color: inherit; }
+.public-page a:visited { color: inherit; }
+
 .public-page .container {
   max-width: 1280px;
   margin: 0 auto;

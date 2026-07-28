@@ -36,6 +36,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+a { text-decoration: none; color: inherit; }
+a:visited { color: inherit; }
+
 /* APP */
 #app { display: none; min-height: 100vh; }
 #app.show { display: flex; }
