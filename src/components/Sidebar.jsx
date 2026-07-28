@@ -30,7 +30,7 @@ export default function Sidebar({ page, onNavigate, user, onLogout }) {
           if (link.sep) return <div key={i} className="sep" />;
           if (link.external) {
             return (
-              <a key={i} onClick={() => window.open('index.html')}>
+              <a key={i} onClick={() => window.open('/')}>
                 {link.icon} {link.text}
               </a>
             );
