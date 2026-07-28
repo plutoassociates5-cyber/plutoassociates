@@ -3,15 +3,8 @@ import { Link } from 'react-router-dom';
 import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup, BackToTop } from '../components/PublicUtils';
-import hero1 from '../assets/hero-1.jpeg';
 import hero2 from '../assets/hero-2.jpeg';
 import teamSudeep from '../assets/team-sudeep.jpg';
-
-const HERO_SLIDES = [
-  { image: hero1 },
-  { image: hero2 },
-  { image: hero3 },
-];
 
 export default function AboutPage() {
   useEffect(() => {
