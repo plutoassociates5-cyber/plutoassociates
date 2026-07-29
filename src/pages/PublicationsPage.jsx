@@ -60,9 +60,7 @@ export default function PublicationsPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-navy/88 to-navy/65" />
         <div className="relative z-10 pt-[70px]">
           <h1 className="font-serif text-[clamp(2.2rem,5vw,3.5rem)] text-white font-bold mb-3">Publications</h1>
-          <p className="text-sm text-white/60">
-            <Link to="/" className="text-white/60 hover:text-gold">Home</Link> / Publications
-          </p>
+
         </div>
       </section>
 
