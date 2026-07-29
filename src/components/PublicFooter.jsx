@@ -35,7 +35,6 @@ export default function PublicFooter() {
               <li><Link to="/teams" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Our Team</Link></li>
               <li><Link to="/publications" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Publications</Link></li>
               <li><Link to="/contact" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Contact</Link></li>
-              <li><a href="https://plutoassociates.com/admin" target="_blank" rel="noopener noreferrer" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Admin</a></li>
             </ul>
           </div>
 
