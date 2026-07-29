@@ -150,12 +150,11 @@ export default function ArticleEditor({ editId, onNavigate }) {
 
   return (
     <>
-      <div className="page-title-area">
-        <h1>{existing ? 'Edit Article' : 'Add New Article'}</h1>
+      <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
+        <h1 className="text-xl lg:text-2xl text-[#1d2327] font-normal font-sans">{existing ? 'Edit Article' : 'Add New Article'}</h1>
         <div style={{ display: 'flex', gap: '.5rem' }}>
           <button
-            className="add-new-btn"
-            style={{ background: '#fff', color: '#333', border: '1px solid #ddd' }}
+            className="bg-white text-[#333] border border-wp-border px-3.5 py-1.5 text-xs font-semibold cursor-pointer font-sans rounded"
             onClick={() => save('preview')}
           >
             Preview
@@ -163,27 +162,27 @@ export default function ArticleEditor({ editId, onNavigate }) {
         </div>
       </div>
 
-      <div className="editor-layout">
-        <div className="editor-main">
-          <div className="editor-title-wrap">
-            <label>Article Title</label>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 items-start">
+        <div className="flex flex-col gap-4">
+          <div className="bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
+            <label className="block text-[0.7rem] font-semibold text-[#555] mb-1.5 uppercase tracking-[0.5px]">Article Title</label>
             <input
               type="text"
-              className="post-title-input"
+              className="w-full font-serif text-xl lg:text-2xl font-semibold border-b-2 border-light-gray px-0 py-2 text-[#1d2327] outline-none bg-transparent focus:border-wp-blue placeholder:text-[#ccc] placeholder:font-normal"
               placeholder="Enter article title here..."
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
             />
-            <div className="permalink-row">
+            <div className="mt-2 text-[0.72rem] text-text-light flex items-center gap-1.5 flex-wrap">
               <strong>Permalink:</strong>
               <span>https://plutoassociates.com/</span>
               <input
-                className="slug-field"
+                className="border border-wp-border px-1.5 py-0.5 text-[0.72rem] outline-none min-w-[150px] focus:border-wp-blue"
                 type="text"
                 value={slug}
                 onChange={(e) => { setSlug(e.target.value); setManualSlug(true); }}
               />
-              <button className="permalink-btn" onClick={() => { setSlug(slugify(title)); setManualSlug(false); }}>
+              <button className="bg-wp-gray border border-wp-border px-2.5 py-0.5 text-[0.7rem] cursor-pointer font-sans" onClick={() => { setSlug(slugify(title)); setManualSlug(false); }}>
                 Regenerate
               </button>
             </div>
@@ -191,23 +190,23 @@ export default function ArticleEditor({ editId, onNavigate }) {
 
           <EditorToolbar onCmd={execCmd} />
 
-          <div className="editor-content-wrap">
-            <div className="editor-tab-bar">
+          <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
+            <div className="flex border-b border-wp-border">
               <div
-                className={`editor-tab ${visualTab ? 'active' : ''}`}
+                className={`px-4 py-2 text-xs font-semibold cursor-pointer border-b-2 mb-[-1px] ${visualTab ? 'text-[#1d2327] border-b-[#1d2327]' : 'text-text-light border-transparent'}`}
                 onClick={() => switchTab('visual')}
               >
                 Visual
               </div>
               <div
-                className={`editor-tab ${!visualTab ? 'active' : ''}`}
+                className={`px-4 py-2 text-xs font-semibold cursor-pointer border-b-2 mb-[-1px] ${!visualTab ? 'text-[#1d2327] border-b-[#1d2327]' : 'text-text-light border-transparent'}`}
                 onClick={() => switchTab('source')}
               >
                 Text (HTML)
               </div>
             </div>
             <div
-              className="editor-body"
+              className="min-h-[450px] p-6 font-['Georgia',serif] text-sm leading-relaxed text-text-dark outline-none focus:outline-none"
               ref={contentRef}
               contentEditable={visualTab}
               onInput={handleContentInput}
@@ -221,45 +220,46 @@ export default function ArticleEditor({ editId, onNavigate }) {
               dangerouslySetInnerHTML={{ __html: existing?.content || '<p>Write your article content here...</p>' }}
             />
             <textarea
-              className="source-view"
+              className="min-h-[450px] p-4 font-mono text-xs border-none w-full resize-y outline-none leading-relaxed text-[#333] bg-gray-50"
               ref={sourceRef}
               style={{ display: visualTab ? 'none' : 'block' }}
               defaultValue={existing?.content || ''}
             />
-            <div className="word-count-bar">
+            <div className="px-4 py-1.5 bg-wp-gray border-t border-wp-border text-[0.7rem] text-text-light flex gap-6">
               <span>{wordCount} words</span>
               <span>{charCount} characters</span>
               <span>{readTime} min read</span>
             </div>
           </div>
 
-          <div className="excerpt-wrap">
-            <div className="meta-box-header">
-              <h3>Excerpt</h3>
+          <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
+            <div className="px-4 py-3 border-b border-wp-border flex justify-between items-center cursor-pointer">
+              <h3 className="text-xs font-semibold text-[#1d2327]">Excerpt</h3>
             </div>
-            <div className="meta-box-body">
+            <div className="p-4">
               <textarea
                 placeholder="Write a brief summary of this article..."
                 rows="4"
+                className="w-full border border-wp-border p-3 font-sans text-xs resize-y min-h-[80px] outline-none leading-relaxed focus:border-wp-blue"
                 value={excerpt}
                 onChange={(e) => setExcerpt(e.target.value)}
               />
-              <p>Excerpts are optional summaries. If not provided, the first 150 characters of content will be used.</p>
+              <p className="text-[0.72rem] text-text-light mt-2 leading-relaxed">Excerpts are optional summaries. If not provided, the first 150 characters of content will be used.</p>
             </div>
           </div>
         </div>
 
-        <div className="editor-side">
+        <div className="flex flex-col gap-4">
           <PublishPanel article={existing} onSave={save} />
 
-          <div className="side-panel">
-            <div className="side-panel-head">
-              <h3><span className="ph-icon">📋</span> Article Settings</h3>
+          <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
+            <div className="px-4 py-3 border-b border-wp-border flex justify-between items-center cursor-pointer">
+              <h3 className="text-xs font-semibold text-[#1d2327] flex items-center gap-1.5"><span>📋</span> Article Settings</h3>
             </div>
-            <div className="side-panel-body">
-              <div className="meta-field">
-                <label>Category</label>
-                <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <div className="p-4">
+              <div className="mb-4">
+                <label className="block text-xs font-semibold text-[#333] mb-1">Category</label>
+                <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-2.5 py-2 border border-wp-border font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]">
                   <option value="general">General</option>
                   <option value="fdi">FDI & Investment</option>
                   <option value="corporate">Corporate Law</option>
@@ -270,20 +270,21 @@ export default function ArticleEditor({ editId, onNavigate }) {
                   <option value="litigation">Litigation</option>
                 </select>
               </div>
-              <div className="meta-field">
-                <label>Author</label>
-                <select value={authorVal} onChange={(e) => setAuthorVal(e.target.value)}>
+              <div className="mb-4">
+                <label className="block text-xs font-semibold text-[#333] mb-1">Author</label>
+                <select value={authorVal} onChange={(e) => setAuthorVal(e.target.value)} className="w-full px-2.5 py-2 border border-wp-border font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]">
                   <option value="SN|Adv. Sudeep Nepal">Adv. Sudeep Nepal (Founder)</option>
-                  <option value="RG|Adv. Ram Sharan Ghimire">Adv. Ram Sharan Ghimire</option>
+                  <option value="SS|Associate Sujan Subedi">Associate Sujan Subedi</option>
                   <option value="NN|Nikesh Nepal">Nikesh Nepal</option>
                 </select>
               </div>
-              <div className="meta-field">
-                <label>Publish Date</label>
+              <div className="mb-4">
+                <label className="block text-xs font-semibold text-[#333] mb-1">Publish Date</label>
                 <input
                   type="date"
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
+                  className="w-full px-2.5 py-2 border border-wp-border font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]"
                 />
               </div>
             </div>

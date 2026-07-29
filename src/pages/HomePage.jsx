@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
-import { WhatsAppPopup, BackToTop } from '../components/PublicUtils';
+import { WhatsAppPopup } from '../components/PublicUtils';
 import { HeroSlideshow } from '../components/PublicHooks';
 import hero1 from '../assets/hero-1.jpeg';
 import hero2 from '../assets/hero-2.jpeg';
 import hero3 from '../assets/hero-3.jpeg';
-import aboutImg from '../assets/about1.jpg';
+import homeImg from '../assets/office-photo.jpeg';
 
 const HERO_SLIDES = [
   { image: hero1 },
@@ -25,111 +25,110 @@ export default function HomePage() {
       },
       { threshold: 0.1 }
     );
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el) => observer.observe(el));
+    document.querySelectorAll('.reveal-anim, .reveal-left-anim, .reveal-right-anim').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="public-page">
+    <div>
       <PublicNavbar />
 
-      <section className="hero">
+      <section className="relative h-screen min-h-[600px] overflow-hidden">
         <HeroSlideshow slides={HERO_SLIDES} />
-        <div className="hero-overlay" />
-        <div className="hero-content">
-          <div className="container-wide">
-            <div className="hero-inner">
-              <div className="hero-badge">Est. 2019 · Nepal Bar Association Registered</div>
-              <h1 className="hero-title">Where Legal <em>Excellence</em> Meets Client <em>Trust</em></h1>
-              <p className="hero-desc">Pluto Associates delivers strategic, results-driven legal counsel across Nepal — combining deep regulatory insight with unwavering commitment to our clients' success.</p>
-              <div className="hero-buttons">
-                <Link to="/contact" className="btn-primary">Schedule a Consultation →</Link>
-                <Link to="/practice-areas" className="btn-secondary">Explore Our Services</Link>
+        <div className="absolute inset-0 bg-gradient-to-br from-navy/85 via-navy/60 to-navy/30" />
+        <div className="relative z-10 h-full flex items-center pt-[70px]">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="max-w-[700px]">
+              <div className="inline-block px-4 py-1.5 text-[0.7rem] font-semibold tracking-[2px] uppercase text-gold border border-gold/30 bg-gold/15 mb-6">Est. 2019 · Nepal Bar Association Registered</div>
+              <h1 className="font-serif text-[clamp(2.5rem,6vw,4.2rem)] text-white font-bold leading-[1.1] mb-5">Where Legal <em className="text-gold not-italic">Excellence</em> Meets Client <em className="text-gold not-italic">Trust</em></h1>
+              <p className="text-[1.05rem] text-white/80 max-w-[540px] leading-relaxed mb-8">Pluto Associates delivers strategic, results-driven legal counsel across Nepal — combining deep regulatory insight with unwavering commitment to our clients' success.</p>
+              <div className="flex gap-4 flex-wrap">
+                <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Schedule a Consultation →</Link>
+                <Link to="/practice-areas" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-white font-sans text-sm font-semibold border-2 border-white/30 cursor-pointer transition-all duration-300 hover:border-gold hover:text-gold no-underline">Explore Our Services</Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="stats-bar">
-        <div className="container-wide">
-          <div className="stats-grid">
-            <div className="stat-item reveal"><div className="stat-num">30+</div><div className="stat-label">Years Combined Experience</div></div>
-            <div className="stat-item reveal"><div className="stat-num">500+</div><div className="stat-label">Cases Successfully Resolved</div></div>
-            <div className="stat-item reveal"><div className="stat-num">15+</div><div className="stat-label">Practice Areas</div></div>
-            <div className="stat-item reveal"><div className="stat-num">95%</div><div className="stat-label">Client Satisfaction Rate</div></div>
+      <section className="bg-navy py-12">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div className="reveal-anim"><div className="font-serif text-4xl font-bold text-gold mb-1">30+</div><div className="text-xs text-white/60 uppercase tracking-[1.5px]">Years Combined Experience</div></div>
+            <div className="reveal-anim"><div className="font-serif text-4xl font-bold text-gold mb-1">500+</div><div className="text-xs text-white/60 uppercase tracking-[1.5px]">Cases Successfully Resolved</div></div>
+            <div className="reveal-anim"><div className="font-serif text-4xl font-bold text-gold mb-1">15+</div><div className="text-xs text-white/60 uppercase tracking-[1.5px]">Practice Areas</div></div>
+            <div className="reveal-anim"><div className="font-serif text-4xl font-bold text-gold mb-1">95%</div><div className="text-xs text-white/60 uppercase tracking-[1.5px]">Client Satisfaction Rate</div></div>
           </div>
         </div>
       </section>
 
-      <section className="section-padding">
-        <div className="container-wide">
-          <div className="about-brief">
-            <div className="reveal-left">
-              <img src={aboutImg} alt="About Pluto Associates" className="about-brief-image" />
+      <section className="py-16 lg:py-24">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
+            <div className="w-full lg:w-1/2 reveal-left-anim">
+              <img src={homeImg} alt="About Pluto Associates" loading="lazy" className="w-full h-[300px] lg:h-[500px] object-cover rounded-lg shadow-md" />
             </div>
-            <div className="about-brief-text reveal-right">
-              <div className="section-label">About Our Firm</div>
-              <h2>Trusted Legal Advisors Committed to Your Success</h2>
-              <p>Pluto Associates is a premier law firm in Kathmandu, Nepal, recognized for our depth of expertise across corporate law, foreign investment, litigation, and regulatory compliance. Our team brings together decades of experience, academic rigor, and a client-first approach to deliver outcomes that matter.</p>
-              <p>From multinational corporations navigating Nepal's FDI landscape to startups seeking incorporation and individuals requiring family law counsel — we provide bespoke legal solutions tailored to each client's unique needs.</p>
-              <Link to="/about" className="btn-outline">Learn More About Us →</Link>
+            <div className="w-full lg:w-1/2 reveal-right-anim flex flex-col justify-center">
+              <div className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4">About Our Firm</div>
+              <h2 className="font-serif text-[clamp(1.6rem,3vw,2.2rem)] text-navy leading-tight mb-6">Trusted Legal Advisors Committed to Your Success</h2>
+              <p className="mb-5 text-text-body leading-relaxed">Pluto Associates is a premier law firm in Kathmandu, Nepal, recognized for our depth of expertise across corporate law, foreign investment, litigation, and regulatory compliance. Our team brings together decades of experience, academic rigor, and a client-first approach to deliver outcomes that matter.</p>
+              <p className="mb-5 text-text-body leading-relaxed">From multinational corporations navigating Nepal's FDI landscape to startups seeking incorporation and individuals requiring family law counsel — we provide bespoke legal solutions tailored to each client's unique needs.</p>
+              <Link to="/about" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-gold hover:text-navy no-underline self-start">Learn More About Us →</Link>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="section-padding" style={{ background: 'var(--off-white)' }}>
-        <div className="container-wide">
-          <div className="section-label center reveal">Our Expertise</div>
-          <h2 className="section-title center" style={{ textAlign: 'center' }}>Practice Areas</h2>
-          <p className="section-subtitle" style={{ textAlign: 'center', margin: '0 auto 3rem' }}>
+      <section className="py-16 lg:py-24 bg-off-white">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 text-center justify-center reveal-anim">Our Expertise</div>
+          <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight mb-5 font-semibold text-center">Practice Areas</h2>
+          <p className="text-base text-text-light max-w-[600px] leading-relaxed mx-auto mb-12 text-center">
             Comprehensive legal services across key practice areas
           </p>
-          <div className="practice-grid">
-            <Link to="/practice-areas#fdi" className="practice-card reveal">
-              <div className="pc-icon">🌐</div>
-              <h3>FDI & Investment</h3>
-              <p>Navigate Nepal's foreign investment landscape with expert guidance on regulations, approvals, and structuring.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Link to="/practice-areas#fdi" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+              <div className="text-3xl mb-4">🌐</div>
+              <h3 className="font-serif text-xl text-navy mb-3">FDI & Investment</h3>
+              <p className="text-sm text-text-body leading-relaxed">Navigate Nepal's foreign investment landscape with expert guidance on regulations, approvals, and structuring.</p>
             </Link>
-            <Link to="/practice-areas#corporate" className="practice-card reveal">
-              <div className="pc-icon">🏢</div>
-              <h3>Corporate Law</h3>
-              <p>Comprehensive corporate services from company registration to mergers, acquisitions, and governance.</p>
+            <Link to="/practice-areas#corporate" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+              <div className="text-3xl mb-4">🏢</div>
+              <h3 className="font-serif text-xl text-navy mb-3">Corporate Law</h3>
+              <p className="text-sm text-text-body leading-relaxed">Comprehensive corporate services from company registration to mergers, acquisitions, and governance.</p>
             </Link>
-            <Link to="/practice-areas#energy" className="practice-card reveal">
-              <div className="pc-icon">⚡</div>
-              <h3>Energy Law</h3>
-              <p>Legal advisory for energy projects, power purchase agreements, regulatory compliance, and dispute resolution.</p>
+            <Link to="/practice-areas#energy" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+              <div className="text-3xl mb-4">⚡</div>
+              <h3 className="font-serif text-xl text-navy mb-3">Energy Law</h3>
+              <p className="text-sm text-text-body leading-relaxed">Legal advisory for energy projects, power purchase agreements, regulatory compliance, and dispute resolution.</p>
             </Link>
-            <Link to="/practice-areas#litigation" className="practice-card reveal">
-              <div className="pc-icon">⚖️</div>
-              <h3>Litigation</h3>
-              <p>Representation across all tiers of the Nepali judiciary with a track record of favorable outcomes.</p>
+            <Link to="/practice-areas#litigation" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+              <div className="text-3xl mb-4">⚖️</div>
+              <h3 className="font-serif text-xl text-navy mb-3">Litigation</h3>
+              <p className="text-sm text-text-body leading-relaxed">Representation across all tiers of the Nepali judiciary with a track record of favorable outcomes.</p>
             </Link>
-            <Link to="/practice-areas#ip" className="practice-card reveal">
-              <div className="pc-icon">💡</div>
-              <h3>Intellectual Property</h3>
-              <p>Protect your innovations with trademark registration, patent filing, copyright enforcement, and IP litigation.</p>
+            <Link to="/practice-areas#ip" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+              <div className="text-3xl mb-4">💡</div>
+              <h3 className="font-serif text-xl text-navy mb-3">Intellectual Property</h3>
+              <p className="text-sm text-text-body leading-relaxed">Protect your innovations with trademark registration, patent filing, copyright enforcement, and IP litigation.</p>
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="section-padding cta-banner">
-        <div className="container-wide">
-          <h2 className="reveal">Ready to Resolve Your Legal Matters?</h2>
-          <p className="reveal">Schedule a confidential consultation with our experienced legal team today.</p>
-          <div className="cta-btns reveal">
-            <Link to="/contact" className="btn-primary">Book a Consultation →</Link>
-            <a href="tel:+977-9802356987" className="btn-secondary">Call Us Now</a>
+      <section className="py-20 lg:py-24 text-center relative overflow-hidden bg-gradient-to-br from-teal to-navy">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-serif text-[clamp(1.8rem,3.5vw,2.6rem)] text-white font-semibold mb-4 reveal-anim">Ready to Resolve Your Legal Matters?</h2>
+          <p className="text-white/70 text-base mb-8 max-w-2xl mx-auto reveal-anim">Schedule a confidential consultation with our experienced legal team today.</p>
+          <div className="flex justify-center gap-4 flex-wrap relative z-10 reveal-anim">
+            <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Book a Consultation →</Link>
+            <a href="tel:+977-9802356987" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-white font-sans text-sm font-semibold border-2 border-white/30 cursor-pointer transition-all duration-300 hover:border-gold hover:text-gold no-underline">Call Us Now</a>
           </div>
         </div>
       </section>
 
       <PublicFooter />
       <WhatsAppPopup />
-      <BackToTop />
     </div>
   );
 }

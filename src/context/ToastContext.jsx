@@ -18,11 +18,11 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={{ toast }}>
       {children}
-      <div className="toast-area">
+      <div className="fixed top-10 right-4 z-[99999]">
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`toast-item${t.type === 'err' ? ' err' : ''}${t.type === 'info' ? ' info' : ''}`}
+            className={`px-5 py-3.5 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.15)] text-xs font-medium mb-2 max-w-[350px] ${t.type === 'err' ? 'border-l-4 border-l-accent-red' : t.type === 'info' ? 'border-l-4 border-l-wp-blue' : 'border-l-4 border-l-accent-green'}`}
           >
             {t.msg}
           </div>

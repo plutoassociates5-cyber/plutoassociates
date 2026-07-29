@@ -1,9 +1,9 @@
 export default function EditorToolbar({ onCmd }) {
   return (
-    <div className="editor-toolbar-wrap">
-      <div className="toolbar-row">
+    <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
+      <div className="flex items-center gap-px px-2 py-1.5 border-b border-wp-border flex-wrap">
         <select
-          className="tb-select"
+          className="px-1.5 py-0.5 border border-wp-border font-sans text-[0.72rem] outline-none cursor-pointer bg-white h-7 focus:border-wp-blue"
           onChange={(e) => { onCmd('formatBlock', e.target.value); e.target.value = ''; }}
         >
           <option value="">Paragraph</option>
@@ -16,9 +16,9 @@ export default function EditorToolbar({ onCmd }) {
           <option value="p">Paragraph</option>
           <option value="pre">Preformatted</option>
         </select>
-        <div className="tb-sep" />
+        <div className="w-px h-5 bg-wp-border mx-1 shrink-0" />
         <select
-          className="tb-select"
+          className="px-1.5 py-0.5 border border-wp-border font-sans text-[0.72rem] outline-none cursor-pointer bg-white h-7 focus:border-wp-blue"
           style={{ width: 90 }}
           onChange={(e) => { onCmd('fontName', e.target.value); e.target.selectedIndex = 0; }}
         >
@@ -30,7 +30,7 @@ export default function EditorToolbar({ onCmd }) {
           <option value="Verdana">Verdana</option>
         </select>
         <select
-          className="tb-select"
+          className="px-1.5 py-0.5 border border-wp-border font-sans text-[0.72rem] outline-none cursor-pointer bg-white h-7 focus:border-wp-blue"
           style={{ width: 70 }}
           onChange={(e) => { onCmd('fontSize', e.target.value); e.target.selectedIndex = 0; }}
         >
@@ -43,44 +43,44 @@ export default function EditorToolbar({ onCmd }) {
           <option value="6">24pt</option>
           <option value="7">36pt</option>
         </select>
-        <div className="tb-sep" />
-        <button className="tb" onClick={() => onCmd('bold')} title="Bold (Ctrl+B)"><b>B</b></button>
-        <button className="tb" onClick={() => onCmd('italic')} title="Italic (Ctrl+I)"><i>I</i></button>
-        <button className="tb" onClick={() => onCmd('underline')} title="Underline (Ctrl+U)"><u>U</u></button>
-        <button className="tb" onClick={() => onCmd('strikeThrough')} title="Strikethrough"><s>S</s></button>
-        <button className="tb" onClick={() => onCmd('subscript')} title="Subscript" style={{ fontSize: '0.65rem' }}>X₂</button>
-        <button className="tb" onClick={() => onCmd('superscript')} title="Superscript" style={{ fontSize: '0.65rem' }}>X²</button>
-        <div className="tb-sep" />
-        <div className="tb-color-wrap" title="Text Color">
-          <span className="tb-color-label" style={{ marginRight: 2 }}>A</span>
-          <input type="color" className="tb-color" defaultValue="#000000" onChange={(e) => onCmd('foreColor', e.target.value)} title="Text Color" />
+        <div className="w-px h-5 bg-wp-border mx-1 shrink-0" />
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('bold')} title="Bold (Ctrl+B)"><b>B</b></button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('italic')} title="Italic (Ctrl+I)"><i>I</i></button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('underline')} title="Underline (Ctrl+U)"><u>U</u></button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('strikeThrough')} title="Strikethrough"><s>S</s></button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('subscript')} title="Subscript" style={{ fontSize: '0.65rem' }}>X₂</button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('superscript')} title="Superscript" style={{ fontSize: '0.65rem' }}>X²</button>
+        <div className="w-px h-5 bg-wp-border mx-1 shrink-0" />
+        <div className="" title="Text Color">
+          <span style={{ marginRight: 2 }}>A</span>
+          <input type="color" className="" defaultValue="#000000" onChange={(e) => onCmd('foreColor', e.target.value)} title="Text Color" />
         </div>
-        <div className="tb-color-wrap" title="Highlight">
-          <span className="tb-color-label" style={{ marginRight: 2 }}>HL</span>
-          <input type="color" className="tb-color" defaultValue="#ffff00" onChange={(e) => onCmd('hiliteColor', e.target.value)} title="Highlight Color" />
+        <div className="" title="Highlight">
+          <span style={{ marginRight: 2 }}>HL</span>
+          <input type="color" className="" defaultValue="#ffff00" onChange={(e) => onCmd('hiliteColor', e.target.value)} title="Highlight Color" />
         </div>
       </div>
-      <div className="toolbar-row">
-        <button className="tb" onClick={() => onCmd('justifyLeft')} title="Align Left">⬅</button>
-        <button className="tb" onClick={() => onCmd('justifyCenter')} title="Align Center">⬌</button>
-        <button className="tb" onClick={() => onCmd('justifyRight')} title="Align Right">➡</button>
-        <button className="tb" onClick={() => onCmd('justifyFull')} title="Justify">☰</button>
-        <div className="tb-sep" />
-        <button className="tb" onClick={() => onCmd('insertUnorderedList')} title="Bullet List">•≡</button>
-        <button className="tb" onClick={() => onCmd('insertOrderedList')} title="Numbered List">1≡</button>
-        <button className="tb" onClick={() => onCmd('indent')} title="Indent">→|</button>
-        <button className="tb" onClick={() => onCmd('outdent')} title="Outdent">|←</button>
-        <div className="tb-sep" />
-        <button className="tb" onClick={() => onCmd('formatBlock', 'blockquote')} title="Blockquote">❝</button>
-        <button className="tb" onClick={() => onCmd('insertHorizontalRule')} title="Horizontal Line">—</button>
-        <button className="tb tb-wide" onClick={insertLink}>🔗 Link</button>
-        <button className="tb tb-wide" onClick={() => onCmd('unlink')}>🔗✕</button>
-        <button className="tb tb-wide" onClick={insertImage}>🖼 Image</button>
-        <button className="tb tb-wide" onClick={insertTable}>⊞ Table</button>
-        <div className="tb-sep" />
-        <button className="tb" onClick={() => onCmd('undo')} title="Undo (Ctrl+Z)">↩</button>
-        <button className="tb" onClick={() => onCmd('redo')} title="Redo (Ctrl+Y)">↪</button>
-        <button className="tb" onClick={() => onCmd('removeFormat')} title="Clear Formatting">✕</button>
+      <div className="flex items-center gap-px px-2 py-1.5 border-b border-wp-border flex-wrap">
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('justifyLeft')} title="Align Left">⬅</button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('justifyCenter')} title="Align Center">⬌</button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('justifyRight')} title="Align Right">➡</button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('justifyFull')} title="Justify">☰</button>
+        <div className="w-px h-5 bg-wp-border mx-1 shrink-0" />
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('insertUnorderedList')} title="Bullet List">•≡</button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('insertOrderedList')} title="Numbered List">1≡</button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('indent')} title="Indent">→|</button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('outdent')} title="Outdent">|←</button>
+        <div className="w-px h-5 bg-wp-border mx-1 shrink-0" />
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('formatBlock', 'blockquote')} title="Blockquote">❝</button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('insertHorizontalRule')} title="Horizontal Line">—</button>
+        <button className="w-auto px-2 text-[0.72rem] whitespace-nowrap h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={insertLink}>🔗 Link</button>
+        <button className="w-auto px-2 text-[0.72rem] whitespace-nowrap h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('unlink')}>🔗✕</button>
+        <button className="w-auto px-2 text-[0.72rem] whitespace-nowrap h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={insertImage}>🖼 Image</button>
+        <button className="w-auto px-2 text-[0.72rem] whitespace-nowrap h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={insertTable}>⊞ Table</button>
+        <div className="w-px h-5 bg-wp-border mx-1 shrink-0" />
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('undo')} title="Undo (Ctrl+Z)">↩</button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('redo')} title="Redo (Ctrl+Y)">↪</button>
+        <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('removeFormat')} title="Clear Formatting">✕</button>
       </div>
     </div>
   );

@@ -66,83 +66,82 @@ export default function Settings({ onNavigate }) {
 
   return (
     <>
-      <div className="page-title-area">
-        <h1>Settings</h1>
+      <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
+        <h1 className="text-xl lg:text-2xl text-[#1d2327] font-normal font-sans">Settings</h1>
       </div>
-      <div className="settings-wrap">
-        <h2>⚙️ General Settings</h2>
+      <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6 max-w-[700px]">
+        <h2 className="text-base text-[#1d2327] mb-6 pb-3 border-b border-wp-border">⚙️ General Settings</h2>
 
-        <div className="settings-section">
-          <h3>🔐 Admin Credentials</h3>
-          <div className="setting-row">
-            <div className="setting-label">
+        <div className="mb-8">
+          <h3 className="text-sm text-[#1d2327] font-semibold mb-4 flex items-center gap-1.5">🔐 Admin Credentials</h3>
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
+            <div className="text-xs font-semibold text-[#333] pt-1">
               Username
-              <small>Used to log into admin</small>
+              <small className="block font-normal text-text-light mt-0.5 text-[0.68rem]">Used to log into admin</small>
             </div>
-            <div className="setting-input">
-              <input type="text" value={user} onChange={(e) => setUser(e.target.value)} />
+            <div className="">
+              <input type="text" value={user} onChange={(e) => setUser(e.target.value)} className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]" />
             </div>
           </div>
-          <div className="setting-row">
-            <div className="setting-label">
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
+            <div className="text-xs font-semibold text-[#333] pt-1">
               Display Name
-              <small>Shown in admin panel</small>
+              <small className="block font-normal text-text-light mt-0.5 text-[0.68rem]">Shown in admin panel</small>
             </div>
-            <div className="setting-input">
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+            <div className="">
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]" />
             </div>
           </div>
-          <div className="setting-row">
-            <div className="setting-label">
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
+            <div className="text-xs font-semibold text-[#333] pt-1">
               New Password
-              <small>Leave blank to keep current</small>
+              <small className="block font-normal text-text-light mt-0.5 text-[0.68rem]">Leave blank to keep current</small>
             </div>
-            <div className="setting-input">
-              <input type="password" placeholder="Enter new password..." value={pass} onChange={(e) => setPass(e.target.value)} />
+            <div className="">
+              <input type="password" placeholder="Enter new password..." value={pass} onChange={(e) => setPass(e.target.value)} className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]" />
             </div>
           </div>
-          <div className="setting-row">
-            <div className="setting-label">Confirm Password</div>
-            <div className="setting-input">
-              <input type="password" placeholder="Confirm new password..." value={passC} onChange={(e) => setPassC(e.target.value)} />
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
+            <div className="text-xs font-semibold text-[#333] pt-1">Confirm Password</div>
+            <div className="">
+              <input type="password" placeholder="Confirm new password..." value={passC} onChange={(e) => setPassC(e.target.value)} className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]" />
             </div>
           </div>
         </div>
 
-        <div className="settings-section">
-          <h3>💾 Data Management</h3>
-          <div className="setting-row">
-            <div className="setting-label">
+        <div className="mb-8">
+          <h3 className="text-sm text-[#1d2327] font-semibold mb-4 flex items-center gap-1.5">💾 Data Management</h3>
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
+            <div className="text-xs font-semibold text-[#333] pt-1">
               Export Articles
-              <small>Download all articles as JSON</small>
+              <small className="block font-normal text-text-light mt-0.5 text-[0.68rem]">Download all articles as JSON</small>
             </div>
-            <div className="setting-input">
-              <button className="settings-save" style={{ marginTop: 0 }} onClick={exportData}>
+            <div className="">
+              <button className="bg-wp-blue text-white border-none py-2.5 px-6 font-sans text-xs font-semibold cursor-pointer hover:bg-[#005a87]" onClick={exportData}>
                 📥 Export JSON
               </button>
             </div>
           </div>
-          <div className="setting-row">
-            <div className="setting-label">
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
+            <div className="text-xs font-semibold text-[#333] pt-1">
               Import Articles
-              <small>Import from JSON backup</small>
+              <small className="block font-normal text-text-light mt-0.5 text-[0.68rem]">Import from JSON backup</small>
             </div>
-            <div className="setting-input">
-              <label className="settings-save" style={{ marginTop: 0, cursor: 'pointer' }}>
+            <div className="">
+              <label className="bg-wp-blue text-white border-none py-2.5 px-6 font-sans text-xs font-semibold cursor-pointer hover:bg-[#005a87]" style={{ marginTop: 0, cursor: 'pointer' }}>
                 📤 Import JSON
                 <input type="file" accept=".json" onChange={importData} style={{ display: 'none' }} />
               </label>
             </div>
           </div>
-          <div className="setting-row">
-            <div className="setting-label">
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
+            <div className="text-xs font-semibold text-[#333] pt-1">
               Reset All Data
-              <small style={{ color: 'var(--red)' }}>This cannot be undone</small>
+              <small className="block font-normal text-accent-red mt-0.5 text-[0.68rem]">This cannot be undone</small>
             </div>
-            <div className="setting-input">
+            <div className="">
               <button
-                className="settings-save"
-                style={{ background: 'var(--red)', marginTop: 0 }}
+                className="bg-accent-red text-white border-none py-2.5 px-6 font-sans text-xs font-semibold cursor-pointer hover:bg-red-700"
                 onClick={resetData}
               >
                 🗑 Delete All Articles
@@ -151,7 +150,7 @@ export default function Settings({ onNavigate }) {
           </div>
         </div>
 
-        <button className="settings-save" onClick={saveSettings}>
+        <button className="bg-wp-blue text-white border-none py-2.5 px-6 font-sans text-xs font-semibold cursor-pointer hover:bg-[#005a87]" onClick={saveSettings}>
           💾 Save Settings
         </button>
       </div>

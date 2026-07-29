@@ -34,14 +34,14 @@ export default function CategoryPanel({ category, onChange }) {
   };
 
   return (
-    <div className="side-panel">
-      <div className="side-panel-head">
-        <h3><span className="ph-icon">🗂</span> Categories</h3>
+    <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
+      <div className="px-4 py-3 border-b border-wp-border flex justify-between items-center cursor-pointer">
+        <h3 className="text-xs font-semibold text-[#1d2327] flex items-center gap-1.5"><span>🗂</span> Categories</h3>
       </div>
-      <div className="side-panel-body">
-        <div className="cat-list">
+      <div className="p-4">
+        <div className="max-h-[150px] overflow-y-auto border border-wp-border p-2 mb-3">
           {categories.map((c) => (
-            <div key={c.val} className="cat-item">
+            <div key={c.val} className="flex items-center gap-1.5 py-1 text-xs">
               <input
                 type="checkbox"
                 checked={category === c.val}
@@ -51,19 +51,20 @@ export default function CategoryPanel({ category, onChange }) {
             </div>
           ))}
         </div>
-        <button className="add-cat-toggle" onClick={() => setShowAdd(!showAdd)}>
+        <button className="text-xs text-wp-blue cursor-pointer bg-none border-none font-sans mb-2 p-0" onClick={() => setShowAdd(!showAdd)}>
           + Add New Category
         </button>
         {showAdd && (
-          <div className="add-cat-form" style={{ display: 'block' }}>
+          <div style={{ display: 'block' }}>
             <input
               type="text"
               placeholder="New category name"
+              className="w-full border border-wp-border px-2 py-1.5 text-xs font-sans outline-none mb-1.5"
               value={newCat}
               onChange={(e) => setNewCat(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleAdd(); }}
             />
-            <button onClick={handleAdd}>Add</button>
+            <button className="bg-wp-gray border border-wp-border px-3 py-1 text-xs cursor-pointer font-sans" onClick={handleAdd}>Add</button>
           </div>
         )}
       </div>

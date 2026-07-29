@@ -17,7 +17,7 @@ export function useScrollReveal() {
       },
       { threshold: 0.1 }
     );
-    const els = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .hero-inner');
+    const els = document.querySelectorAll('.reveal-anim, .reveal-left-anim, .reveal-right-anim, .hero-inner');
     els.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   });
@@ -38,13 +38,18 @@ export function HeroSlideshow({ slides }) {
       {slides.map((slide, idx) => (
         <div
           key={idx}
-          className={`hero-slide${idx === current ? ' active' : ''}`}
+          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${idx === current ? 'opacity-100' : 'opacity-0'}`}
           style={{ backgroundImage: `url(${slide.image})` }}
+          {...(idx === 0 ? { fetchpriority: 'high' } : {})}
         />
       ))}
-      <div className="hero-dots">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
         {slides.map((_, idx) => (
-          <span key={idx} className={idx === current ? 'active' : ''} onClick={() => setCurrent(idx)} />
+          <span
+            key={idx}
+            className={`rounded-full cursor-pointer transition-all duration-300 ${idx === current ? 'bg-gold w-4 h-4' : 'bg-white/40 w-3 h-3 hover:bg-white/70'}`}
+            onClick={() => setCurrent(idx)}
+          />
         ))}
       </div>
     </>

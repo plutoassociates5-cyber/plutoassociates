@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #0a1628;
+  --color-navy-light: #132038;
+  --color-navy-mid: #1a2d4a;
+  --color-teal: #0d4f4f;
+  --color-teal-light: #147272;
+  --color-gold: #c9a84c;
+  --color-gold-light: #d4b85c;
+  --color-gold-dark: #a8893e;
+  --color-off-white: #f8f7f4;
+  --color-light-gray: #f0eeeb;
+  --color-mid-gray: #e0ddd8;
+  --color-text-dark: #1a1a1a;
+  --color-text-body: #4a4a4a;
+  --color-text-light: #7a7a7a;
+  --color-wp-blue: #0073aa;
+  --color-wp-gray: #f1f1f1;
+  --color-wp-border: #ddd;
+  --color-accent-red: #e74c3c;
+  --color-accent-green: #27ae60;
+  --color-accent-orange: #e67e22;
+  --color-accent-purple: #8e44ad;
+  --color-accent-blue: #2980b9;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling for public pages */
+.public-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.public-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.public-scroll::-webkit-scrollbar-thumb {
+  background: #c9a84c;
+  border-radius: 3px;
+}
+
+/* Reveal animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.reveal-anim { animation: fadeUp 0.7s ease forwards; }
+.reveal-left-anim { animation: fadeLeft 0.7s ease forwards; }
+.reveal-right-anim { animation: fadeRight 0.7s ease forwards; }
+
+@keyframes ping {
+  75%, 100% { transform: scale(1.5); opacity: 0; }
+}
+.wa-ping {
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}

@@ -7,10 +7,11 @@ import TeamsPage from './pages/TeamsPage';
 import PublicationsPage from './pages/PublicationsPage';
 import ContactPage from './pages/ContactPage';
 import ScrollToTop from './components/PublicHooks';
+import { ToastProvider } from './context/ToastContext';
 
 export default function App() {
   return (
-    <>
+    <ToastProvider>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -21,6 +22,6 @@ export default function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/admin/*" element={<AdminApp />} />
       </Routes>
-    </>
+    </ToastProvider>
   );
 }

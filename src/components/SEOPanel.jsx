@@ -31,50 +31,50 @@ export default function SEOPanel({ title, slug, excerpt, content, tags, keywords
   score = Math.min(100, score);
 
   return (
-    <div className="side-panel seo-panel">
-      <div className="side-panel-head">
-        <h3><span className="ph-icon">🎯</span> SEO — RankMath Style</h3>
+    <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)] border-t-[3px] border-[#f54e31]">
+      <div className="px-4 py-3 border-b border-wp-border flex justify-between items-center cursor-pointer">
+        <h3 className="text-xs font-semibold text-[#1d2327] flex items-center gap-1.5"><span>🎯</span> SEO — RankMath Style</h3>
       </div>
-      <div className="side-panel-body">
-        <div className="seo-score-row">
-          <div className={`seo-score-circle ${score >= 80 ? 'seo-score-good' : score >= 50 ? 'seo-score-ok' : 'seo-score-bad'}`}>
+      <div className="p-4">
+        <div className="flex items-center gap-3 mb-4">
+          <div className={`w-14 h-14 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0 ${score >= 80 ? 'bg-[#2db87f]' : score >= 50 ? 'bg-[#e67e22]' : 'bg-[#e74c3c]'}`}>
             {score}
           </div>
-          <div className="seo-score-info">
-            <h4>{score >= 80 ? '🟢 Good' : score >= 50 ? '🟡 Needs Improvement' : '🔴 Poor'}</h4>
-            <p>{score >= 80 ? 'Great SEO score!' : 'Add focus keyword to improve score.'}</p>
+          <div className="">
+            <h4 className="text-xs font-semibold text-[#1d2327]">{score >= 80 ? '🟢 Good' : score >= 50 ? '🟡 Needs Improvement' : '🔴 Poor'}</h4>
+            <p className="text-[0.7rem] text-text-light">{score >= 80 ? 'Great SEO score!' : 'Add focus keyword to improve score.'}</p>
           </div>
         </div>
 
-        <div className="seo-field">
-          <label>Focus Keyword</label>
+        <div className="mb-3">
+          <label className="block text-[0.7rem] font-semibold text-[#333] mb-1">Focus Keyword</label>
           <input
             type="text"
-            className="seo-focus-kw"
+            className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none mb-3 focus:border-[#f54e31]"
             placeholder="e.g. company registration Nepal"
             value={kw}
             onChange={(e) => onKwChange(e.target.value)}
           />
         </div>
 
-        <div className="seo-preview-box">
-          <div className="seo-preview-title">{seoTitle || 'Article Title | Pluto Associates Nepal'}</div>
-          <div className="seo-preview-url">plutoassociates.com/{slug || 'article-slug'}</div>
-          <div className="seo-preview-desc">{seoDesc.substring(0, 155) || 'Article description...'}</div>
+        <div className="border border-wp-border p-4 bg-gray-50 mb-3 rounded">
+          <div className="text-[#1a0dab] text-sm font-normal mb-0.5 truncate">{seoTitle || 'Article Title | Pluto Associates Nepal'}</div>
+          <div className="text-[#006621] text-[0.72rem] mb-1">plutoassociates.com/{slug || 'article-slug'}</div>
+          <div className="text-[#545454] text-xs leading-relaxed">{seoDesc.substring(0, 155) || 'Article description...'}</div>
         </div>
 
-        <div className="seo-field">
-          <label>SEO Title</label>
-          <input type="text" value={seoTitle} readOnly placeholder="Article Title | Pluto Associates Nepal" />
-          <div className={`char-count ${titleLen > 60 ? 'char-warn' : titleLen > 0 ? 'char-ok' : 'char-bad'}`}>
+        <div className="mb-3">
+          <label className="block text-[0.7rem] font-semibold text-[#333] mb-1">SEO Title</label>
+          <input type="text" value={seoTitle} readOnly placeholder="Article Title | Pluto Associates Nepal" className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none resize-y focus:border-[#f54e31]" />
+          <div className={`text-[0.65rem] text-right mt-1 ${titleLen > 60 ? 'text-accent-orange' : titleLen > 0 ? 'text-accent-green' : 'text-accent-red'}`}>
             {titleLen}/60 characters
           </div>
         </div>
 
-        <div className="seo-field">
-          <label>Meta Description</label>
-          <textarea rows="3" value={seoDesc.substring(0, 155)} readOnly placeholder="Describe this article..." />
-          <div className={`char-count ${descLen > 155 ? 'char-warn' : descLen > 0 ? 'char-ok' : 'char-bad'}`}>
+        <div className="mb-3">
+          <label className="block text-[0.7rem] font-semibold text-[#333] mb-1">Meta Description</label>
+          <textarea rows="3" value={seoDesc.substring(0, 155)} readOnly placeholder="Describe this article..." className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none resize-y focus:border-[#f54e31]" />
+          <div className={`text-[0.65rem] text-right mt-1 ${descLen > 155 ? 'text-accent-orange' : descLen > 0 ? 'text-accent-green' : 'text-accent-red'}`}>
             {descLen}/155 characters
           </div>
         </div>
