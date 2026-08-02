@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { getSettings, saveSettings } from '../../utils/contentStore';
+import { applyFavicon } from '../SiteFavicon';
 import { useToast } from '../../context/ToastContext';
 
 export default function SiteSettings() {
@@ -18,7 +19,7 @@ export default function SiteSettings() {
     r.readAsDataURL(f);
   };
 
-  const save = () => { saveSettings(s); toast('✓ Site settings saved. The website will reflect these changes immediately.'); };
+  const save = () => { saveSettings(s); applyFavicon(s.logo); toast('✓ Site settings saved. The website will reflect these changes immediately.'); };
 
   const input = 'w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]';
   const Row = ({ label, hint, children }) => (
