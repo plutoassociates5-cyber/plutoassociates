@@ -232,14 +232,18 @@ function buildSitemap(entry, published) {
   fs.writeFileSync(path.join(DIST, '404.html'), notFoundHtml, 'utf8');
   console.log('prerendered /404 -> dist/404.html');
 
-  // Admin SPA entry -> dist/admin.html. Cloudflare Pages 308-redirects any
-  // request that resolves to a directory index file (e.g. `/admin` rewritten to
-  // `/index.html` becomes a redirect to `/`), so the admin rewrite targets this
-  // dedicated non-index file instead of `/index.html`.
+  // Admin SPA entry -> dist/admin/index.html. A real directory (like every
+  // public route) means Cloudflare Pages serves it directly: /admin is
+  // auto-redirected to /admin/ (308) which serves this file with 200. No
+  // _redirects rewrite is involved, so Cloudflare's automatic HTML handling
+  // (which 308s rewrites that resolve to index.html or other .html files)
+  // cannot hijack the admin URL.
   const adminMeta = entry.resolveRouteMeta('/admin');
   const adminHtml = assembleHtml(entry, { ...adminMeta, body: entry.renderApp('/admin'), jsonLd: null });
-  fs.writeFileSync(path.join(DIST, 'admin.html'), adminHtml, 'utf8');
-  console.log('prerendered /admin -> dist/admin.html (SPA entry, noindex)');
+  const adminDir = path.join(DIST, 'admin');
+  fs.mkdirSync(adminDir, { recursive: true });
+  fs.writeFileSync(path.join(adminDir, 'index.html'), adminHtml, 'utf8');
+  console.log('prerendered /admin -> dist/admin/index.html (SPA entry, noindex)');
 
   // Published articles -> /publications/<slug> (unique title/desc/OG + Article JSON-LD)
   const published = entry.getPublishedArticles();
