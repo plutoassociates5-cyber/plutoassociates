@@ -1,19 +1,25 @@
 import { useRef, useState } from 'react';
+import { getSettings } from '../utils/contentStore';
+import { readFileAsDataUrl } from '../utils/image';
+import ImageResizeModal from './admin/ImageResizeModal';
 
 export default function FeaturedImagePanel({ image, onChange, alt, onAltChange }) {
   const [url, setUrl] = useState(image || '');
   const fileRef = useRef(null);
+  const site = getSettings();
+  const [pending, setPending] = useState(null);
 
-  const handleFile = (e) => {
+  const handleFile = async (e) => {
     const f = e.target.files && e.target.files[0];
     e.target.value = '';
     if (!f) return;
     if (!f.type.startsWith('image/')) { alert('Please choose an image file.'); return; }
     if (f.size > 8 * 1024 * 1024) { alert('Image must be under 8MB.'); return; }
-    const reader = new FileReader();
-    reader.onload = () => { setUrl(reader.result); onChange(reader.result); };
-    reader.readAsDataURL(f);
+    const dataUrl = await readFileAsDataUrl(f);
+    setPending(dataUrl);
   };
+
+  const applyResize = ({ dataUrl }) => { setUrl(dataUrl); onChange(dataUrl); setPending(null); };
 
   const handleUrl = () => {
     const u = prompt('Enter image URL:', 'https://');
@@ -46,6 +52,13 @@ export default function FeaturedImagePanel({ image, onChange, alt, onAltChange }
           </div>
           <input ref={fileRef} type="file" accept="image/*" hidden onChange={handleFile} />
         </div>
+        <ImageResizeModal
+          src={pending}
+          name="Adjust featured image"
+          defaults={{ imgMaxWidth: site.imgMaxWidth || 1600, imgQuality: site.imgQuality ?? 85 }}
+          onApply={applyResize}
+          onCancel={() => setPending(null)}
+        />
       </div>
     );
   }
@@ -73,6 +86,13 @@ export default function FeaturedImagePanel({ image, onChange, alt, onAltChange }
           className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue"
         />
         <input ref={fileRef} type="file" accept="image/*" hidden onChange={handleFile} />
+      <ImageResizeModal
+        src={pending}
+        name="Adjust featured image"
+        defaults={{ imgMaxWidth: site.imgMaxWidth || 1600, imgQuality: site.imgQuality ?? 85 }}
+        onApply={applyResize}
+        onCancel={() => setPending(null)}
+      />
       </div>
     </div>
   );

@@ -1,17 +1,27 @@
+import { useRef, useState } from 'react';
+import { getSettings } from '../utils/contentStore';
+import { readFileAsDataUrl } from '../utils/image';
+import ImageResizeModal from './admin/ImageResizeModal';
+
 export default function EditorToolbar({ onCmd }) {
-  const triggerImage = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = () => {
-      const f = input.files && input.files[0];
-      if (!f) return;
-      if (f.size > 8 * 1024 * 1024) { alert('Image must be under 8MB.'); return; }
-      const reader = new FileReader();
-      reader.onload = () => insertImage(reader.result);
-      reader.readAsDataURL(f);
-    };
-    input.click();
+  const site = getSettings();
+  const [pendingImg, setPendingImg] = useState(null);
+  const inputRef = useRef(null);
+
+  const triggerImage = () => inputRef.current && inputRef.current.click();
+
+  const onImage = async (e) => {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    if (f.size > 8 * 1024 * 1024) { alert('Image must be under 8MB.'); return; }
+    const dataUrl = await readFileAsDataUrl(f);
+    setPendingImg(dataUrl);
+  };
+
+  const applyImg = ({ dataUrl }) => {
+    insertImage(dataUrl, dataUrl !== pendingImg);
+    setPendingImg(null);
   };
 
   return (
@@ -97,6 +107,15 @@ export default function EditorToolbar({ onCmd }) {
         <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('redo')} title="Redo (Ctrl+Y)">↪</button>
         <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('removeFormat')} title="Clear Formatting">✕</button>
       </div>
+
+      <input ref={inputRef} type="file" accept="image/*" hidden onChange={onImage} />
+      <ImageResizeModal
+        src={pendingImg}
+        name="Adjust image size"
+        defaults={{ imgMaxWidth: site.imgMaxWidth || 1600, imgQuality: site.imgQuality ?? 85 }}
+        onApply={applyImg}
+        onCancel={() => setPendingImg(null)}
+      />
     </div>
   );
 }

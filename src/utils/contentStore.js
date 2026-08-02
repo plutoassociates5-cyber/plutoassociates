@@ -408,6 +408,8 @@ const SITE_SETTINGS_SEED = {
   social: { facebook: 'https://facebook.com', linkedin: 'https://linkedin.com', twitter: 'https://twitter.com', instagram: 'https://instagram.com', youtube: '' },
   footerAbout: 'Pluto Associates is a full-service law firm based in Kathmandu, Nepal, providing expert legal solutions across corporate law, FDI, litigation, intellectual property, and more.',
   copyright: '© {year} Pluto Associates. All rights reserved.',
+  imgMaxWidth: 1600,
+  imgQuality: 85,
 };
 
 /* ------------------------------------------------------------------ */

@@ -1,7 +1,8 @@
 import { useMemo, useRef, useState } from 'react';
-import { getMedia, saveMedia, uid } from '../../utils/contentStore';
+import { getMedia, saveMedia, uid, getSettings } from '../../utils/contentStore';
 import { getArticles } from '../../utils/storage';
 import { useToast } from '../../context/ToastContext';
+import { readFileAsDataUrl, resizeDataUrl, isSvg } from '../../utils/image';
 
 const MB = 1024 * 1024;
 const MAX = 2.5 * MB;
@@ -13,6 +14,7 @@ export default function MediaLibrary() {
   const [folder, setFolder] = useState('all');
   const [drop, setDrop] = useState(false);
   const fileRef = useRef(null);
+  const site = getSettings();
 
   const folders = useMemo(() => [...new Set(items.map((i) => i.folder).filter(Boolean))], [items]);
 
@@ -29,28 +31,47 @@ export default function MediaLibrary() {
     const valid = Array.from(list).filter((f) => f.type.startsWith('image/'));
     if (valid.length === 0) { toast('Only image files are supported.', 'err'); return; }
     let added = 0;
-    valid.forEach((file) => {
+    const mw = site.imgMaxWidth || 1600;
+    const q = (site.imgQuality ?? 85) / 100;
+    valid.forEach(async (file) => {
       if (file.size > MAX) { toast(`"${file.name}" is larger than 2.5MB.`, 'err'); return; }
-      const reader = new FileReader();
-      reader.onload = () => {
-        const item = {
-          id: uid('m'),
-          name: file.name.replace(/\.[^.]+$/, ''),
-          type: file.type,
-          size: file.size,
-          dataUrl: reader.result,
-          folder: folder === 'all' ? '' : folder,
-          alt: '',
-          addedAt: new Date().toISOString(),
-        };
-        const next = [item].concat(getMedia());
-        saveMedia(next);
-        setItems(next);
-        added += 1;
+      const dataUrl = await readFileAsDataUrl(file);
+      if (!isSvg(dataUrl) && dataUrl.length > 0) {
+        try {
+          const r = await resizeDataUrl(dataUrl, { maxWidth: mw, maxHeight: mw, quality: q });
+          const item = {
+            id: uid('m'),
+            name: file.name.replace(/\.[^.]+$/, ''),
+            type: file.type,
+            size: Math.round((r.dataUrl.length - 'data:image/jpeg;base64,'.length) * 0.75) || file.size,
+            dataUrl: r.dataUrl,
+            folder: folder === 'all' ? '' : folder,
+            alt: '',
+            addedAt: new Date().toISOString(),
+          };
+          const next = [item].concat(getMedia());
+          saveMedia(next);
+          setItems(next);
+          added += 1;
+          return;
+        } catch (e) { /* fall through to original */ }
+      }
+      const item = {
+        id: uid('m'),
+        name: file.name.replace(/\.[^.]+$/, ''),
+        type: file.type,
+        size: file.size,
+        dataUrl,
+        folder: folder === 'all' ? '' : folder,
+        alt: '',
+        addedAt: new Date().toISOString(),
       };
-      reader.readAsDataURL(file);
+      const next = [item].concat(getMedia());
+      saveMedia(next);
+      setItems(next);
+      added += 1;
     });
-    setTimeout(() => { if (added) toast(`✓ ${added} image${added === 1 ? '' : 's'} uploaded.`); }, 50);
+    setTimeout(() => { if (added) toast(`✓ ${added} image${added === 1 ? '' : 's'} uploaded (auto-sized).`); }, 100);
   };
 
   const rename = (id) => {

@@ -2,22 +2,28 @@ import { useState } from 'react';
 import { getSettings, saveSettings } from '../../utils/contentStore';
 import { applyFavicon } from '../SiteFavicon';
 import { useToast } from '../../context/ToastContext';
+import { readFileAsDataUrl, isSvg } from '../../utils/image';
+import ImageResizeModal from './ImageResizeModal';
 
 export default function SiteSettings() {
   const { toast } = useToast();
   const [s, setS] = useState(getSettings);
+  const [pendingLogo, setPendingLogo] = useState(null);
 
   const set = (key, value) => setS((prev) => ({ ...prev, [key]: value }));
   const setSocial = (key, value) => setS((prev) => ({ ...prev, social: { ...prev.social, [key]: value } }));
 
-  const onLogo = (e) => {
+  const onLogo = async (e) => {
     const f = e.target.files && e.target.files[0];
+    e.target.value = '';
     if (!f || !f.type.startsWith('image/')) return;
     if (f.size > 3 * 1024 * 1024) { toast('Logo must be under 3MB.', 'err'); return; }
-    const r = new FileReader();
-    r.onload = () => set('logo', r.result);
-    r.readAsDataURL(f);
+    const dataUrl = await readFileAsDataUrl(f);
+    if (isSvg(dataUrl)) { set('logo', dataUrl); return; }
+    setPendingLogo(dataUrl);
   };
+
+  const applyLogo = ({ dataUrl }) => { set('logo', dataUrl); setPendingLogo(null); };
 
   const save = () => { saveSettings(s); applyFavicon(s.logo); toast('✓ Site settings saved. The website will reflect these changes immediately.'); };
 
@@ -74,7 +80,26 @@ export default function SiteSettings() {
           <Row label="Instagram"><input className={input} value={s.social?.instagram || ''} onChange={(e) => setSocial('instagram', e.target.value)} /></Row>
           <Row label="YouTube"><input className={input} value={s.social?.youtube || ''} onChange={(e) => setSocial('youtube', e.target.value)} /></Row>
         </div>
+
+        <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6">
+          <h2 className="text-sm font-semibold text-[#1d2327] mb-4 pb-3 border-b border-wp-border">🖼️ Image Settings</h2>
+          <p className="text-xs text-text-body mb-4 bg-wp-gray/60 p-3 rounded">Applied automatically to all newly uploaded photos (logo, team, media, article images) to keep storage small. You can still fine-tune before saving.</p>
+          <Row label="Default Max Width (px)" hint="Largest width any uploaded photo is allowed to keep">
+            <input className={input} type="number" min="100" value={s.imgMaxWidth ?? 1600} onChange={(e) => set('imgMaxWidth', parseInt(e.target.value) || 1600)} />
+          </Row>
+          <Row label="Default Quality (%)" hint="JPG compression quality for resized photos">
+            <input className={input} type="number" min="20" max="100" value={s.imgQuality ?? 85} onChange={(e) => set('imgQuality', parseInt(e.target.value) || 85)} />
+          </Row>
+        </div>
       </div>
+
+      <ImageResizeModal
+        src={pendingLogo}
+        name="Adjust logo size"
+        defaults={{ imgMaxWidth: s.imgMaxWidth || 1600, imgQuality: s.imgQuality ?? 85 }}
+        onApply={applyLogo}
+        onCancel={() => setPendingLogo(null)}
+      />
     </>
   );
 }

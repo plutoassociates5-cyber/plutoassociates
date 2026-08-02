@@ -1,21 +1,27 @@
 import { useState } from 'react';
-import { getLawyers, saveLawyers, getPracticeAreas, uid } from '../../utils/contentStore';
+import { getLawyers, saveLawyers, getPracticeAreas, uid, getSettings } from '../../utils/contentStore';
 import { useToast } from '../../context/ToastContext';
+import { readFileAsDataUrl } from '../../utils/image';
+import ImageResizeModal from './ImageResizeModal';
 
 export default function LawyersManager() {
   const { toast } = useToast();
   const [lawyers, setLawyers] = useState(getLawyers);
   const areas = getPracticeAreas();
   const [form, setForm] = useState(null);
+  const [pendingImg, setPendingImg] = useState(null);
+  const site = getSettings();
 
-  const onImage = (e) => {
+  const onImage = async (e) => {
     const file = e.target.files && e.target.files[0];
+    e.target.value = '';
     if (!file || !file.type.startsWith('image/')) return;
     if (file.size > 2500000) { toast('Image must be under 2.5MB.', 'err'); return; }
-    const reader = new FileReader();
-    reader.onload = () => setForm((f) => ({ ...f, img: reader.result }));
-    reader.readAsDataURL(file);
+    const dataUrl = await readFileAsDataUrl(file);
+    setPendingImg(dataUrl);
   };
+
+  const applyImg = ({ dataUrl }) => { setForm((f) => ({ ...f, img: dataUrl })); setPendingImg(null); };
 
   const save = (e) => {
     e.preventDefault();
@@ -131,6 +137,14 @@ export default function LawyersManager() {
           </div>
         )}
       </div>
+
+      <ImageResizeModal
+        src={pendingImg}
+        name="Adjust team photo"
+        defaults={{ imgMaxWidth: site.imgMaxWidth || 1600, imgQuality: site.imgQuality ?? 85 }}
+        onApply={applyImg}
+        onCancel={() => setPendingImg(null)}
+      />
     </>
   );
 }
