@@ -119,7 +119,6 @@ export default function FaqPage() {
           <div className="relative max-w-xl mx-auto">
             <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search e.g. register a company, trademark, terminate employee…"
               className="w-full rounded-full border border-white/20 bg-white/10 backdrop-blur px-5 py-3.5 pr-28 text-white placeholder:text-white/60 outline-none focus:border-gold text-sm" />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gold bg-gold/10 border border-gold/30 rounded-full px-3 py-1.5 text-[0.7rem] font-semibold">{visible.length} answers</span>
           </div>
         </div>
       </section>
