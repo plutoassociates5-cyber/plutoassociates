@@ -2,9 +2,11 @@
 # Each public route is prerendered to dist/<route>/index.html, so deep links
 # resolve to real HTML without rewrites. Only dynamic/admin + legacy .html URLs need rules.
 
-# Admin SPA fallback (not prerendered)
-/admin/*   /index.html   200
-/admin     /index.html   200
+# Admin SPA fallback (not prerendered). Rewrites target admin.html (a dedicated
+# SPA entry) because Cloudflare Pages 308-redirects requests that resolve to a
+# directory index file (/admin -> /index.html would redirect to /).
+/admin/*   /admin.html   200
+/admin     /admin.html   200
 
 # Legacy .html URLs → clean canonical routes (301 preserves link equity)
 /about.html          /about          301

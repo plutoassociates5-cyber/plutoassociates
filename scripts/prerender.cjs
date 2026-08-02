@@ -232,6 +232,15 @@ function buildSitemap(entry, published) {
   fs.writeFileSync(path.join(DIST, '404.html'), notFoundHtml, 'utf8');
   console.log('prerendered /404 -> dist/404.html');
 
+  // Admin SPA entry -> dist/admin.html. Cloudflare Pages 308-redirects any
+  // request that resolves to a directory index file (e.g. `/admin` rewritten to
+  // `/index.html` becomes a redirect to `/`), so the admin rewrite targets this
+  // dedicated non-index file instead of `/index.html`.
+  const adminMeta = entry.resolveRouteMeta('/admin');
+  const adminHtml = assembleHtml(entry, { ...adminMeta, body: entry.renderApp('/admin'), jsonLd: null });
+  fs.writeFileSync(path.join(DIST, 'admin.html'), adminHtml, 'utf8');
+  console.log('prerendered /admin -> dist/admin.html (SPA entry, noindex)');
+
   // Published articles -> /publications/<slug> (unique title/desc/OG + Article JSON-LD)
   const published = entry.getPublishedArticles();
   for (const art of published) {
