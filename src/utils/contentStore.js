@@ -99,15 +99,96 @@ function makeCollection(key, seed = []) {
 /* Seeds                                                               */
 /* ------------------------------------------------------------------ */
 const PRACTICE_AREAS_SEED = [
-  { id: 'fdi', img: paFdi, icon: '🌐', title: 'Foreign Direct Investment (FDI)', desc: 'Specialised guidance for foreign investors entering Nepal — from sector eligibility and FITTA compliance to joint ventures and structuring. We walk you through approvals with the Department of Industry and Investment Board Nepal so your entry is transparent, compliant, and ready for the market.', highlights: ['Sector eligibility & entry strategy', 'FITTA & regulatory approvals', 'Joint ventures & investment structuring', 'Investment Board Nepal liaison'] },
-  { id: 'corporate', img: paCorporate, icon: '🏢', title: 'Corporate & Commercial Law', desc: 'End-to-end corporate services covering company registration, corporate governance, mergers & acquisitions, due diligence, and commercial contracts. We help businesses structure, grow, and transact with confidence at every stage.', highlights: ['Company registration & formation', 'Corporate governance & compliance', 'Mergers, acquisitions & due diligence', 'Commercial contract drafting & review'] },
-  { id: 'energy', img: paEnergy, icon: '⚡', title: 'Energy, Infrastructure & Project Finance', desc: 'Strategic legal advisory for energy and infrastructure — from hydropower to solar. Our team negotiates power purchase agreements, secures regulatory approvals, structures project financing, and resolves disputes to keep projects on track.', highlights: ['Power purchase agreements (PPAs)', 'Regulatory approvals & licensing', 'Project finance & structuring', 'Infrastructure dispute resolution'] },
-  { id: 'banking', img: paBanking, icon: '🏦', title: 'Banking & Finance', desc: 'Regulatory compliance, loan documentation, financial restructuring, and secured lending advice. We represent banks, financial institutions, and borrowers before Nepali courts and regulators to protect every transaction.', highlights: ['Loan & security documentation', 'Regulatory compliance advisory', 'Financial restructuring', 'Banking dispute representation'] },
-  { id: 'litigation', img: paLitigation, icon: '⚖️', title: 'Litigation & Dispute Resolution', desc: 'Trial-tested representation across all levels of the Nepali judiciary, together with arbitration, mediation, and alternatives to dispute resolution. We pursue outcomes that safeguard your rights and your business.', highlights: ['Civil & commercial litigation', 'Arbitration & mediation', 'Appellate representation', 'Strategic dispute resolution'] },
-  { id: 'ip', img: paIp, icon: '💡', title: 'Intellectual Property', desc: 'From trademark registration and patent filing to copyright protection and enforcement, we build and defend your IP portfolio so the value you create stays yours — including renewals and oppositions.', highlights: ['Trademark registration & renewal', 'Patent & design filings', 'Copyright protection', 'IP enforcement & litigation'] },
-  { id: 'labor', img: paLabor, icon: '👥', title: 'Labor & Employment Law', desc: 'Practical labour and employment advice spanning employment contracts, workplace compliance, dispute resolution, collective bargaining, and HR policy — keeping your workforce and your business aligned.', highlights: ['Employment contracts & policies', 'Labour compliance (Labor Act 2074)', 'Collective bargaining', 'Workplace dispute resolution'] },
-  { id: 'realestate', img: paRealestate, icon: '🏠', title: 'Real Estate & Property', desc: 'Property due diligence, title verification, land acquisition, lease arrangements, and real-estate disputes handled with clear, practical advice — so you transact with certainty and minimum risk.', highlights: ['Title & due diligence', 'Land acquisition & transfers', 'Lease & property agreements', 'Real-estate dispute resolution'] },
-  { id: 'tax', img: paTax, icon: '📊', title: 'Taxation', desc: 'Strategic tax planning, corporate tax compliance, VAT advisory, international tax structuring, and representation in tax disputes. We help you stay compliant while optimising what you keep.', highlights: ['Corporate tax planning & compliance', 'VAT advisory & filing', 'International tax structuring', 'Tax dispute representation'] },
+  {
+    id: 'fdi', img: paFdi, icon: '🌐', title: 'Foreign Direct Investment (FDI)',
+    desc: 'Specialised guidance for foreign investors entering Nepal — from sector eligibility and FITTA compliance to joint ventures and structuring. We walk you through approvals with the Department of Industry and Investment Board Nepal so your entry is transparent, compliant, and ready for the market.',
+    highlights: ['Sector eligibility & entry strategy', 'FITTA & regulatory approvals', 'Joint ventures & investment structuring', 'Investment Board Nepal liaison'],
+    long: [
+      'Nepal has opened its economy to foreign investment across a wide range of sectors, but the regulatory path remains nuanced. Our FDI practice helps foreign investors understand exactly where they can invest, at what participation threshold, and through which structure — before any commitment is made.',
+      'We lead the entire authorisation workflow, including the Foreign Investment and Technology Transfer Act (FITTA 2075) approvals, sector eligibility screening, and registration with the Department of Industry. For larger or strategic projects, we liaise directly with the Investment Board Nepal and coordinate the permits, tax registrations, and banking steps that follow.',
+      'Our team also structures joint ventures, drafts shareholder and investment agreements, and advises on repatriation, incentives, and ongoing compliance so that your entry into the Nepali market is not just legal, but commercially sound.'
+    ]
+  },
+  {
+    id: 'corporate', img: paCorporate, icon: '🏢', title: 'Corporate & Commercial Law',
+    desc: 'End-to-end corporate services covering company registration, corporate governance, mergers & acquisitions, due diligence, and commercial contracts. We help businesses structure, grow, and transact with confidence at every stage.',
+    highlights: ['Company registration & formation', 'Corporate governance & compliance', 'Mergers, acquisitions & due diligence', 'Commercial contract drafting & negotiation'],
+    long: [
+      'From incorporating your first private limited company to structuring complex group transactions, our corporate practice supports businesses at every stage of their lifecycle. We prepare all founding documents, navigate Office of the Company Registrar filings, and ensure your entity is properly capitalised and governed.',
+      'For established companies, we provide continuous corporate governance support — shareholder and board resolutions, annual compliance filings, regulatory returns, and shareholder agreements, keeping your records audit-ready and your directors properly protected under the Companies Act.',
+      'We also act on mergers, amalgamations, acquisitions, and group restructurings, conducting legal due diligence, negotiating transaction documents, and obtaining the necessary regulatory consents so that your deals close, and your post-closing structure is clean.'
+    ]
+  },
+  {
+    id: 'energy', img: paEnergy, icon: '⚡', title: 'Energy, Infrastructure & Project Finance',
+    desc: 'Strategic legal advisory for energy and infrastructure — from hydropower to solar. Our team negotiates power purchase agreements, secures regulatory approvals, structures project financing, and resolves disputes to keep projects on track.',
+    highlights: ['Power purchase agreements (PPAs)', 'Regulatory approvals & licensing', 'Project finance & structuring', 'Infrastructure dispute resolution'],
+    long: [
+      'Nepal\'s energy sector is among the most active in the region, and the legal framework around it is fast-moving. Our energy practice supports developers, lenders, and investors across hydropower, solar, and related infrastructure from the very first survey application through energisation.',
+      'We negotiate and draft power purchase agreements with utilities, secure survey licences, generation licences, and environmental approvals, and advise on the regulatory conditions governing independent power producers. We also structure project finance — offtake, financing documents, security packages — to be bankable.',
+      'When issues arise, our team provides a full dispute-resolution capability for energy and infrastructure, including settlement of construction and EPC disputes and enforcement of investment protection. Our goal is to keep your project generating value, on schedule and on budget.'
+    ]
+  },
+  {
+    id: 'banking', img: paBanking, icon: '🏦', title: 'Legal Finance Advisory',
+    desc: 'Regulatory compliance, lending documentation, financial restructuring, and secured financing advice. We advise and represent banks, financial institutions, and borrowers to protect every transaction and recover the value owed.',
+    highlights: ['Loan & facility documentation', 'Regulatory compliance advisory', 'Repayment & restructuring', 'Default & recovery representation'],
+    long: [
+      'Our banking and finance practice advises lenders and borrowers across facilities, security structures, and day-to-day lending operations. We document loans efficiently, structure security, and prepare the standard conditions that govern each facility.',
+      'When difficulties arise, we guide clients through restructuring and negotiated settlements, and represent them in recovery proceedings where the courts or regulators become involved. We understand how interest, security ranking, and enforcement interact, to protect the creditor or the borrower position effectively.',
+      'We also provide recurring regulatory compliance support to banks and financial institutions — covering documentation standards, consumer protections, and the regulations of the central bank — so that lending activity stays on the right side of the law.'
+    ]
+  },
+  {
+    id: 'litigation', img: paLitigation, icon: '⚖️', title: 'Litigation & Dispute Resolution',
+    desc: 'Trial-tested representation across all levels of the Nepali judiciary, together with arbitration, mediation, and alternative resolution. We pursue outcomes that protect your rights and your business.',
+    highlights: ['Civil & commercial litigation', 'Arbitration & mediation', 'Appellate representation', 'Strategic dispute resolution'],
+    long: [
+      'When a dispute escalates to the courts, you need representation that is thorough, strategic, and persuasive in the Nepali judicial system. Our litigation team appears before all levels of the judiciary — from district courts to the Supreme Court and specialist tribunals — with a reputation for preparation at every hearing.',
+      'We begin every case with a candid assessment: whether litigation is the right path, what the realistic outcomes are, and what it will cost. Where a better route exists, we recommend mediation, settlement negotiations, or arbitration for commercial disputes.',
+      'We manage each case in full: drafting pleadings and written submissions, advancing and meeting filing deadlines, leading evidence, arguing motions, and pursuing appeals. Our goal is to resolve the matter in the most effective way possible — and to defend your interests if you choose to go to trial.'
+    ]
+  },
+  {
+    id: 'ip', img: paIp, icon: '💡', title: 'Intellectual Property',
+    desc: 'From trademark registration and patent filing to copyright protection and enforcement, we build and secure your IP portfolio so the value you create stays yours — including renewals and oppositions.',
+    highlights: ['Trademark registration & renewal', 'Patent & design filings', 'Copyright protection', 'IP enforcement & litigation'],
+    long: [
+      'Your brand, inventions, designs and original works are valuable business assets — and we help you own, and defend them. Our IP practice covers end-to-end protection for trademarks, patents, designs, and copyright under Nepal\'s framework and international conventions.',
+      'We conduct searches to confirm availability, prepare and file applications with the Department of Industry, and manage examination, registration, renewals and oppositions. We also run watching programs so that you can act quickly when a similar mark or design appears in the market.',
+      'Where rights are infringed, we enforce them — issuing takedowns and cease notices, negotiating and, where necessary, litigating IP disputes. We also advise on licensing and commercial exploitation so your intangible assets carry real monetary value.'
+    ]
+  },
+  {
+    id: 'labor', img: paLabor, icon: '👥', title: 'Labor & Employment Law',
+    desc: 'Practical employment advice spanning contracts, workplace compliance, dispute resolution, collective bargaining, and HR policy — keeping your workforce and your business aligned.',
+    highlights: ['Employment contracts & policies', 'Labour compliance (Labor Act 2074)', 'Collective bargaining', 'Workplace dispute resolution'],
+    long: [
+      'A well-managed workforce begins with clear, lawful contracts and policies. We draft employment agreements that comply with the Labor Act, set out rights, and clearly define expectations in rolling provisions and intellectual property protection.',
+      'Our practice keeps employers aligned with mandatory requirements — from leaves, allowances and grievance procedures to social security enrolment under the Social Security Fund. We review HR handbooks and ensure termination, and severance are handled correctly.',
+      'When workplace issues arise, we step in regardless of whether it is a disciplinary matter, a dispute, or collective bargaining with a union. Our cases regularly help employers resolve issues fairly, while protecting the business.'
+    ]
+  },
+  {
+    id: 'realestate', img: paRealestate, icon: '🏠', title: 'Real Estate & Property',
+    desc: 'Property due diligence, title verification, land acquisition, lease arrangements, and real-estate disputes handled with practical advice — so you transact with certainty and minimum risk.',
+    highlights: ['Title & due diligence', 'Land acquisition & transfers', 'Lease & property agreements', 'Real-estate dispute resolution'],
+    long: [
+      'Every land or property deal in Nepal carries title, and boundary, and town-planning considerations. We run robust due diligence on land titles, so that you really buy what you intend to buy — with full verification of records, and planning compliance.',
+      'We prepare and complete the transfer documentation and registration, coordinate with land revenue offices and municipalities, and structure the transaction, including lease structures for commercial property and developments.',
+      'When conflicts over boundaries, ownership, or tenancy arise, we resolve them through negotiation and, if needed, litigation. Our property practice gives both private and business clients the confidence to transact with certainty.'
+    ]
+  },
+  {
+    id: 'tax', img: paTax, icon: '📊', title: 'Taxation',
+    desc: 'Strategic tax planning, tax compliance, VAT advisory, international tax structuring, and representation in tax disputes. We help you stay compliant while optimising what you keep.',
+    highlights: ['Tax planning & compliance', 'VAT advisory & filing', 'International tax structuring', 'Tax dispute representation'],
+    long: [
+      'Efficient, compliant taxation begins with correct planning from the outset. Our tax practitioner helps individuals and companies with advance planning, structuring transactions, and ongoing compliance with the Income Tax Act and VAT regime in Nepal.',
+      'We support your filings, deductions and documentation, VAT registration and returns, and the disclosure that is required across corporate and international structures — including withholding and permanent establishment considerations for cross-border activity.',
+      'Where disputes arise — an assessment, denial of a deduction, or an audit adjustment — we represent you in internal revenue proceedings and drive for the most efficient resolution. We combine technical tax advice with practical business strategy.'
+    ]
+  },
 ];
 
 const LAWYERS_SEED = [

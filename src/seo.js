@@ -146,13 +146,19 @@ function articleMeta(article) {
  * prerendered <head> matches what the SPA renders.
  */
 export function resolveRouteMeta(path) {
-  if (path.startsWith('/admin')) return ADMIN_ROUTE;
-  if (path.startsWith('/publications/')) {
-    const m = path.match(/^\/publications\/([^/]+)\/?$/);
+  const p = normalizePath(path);
+  if (p.startsWith('/admin')) return ADMIN_ROUTE;
+  if (p.startsWith('/publications/')) {
+    const m = p.match(/^\/publications\/([^/]+)\/?$/);
     const article = m ? findArticleBySlug(decodeURIComponent(m[1])) : undefined;
     return article ? articleMeta(article) : ROUTES['/404'];
   }
-  return ROUTES[path] || ROUTES['/404'];
+  return ROUTES[p] || ROUTES['/404'];
+}
+
+function normalizePath(path) {
+  if (!path || path === '/') return '/';
+  return path.replace(/\/+$/, '');
 }
 
 /* ------------------------------------------------------------------ */
@@ -454,9 +460,10 @@ export default function RouteSEO() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const route = resolveRouteMeta(pathname);
+    const normalized = normalizePath(pathname);
+    const route = resolveRouteMeta(normalized);
     applyRoute(route);
-    upsertJsonLd(pathname.startsWith('/admin') ? null : buildJsonLd(pathname));
+    upsertJsonLd(normalized.startsWith('/admin') ? null : buildJsonLd(normalized));
   }, [pathname]);
 
   return null;
