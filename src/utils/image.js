@@ -25,13 +25,13 @@ export function inferMimeType(src, fallback = 'image/jpeg') {
   return m ? m[1] : fallback;
 }
 
-export async function resizeDataUrl(src, { maxWidth = 1600, maxHeight = 1600, quality = 0.85 } = {}) {
+export async function resizeDataUrl(src, { maxWidth = 1600, maxHeight = 1600, quality = 0.85, upscale = true } = {}) {
   if (isSvg(src)) return { dataUrl: src, width: null, height: null, skipped: true };
 
   const img = await loadImage(src);
   const w = img.naturalWidth;
   const h = img.naturalHeight;
-  const scale = Math.min(1, maxWidth / w, maxHeight / h);
+  const scale = Math.min(upscale ? 20 : 1, maxWidth / w, maxHeight / h);
   const dw = Math.max(1, Math.round(w * scale));
   const dh = Math.max(1, Math.round(h * scale));
 
@@ -41,6 +41,8 @@ export async function resizeDataUrl(src, { maxWidth = 1600, maxHeight = 1600, qu
   canvas.width = dw;
   canvas.height = dh;
   const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
   if (/png|webp|gif/i.test(inferMimeType(src))) {
     ctx.clearRect(0, 0, dw, dh);
   } else {
