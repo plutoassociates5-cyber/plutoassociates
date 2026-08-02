@@ -10,6 +10,7 @@ import ArticlePage from './pages/ArticlePage';
 import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ScrollToTop from './components/PublicHooks';
+import SiteFavicon from './components/SiteFavicon';
 import { ToastProvider } from './context/ToastContext';
 
 const AdminApp = lazy(() => import('./AdminApp'));
@@ -18,6 +19,7 @@ export default function App() {
   return (
     <ToastProvider>
       <ScrollToTop />
+      <SiteFavicon />
       <RouteSEO />
       <main id="main-content">
         <Routes>
