@@ -5,6 +5,7 @@ import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup } from '../components/PublicUtils';
 import { HeroSlideshow } from '../components/PublicHooks';
 import { getHomepage } from '../utils/contentStore';
+import { getPublishedArticles } from '../seo';
 import hero1 from '../assets/hero-1.jpeg';
 import hero2 from '../assets/hero-2.jpeg';
 import hero3 from '../assets/hero-3.jpeg';
@@ -16,8 +17,41 @@ const HERO_SLIDES = [
   { image: hero3 },
 ];
 
+const CATEGORY_LABELS = {
+  general: 'Updates', fdi: 'FDI & Investment', corporate: 'Corporate Law',
+  labor: 'Labor & Employment', energy: 'Energy Law', tax: 'Taxation',
+  ip: 'Intellectual Property', litigation: 'Litigation',
+};
+function catLabel(c) { return CATEGORY_LABELS[c] || 'Updates'; }
+
+const FEATURES = [
+  { icon: '🎯', title: 'Results-Driven Approach', desc: 'We are measured by the outcomes we secure. Every strategy is built around your objectives, not our protocols.' },
+  { icon: '🤝', title: 'Client-First Culture', desc: 'We listen first, advise clearly, and tailor every recommendation to your unique situation and goals.' },
+  { icon: '🌐', title: 'Local Insight, Global Standards', desc: 'Deep command of Nepali law and institutions, matched with the sophistication expected of an international firm.' },
+  { icon: '⚡', title: 'Responsive & Accessible', desc: 'Direct access to your counsel. When the matter is urgent, your lawyer is a phone call away.' },
+  { icon: '🔒', title: 'Confidential & Trusted', desc: 'Absolute discretion on every engagement, so you can share freely and act with confidence.' },
+  { icon: '🗂️', title: 'Full-Service Firm', desc: 'Corporate, litigation, tax, energy, IP and more — comprehensive counsel under one roof.' },
+];
+
+const TESTIMONIALS = [
+  { quote: 'Pluto Associates guided our investment into Nepal from start to finish. Their clarity on FDI compliance and approvals made an otherwise complex process seamless.', name: 'Gautam R.', role: 'Managing Director, Kathmandu' },
+  { quote: 'Their litigation team is relentless and precise. We finally resolved a dispute that had stalled our business for years — and they kept us informed at every step.', name: 'Priya S.', role: 'Founder, Manufacturing Sector' },
+  { quote: 'From incorporation to contract drafting, their corporate practice handled everything with remarkable efficiency. A trusted partner in every sense.', name: 'Adv. Deepak M.', role: 'Corporate Client, Nepal' },
+];
+
+const PROCESS = [
+  { step: '01', title: 'Initial Consultation', desc: 'We listen carefully to understand your situation, objectives, and constraints in a confidential first meeting.' },
+  { step: '02', title: 'Strategy & Plan', desc: 'Your counsel develops a clear, tailored legal strategy — with timeline, options, and transparent fee guidance.' },
+  { step: '03', title: 'Execution & Advocacy', desc: 'We act decisively — drafting, negotiating, and representing you before courts, tribunals, and regulators.' },
+  { step: '04', title: 'Resolution & Review', desc: 'We see matters through to completion and remain on hand for follow-up, compliance, and future guidance.' },
+];
+
 export default function HomePage() {
   const hp = getHomepage();
+  const latest = getPublishedArticles()
+    .slice()
+    .sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0))
+    .slice(0, 3);
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -113,6 +147,91 @@ export default function HomePage() {
               <h3 className="font-serif text-xl text-navy mb-3">Intellectual Property</h3>
               <p className="text-sm text-text-body leading-relaxed">Protect your innovations with trademark registration, patent filing, copyright enforcement, and IP litigation.</p>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-24">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <span className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 inline-block reveal-anim">Why Choose Pluto Associates</span>
+            <h2 className="font-serif text-[clamp(2rem,4vw,2.6rem)] text-navy leading-tight mb-4 font-semibold reveal-anim">A Firm Built Around You</h2>
+            <p className="text-base text-text-light leading-relaxed reveal-anim">Everything you expect from a premier law firm — expertise, responsiveness, and results — delivered with genuine care.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FEATURES.map((f, i) => (
+              <div key={i} className="group bg-white border border-light-gray p-7 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+                <div className="w-12 h-12 rounded-xl bg-gold/10 text-2xl flex items-center justify-center mb-4">{f.icon}</div>
+                <h3 className="font-serif text-lg text-navy mb-2">{f.title}</h3>
+                <p className="text-sm text-text-body leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-24 bg-off-white">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+            <div>
+              <span className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 inline-block reveal-anim">From Our Team</span>
+              <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight font-semibold reveal-anim">Legal Updates & Insights</h2>
+            </div>
+            <Link to="/publications" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all self-start md:self-auto reveal-anim">View All Publications →</Link>
+          </div>
+
+          {latest.length === 0 ? (
+            <p className="text-text-light text-sm">New publications from our team will appear here soon.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {latest.map((a) => (
+                <Link key={a.id} to={`/publications/${a.slug}`} className="group bg-white border border-light-gray p-7 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-gold no-underline block reveal-anim">
+                  <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-3">{catLabel(a.category)}</div>
+                  <h3 className="font-serif text-lg text-navy mb-2 leading-snug group-hover:text-gold">{a.title}</h3>
+                  <p className="text-sm text-text-body leading-relaxed">{a.excerpt || (a.content ? a.content.replace(/<[^>]*>/g, '').substring(0, 120) : '')}…</p>
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-gold mt-4 group-hover/read:gap-3 transition-all">Read Article <span>→</span></span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="py-20 lg:py-24 bg-navy text-white">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 inline-block reveal-anim">Client Stories</span>
+            <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-white leading-tight font-semibold reveal-anim">What Our Clients Say</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {TESTIMONIALS.map((t, i) => (
+              <figure key={i} className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col transition-all duration-300 hover:bg-white/10 reveal-anim">
+                <span className="text-3xl text-gold leading-none mb-4">“</span>
+                <blockquote className="text-[0.95rem] text-white/85 leading-relaxed flex-1">{t.quote}</blockquote>
+                <figcaption className="mt-6 pt-5 border-t border-white/10">
+                  <div className="font-semibold text-gold">{t.name}</div>
+                  <div className="text-sm text-white/50">{t.role}</div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 lg:py-24 bg-off-white">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 inline-block reveal-anim">How We Work</span>
+            <h2 className="font-serif text-[clamp(2rem,4vw,2.6rem)] text-navy leading-tight font-semibold reveal-anim">A Clear Path to Resolution</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {PROCESS.map((p) => (
+              <div key={p.step} className="relative bg-white border border-light-gray p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 reveal-anim">
+                <span className="font-serif text-4xl text-gold/30 font-bold block mb-4">{p.step}</span>
+                <h3 className="font-serif text-lg text-navy mb-2">{p.title}</h3>
+                <p className="text-sm text-text-body leading-relaxed">{p.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
