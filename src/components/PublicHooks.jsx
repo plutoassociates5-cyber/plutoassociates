@@ -33,13 +33,15 @@ export function HeroSlideshow({ slides }) {
     return () => clearInterval(timer);
   }, [slides.length]);
 
+  const next = (current + 1) % slides.length;
+
   return (
     <>
       {slides.map((slide, idx) => (
         <div
           key={idx}
           className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${idx === current ? 'opacity-100' : 'opacity-0'}`}
-          style={{ backgroundImage: `url(${slide.image})` }}
+          style={idx === current || idx === next ? { backgroundImage: `url(${slide.image})` } : undefined}
           {...(idx === 0 ? { fetchpriority: 'high' } : {})}
         />
       ))}
