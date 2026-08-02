@@ -66,7 +66,7 @@ export default function HomePage() {
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
             <div className="w-full lg:w-1/2 reveal-left-anim">
-              <img src={homeImg} alt="About Pluto Associates" loading="lazy" className="w-full h-[300px] lg:h-[500px] object-cover rounded-lg shadow-md" />
+              <img src={homeImg} alt="Pluto Associates office and legal team in Kathmandu, Nepal" title="Pluto Associates office, Kathmandu" loading="lazy" className="w-full h-[300px] lg:h-[500px] object-cover rounded-lg shadow-md" />
             </div>
             <div className="w-full lg:w-1/2 reveal-right-anim flex flex-col justify-center">
               <div className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4">About Our Firm</div>

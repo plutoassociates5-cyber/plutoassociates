@@ -44,12 +44,12 @@ export default function TeamsPage() {
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6 lg:gap-10 bg-white shadow-sm p-6 lg:p-8 items-start reveal-anim mb-12">
-            <img src={teamSudeep} alt="Adv. Sudeep Nepal" loading="lazy" className="w-full h-[300px] lg:h-full object-cover" />
+            <img src={teamSudeep} alt="Adv. Sudeep Nepal, Founder and Senior Partner" title="Adv. Sudeep Nepal — Founder & Senior Partner" loading="lazy" className="w-full h-[300px] lg:h-full object-cover" />
             <div>
               <h3 className="font-serif text-2xl text-navy mb-1">Adv. Sudeep Nepal</h3>
               <div className="text-xs text-gold font-semibold tracking-[1px] uppercase mb-4">Founder & Senior Partner</div>
               <p className="text-sm leading-relaxed mb-4 text-text-body">
-                Adv. Sudeep Nepal is the founding partner of Pluto Associates, bringing years of extensive experience in corporate law, FDI, litigation, and regulatory affairs. He has represented clients before the Supreme Court of Nepal, appellate courts, and various tribunals. His practice focuses on cross-border investments, commercial litigation, and strategic legal advisory for multinational corporations operating in Nepal.
+                Adv. Sudeep Nepal is the founding partner of Pluto Associates, bringing years of extensive experience in <Link to="/practice-areas" className="text-navy underline underline-offset-2 hover:text-gold">corporate law, FDI, litigation, and regulatory affairs</Link>. He has represented clients before the Supreme Court of Nepal, appellate courts, and various tribunals. His practice focuses on cross-border investments, commercial litigation, and strategic legal advisory for multinational corporations operating in Nepal.
               </p>
               <p className="text-sm leading-relaxed mb-4 text-text-body">
                 A recognized thought leader in Nepali legal circles, Adv. Nepal has authored numerous articles on corporate law and investment regulations. He is committed to mentoring the next generation of legal professionals and advancing the rule of law in Nepal.
@@ -68,19 +68,19 @@ export default function TeamsPage() {
 
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
-              <img src={teamNikesh} alt="Nikesh Nepal" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
+              <img src={teamNikesh} alt="Nikesh Nepal, Legal Associate at Pluto Associates" title="Nikesh Nepal — Legal Associate" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
               <h3 className="font-serif text-lg text-navy mb-2">Nikesh Nepal</h3>
               <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">Legal Associate</div>
               <p className="text-sm text-text-body">Civil Law, Corporate Law, Contract Drafting</p>
             </div>
             <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
-              <img src={teamGhimire} alt="Sujan Subedi" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
+              <img src={teamGhimire} alt="Sujan Subedi, Legal Associate at Pluto Associates" title="Sujan Subedi — Legal Associate" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
               <h3 className="font-serif text-lg text-navy mb-2">Sujan Subedi</h3>
               <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">Legal Associate</div>
               <p className="text-sm text-text-body">Corporate Law, Litigation, Compliance</p>
             </div>
             <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
-              <img src={teamNeehal} alt="Neehal Pokharel" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
+              <img src={teamNeehal} alt="Neehal Pokharel, Legal Associate at Pluto Associates" title="Neehal Pokharel — Legal Associate" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
               <h3 className="font-serif text-lg text-navy mb-2">Neehal Pokharel</h3>
               <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">Legal Associate</div>
               <p className="text-sm text-text-body">Corporate Law, Litigation, Compliance</p>

@@ -65,7 +65,7 @@ export default function PracticeAreasPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {AREAS.map((area, idx) => (
               <div key={area.id} id={area.id} className="bg-white border border-light-gray overflow-hidden cursor-pointer transition-all duration-400 hover:shadow-lg hover:-translate-y-[3px] reveal-anim">
-                <img src={area.img} alt={area.title} loading="lazy" className="w-full h-48 object-cover" />
+                <img src={area.img} alt={area.title} title={area.title} loading="lazy" className="w-full h-48 object-cover" />
                 <div className="p-5">
                   <h3 className="font-serif text-xl text-navy mb-3">{area.icon} {area.title}</h3>
                   <p className="text-sm text-text-body leading-relaxed">{area.desc}</p>
