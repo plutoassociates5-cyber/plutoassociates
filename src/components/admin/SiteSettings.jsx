@@ -12,7 +12,7 @@ export default function SiteSettings() {
   const onLogo = (e) => {
     const f = e.target.files && e.target.files[0];
     if (!f || !f.type.startsWith('image/')) return;
-    if (f.size > 1500000) { toast('Logo must be under 1.5MB.', 'err'); return; }
+    if (f.size > 3 * 1024 * 1024) { toast('Logo must be under 3MB.', 'err'); return; }
     const r = new FileReader();
     r.onload = () => set('logo', r.result);
     r.readAsDataURL(f);
@@ -40,7 +40,7 @@ export default function SiteSettings() {
           <h2 className="text-sm font-semibold text-[#1d2327] mb-4 pb-3 border-b border-wp-border">🏢 Company</h2>
           <Row label="Site Name"><input className={input} value={s.name} onChange={(e) => set('name', e.target.value)} /></Row>
           <Row label="Tagline"><input className={input} value={s.tagline} onChange={(e) => set('tagline', e.target.value)} /></Row>
-          <Row label="Logo" hint="PNG/SVG, up to 1.5MB">
+          <Row label="Logo" hint="PNG/SVG, up to 3MB">
             <div className="flex items-center gap-3">
               <img src={s.logo} alt="Logo" className="w-10 h-10 object-contain bg-light-gray" />
               <label className="bg-wp-blue text-white px-3 py-1.5 text-xs font-semibold cursor-pointer">Upload<input type="file" accept="image/*" hidden onChange={onLogo} /></label>

@@ -35,7 +35,9 @@ export default function PublicNavbar() {
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 lg:h-24">
             <Link to="/" className="flex items-center no-underline gap-3">
-              <img src={logoSrc} alt="Pluto Associates — Advocates and Legal Consultants" title="Pluto Associates" className="w-[38px] h-[38px] object-contain" />
+              <span className="flex items-center justify-center w-14 h-14 lg:w-[60px] lg:h-[60px] rounded-full bg-white/10 backdrop-blur-sm shrink-0 overflow-hidden">
+                <img src={logoSrc} alt="Pluto Associates — Advocates and Legal Consultants" title="Pluto Associates" className="w-[42px] h-[42px] lg:w-[48px] lg:h-[48px] object-contain" />
+              </span>
               <div className="flex flex-col">
                 <span className="font-serif text-white text-lg font-semibold leading-tight">Pluto Associates</span>
                 <span className="text-[0.65rem] text-text-light tracking-wider hidden sm:block">Advocates & Legal Consultants</span>
@@ -86,7 +88,9 @@ export default function PublicNavbar() {
       <div className={`fixed top-0 -right-full w-[85%] max-w-[360px] h-screen bg-navy z-[10001] transition-all duration-500 flex flex-col${mobileOpen ? ' right-0' : ''}`} id="mobile-menu" aria-label="Mobile navigation">
         <button className="absolute top-4 right-4 bg-transparent border-none text-white text-2xl cursor-pointer p-2" onClick={() => setMobileOpen(false)} aria-label="Close menu">✕</button>
         <div className="flex items-center gap-3 p-6 border-b border-white/5">
-          <img src={logoSrc} alt="Pluto Associates" title="Pluto Associates" className="w-[35px] h-[35px] object-contain" />
+          <span className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white/10 backdrop-blur-sm shrink-0 overflow-hidden">
+            <img src={logoSrc} alt="Pluto Associates" title="Pluto Associates" className="w-[38px] h-[38px] object-contain" />
+          </span>
           <span className="font-serif text-white text-base font-bold">Pluto Associates</span>
         </div>
         <ul className="flex flex-col list-none m-0 p-4 pt-8">
