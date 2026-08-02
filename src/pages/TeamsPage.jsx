@@ -5,11 +5,12 @@ import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup } from '../components/PublicUtils';
 import teamsBg from '../assets/teams-background.jpg';
 import teamSudeep from '../assets/team-sudeep.jpg';
-import teamGhimire from '../assets/team-sujan.jpeg';
-import teamNikesh from '../assets/team-nikesh.jpeg';
-import teamNeehal from '../assets/team-motey.jpeg';
+import { getLawyers } from '../utils/contentStore';
 
 export default function TeamsPage() {
+  const lawyers = getLawyers();
+  const partner = lawyers.find((l) => l.id === 'sudeep') || { img: teamSudeep, name: 'Adv. Sudeep Nepal', designation: 'Founder & Senior Partner', bio: '', email: '', phone: '' };
+  const associates = lawyers.filter((l) => l.id !== 'sudeep');
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -55,8 +56,8 @@ export default function TeamsPage() {
                 A recognized thought leader in Nepali legal circles, Adv. Nepal has authored numerous articles on corporate law and investment regulations. He is committed to mentoring the next generation of legal professionals and advancing the rule of law in Nepal.
               </p>
               <div className="flex gap-4">
-                <a href="mailto:sudeep@plutoassociates.com" className="text-gold text-sm hover:underline">✉️ sudeep@plutoassociates.com</a>
-                <a href="tel:+977-9802356987" className="text-gold text-sm hover:underline">📞 Contact</a>
+                <a href={`mailto:${partner.email}`} className="text-gold text-sm hover:underline">✉️ {partner.email}</a>
+                {partner.phone && <a href={`tel:${partner.phone}`} className="text-gold text-sm hover:underline">📞 Contact</a>}
               </div>
             </div>
           </div>
@@ -67,24 +68,14 @@ export default function TeamsPage() {
           <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight mb-5 font-semibold text-center">Our Associates</h2>
 
           <div className="flex flex-wrap justify-center gap-8 mt-8">
-            <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
-              <img src={teamNikesh} alt="Nikesh Nepal, Legal Associate at Pluto Associates" title="Nikesh Nepal — Legal Associate" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
-              <h3 className="font-serif text-lg text-navy mb-2">Nikesh Nepal</h3>
-              <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">Legal Associate</div>
-              <p className="text-sm text-text-body">Civil Law, Corporate Law, Contract Drafting</p>
-            </div>
-            <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
-              <img src={teamGhimire} alt="Sujan Subedi, Legal Associate at Pluto Associates" title="Sujan Subedi — Legal Associate" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
-              <h3 className="font-serif text-lg text-navy mb-2">Sujan Subedi</h3>
-              <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">Legal Associate</div>
-              <p className="text-sm text-text-body">Corporate Law, Litigation, Compliance</p>
-            </div>
-            <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
-              <img src={teamNeehal} alt="Neehal Pokharel, Legal Associate at Pluto Associates" title="Neehal Pokharel — Legal Associate" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
-              <h3 className="font-serif text-lg text-navy mb-2">Neehal Pokharel</h3>
-              <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">Legal Associate</div>
-              <p className="text-sm text-text-body">Corporate Law, Litigation, Compliance</p>
-            </div>
+            {associates.map((l) => (
+              <div key={l.id} className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
+                <img src={l.img} alt={`${l.name}, ${l.designation} at Pluto Associates`} title={`${l.name} — ${l.designation}`} loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
+                <h3 className="font-serif text-lg text-navy mb-2">{l.name}</h3>
+                <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">{l.designation}</div>
+                <p className="text-sm text-text-body">{l.focus || l.bio}</p>
+              </div>
+            ))}
             <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-navy shadow-sm p-6 lg:p-8 text-center flex flex-col items-center justify-center text-white reveal-anim">
               <h3 className="font-serif text-xl mb-3">Join Our Team</h3>
               <p className="text-sm text-white/70 mb-4">We're always looking for talented legal professionals.</p>

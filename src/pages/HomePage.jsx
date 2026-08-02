@@ -4,6 +4,7 @@ import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup } from '../components/PublicUtils';
 import { HeroSlideshow } from '../components/PublicHooks';
+import { getHomepage } from '../utils/contentStore';
 import hero1 from '../assets/hero-1.jpeg';
 import hero2 from '../assets/hero-2.jpeg';
 import hero3 from '../assets/hero-3.jpeg';
@@ -16,6 +17,7 @@ const HERO_SLIDES = [
 ];
 
 export default function HomePage() {
+  const hp = getHomepage();
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -39,12 +41,12 @@ export default function HomePage() {
         <div className="relative z-10 h-full flex items-center pt-[70px]">
           <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="max-w-[700px]">
-              <div className="inline-block px-4 py-1.5 text-[0.7rem] font-semibold tracking-[2px] uppercase text-gold border border-gold/30 bg-gold/15 mb-6">Est. 2019 · Nepal Bar Association Registered</div>
-              <h1 className="font-serif text-[clamp(2.5rem,6vw,4.2rem)] text-white font-bold leading-[1.1] mb-5">Where Legal <em className="text-gold not-italic">Excellence</em> Meets Client <em className="text-gold not-italic">Trust</em></h1>
-              <p className="text-[1.05rem] text-white/80 max-w-[540px] leading-relaxed mb-8">Pluto Associates delivers strategic, results-driven legal counsel across Nepal — combining deep regulatory insight with unwavering commitment to our clients' success.</p>
+              <div className="inline-block px-4 py-1.5 text-[0.7rem] font-semibold tracking-[2px] uppercase text-gold border border-gold/30 bg-gold/15 mb-6">{hp.hero.badge}</div>
+              <h1 className="font-serif text-[clamp(2.5rem,6vw,4.2rem)] text-white font-bold leading-[1.1] mb-5">{hp.hero.headline}</h1>
+              <p className="text-[1.05rem] text-white/80 max-w-[540px] leading-relaxed mb-8">{hp.hero.subheadline}</p>
               <div className="flex gap-4 flex-wrap">
-                <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Schedule a Consultation →</Link>
-                <Link to="/practice-areas" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-white font-sans text-sm font-semibold border-2 border-white/30 cursor-pointer transition-all duration-300 hover:border-gold hover:text-gold no-underline">Explore Our Services</Link>
+                <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">{hp.hero.ctaPrimary} →</Link>
+                <Link to="/practice-areas" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-white font-sans text-sm font-semibold border-2 border-white/30 cursor-pointer transition-all duration-300 hover:border-gold hover:text-gold no-underline">{hp.hero.ctaSecondary}</Link>
               </div>
             </div>
           </div>
@@ -54,10 +56,9 @@ export default function HomePage() {
       <section className="bg-navy py-12">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div className="reveal-anim"><div className="font-serif text-4xl font-bold text-gold mb-1">30+</div><div className="text-xs text-white/60 uppercase tracking-[1.5px]">Years Combined Experience</div></div>
-            <div className="reveal-anim"><div className="font-serif text-4xl font-bold text-gold mb-1">500+</div><div className="text-xs text-white/60 uppercase tracking-[1.5px]">Cases Successfully Resolved</div></div>
-            <div className="reveal-anim"><div className="font-serif text-4xl font-bold text-gold mb-1">15+</div><div className="text-xs text-white/60 uppercase tracking-[1.5px]">Practice Areas</div></div>
-            <div className="reveal-anim"><div className="font-serif text-4xl font-bold text-gold mb-1">95%</div><div className="text-xs text-white/60 uppercase tracking-[1.5px]">Client Satisfaction Rate</div></div>
+            {hp.stats.map((stat, i) => (
+              <div key={i} className="reveal-anim"><div className="font-serif text-4xl font-bold text-gold mb-1">{stat.value}</div><div className="text-xs text-white/60 uppercase tracking-[1.5px]">{stat.label}</div></div>
+            ))}
           </div>
         </div>
       </section>

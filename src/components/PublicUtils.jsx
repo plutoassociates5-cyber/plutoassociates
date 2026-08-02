@@ -57,6 +57,7 @@ export function WhatsAppPopup() {
 
       <a
         href="https://wa.me/9779802356987"
+
         target="_blank"
         rel="noopener noreferrer"
         className={`fixed bottom-6 sm:bottom-8 right-4 sm:right-8 z-[9999] transition-all duration-500 ease-out ${showFloat ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-50 pointer-events-none'}`}

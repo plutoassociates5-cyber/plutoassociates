@@ -4,10 +4,12 @@ import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup } from '../components/PublicUtils';
 import { useToast } from '../context/ToastContext';
+import { getSettings, addMessage, uid } from '../utils/contentStore';
 import hero1 from '../assets/hero-1.jpeg';
 
 export default function ContactPage() {
   const { toast } = useToast();
+  const site = getSettings();
   const [form, setForm] = useState({ fname: '', lname: '', email: '', phone: '', area: 'general', message: '' });
   const [sent, setSent] = useState(false);
 
@@ -30,7 +32,8 @@ export default function ContactPage() {
     const body = encodeURIComponent(
       `Name: ${form.fname} ${form.lname}\nEmail: ${form.email}\nPhone: ${form.phone}\nArea: ${form.area}\n\nMessage:\n${form.message}`
     );
-    window.location.href = `mailto:info@plutoassociates.com?subject=${subject}&body=${body}`;
+    addMessage({ id: uid('msg'), name: `${form.fname} ${form.lname}`, email: form.email, phone: form.phone, area: form.area, subject: `Consultation Request - ${form.area}`, message: form.message, status: 'new', date: new Date().toISOString() });
+    window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
     setSent(true);
     toast('Opening your email client to send the consultation request.');
   };
@@ -55,22 +58,22 @@ export default function ContactPage() {
             <div className="text-center p-6 lg:p-8 border border-white/10 reveal-anim">
               <div className="text-3xl mb-3">📍</div>
               <h3 className="font-serif text-lg text-white mb-2">Visit Us</h3>
-              <p className="text-sm text-white/70">Kathmandu, Nepal</p>
+              <p className="text-sm text-white/70">{site.address}</p>
             </div>
             <div className="text-center p-6 lg:p-8 border border-white/10 reveal-anim">
               <div className="text-3xl mb-3">📞</div>
               <h3 className="font-serif text-lg text-white mb-2">Call Us</h3>
-              <a href="tel:+977-9802356987" className="text-sm text-gold hover:underline">+977-9802356987</a>
+              <a href={`tel:${site.phone}`} className="text-sm text-gold hover:underline">{site.phone}</a>
             </div>
             <div className="text-center p-6 lg:p-8 border border-white/10 reveal-anim">
               <div className="text-3xl mb-3">✉️</div>
               <h3 className="font-serif text-lg text-white mb-2">Email Us</h3>
-              <a href="mailto:info@plutoassociates.com" className="text-sm text-gold hover:underline">info@plutoassociates.com</a>
+              <a href={`mailto:${site.email}`} className="text-sm text-gold hover:underline">{site.email}</a>
             </div>
             <div className="text-center p-6 lg:p-8 border border-white/10 reveal-anim">
               <div className="text-3xl mb-3">💬</div>
               <h3 className="font-serif text-lg text-white mb-2">WhatsApp</h3>
-              <a href="https://wa.me/9779802356987" target="_blank" rel="noopener noreferrer" className="text-sm text-gold hover:underline">Chat Now</a>
+              <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer" className="text-sm text-gold hover:underline">Chat Now</a>
             </div>
           </div>
         </div>
@@ -84,8 +87,8 @@ export default function ContactPage() {
               <div className="bg-off-white p-4 rounded-md mb-6 text-[0.85rem] leading-relaxed">
                 <strong>How consultations work:</strong><br />
                 Fill out the form below and it will open your email client with your details pre-filled.
-                Send the email to <strong>info@plutoassociates.com</strong> and our team will reply within 24 hours.
-                You can also email us directly or call <strong>+977-9802356987</strong>.
+                Send the email to <strong>{site.email}</strong> and our team will reply within 24 hours.
+                You can also email us directly or call <strong>{site.phone}</strong>.
               </div>
               <p className="text-sm text-text-body mb-6">Fill out the form and our team will get back to you within 24 hours.</p>
               <form onSubmit={handleSubmit}>
@@ -137,8 +140,8 @@ export default function ContactPage() {
             <div className="reveal-anim">
               <div className="bg-off-white p-6 mb-6">
                 <h3 className="font-serif text-base text-navy mb-3">🕐 Office Hours</h3>
-                <p className="text-sm text-text-body mb-2"><strong>Sunday – Friday:</strong> 10:00 AM – 6:00 PM</p>
-                <p className="text-sm text-text-body mb-2"><strong>Saturday:</strong> Closed</p>
+                <p className="text-sm text-text-body mb-2"><strong>{site.hours}</strong></p>
+                <p className="text-sm text-text-body mb-2"><strong>{site.hoursSat}</strong></p>
                 <p className="text-sm text-text-light/70 mt-2 text-[0.78rem]">Weekend appointments available upon request.</p>
               </div>
               <div className="bg-off-white p-6 mb-6">
@@ -148,9 +151,9 @@ export default function ContactPage() {
               </div>
               <div className="bg-off-white p-6 mb-6">
                 <h3 className="font-serif text-base text-navy mb-3">⚡ Quick Connect</h3>
-                <p className="mb-2"><a href="https://wa.me/9779802356987" target="_blank" rel="noopener noreferrer" className="text-wp-blue text-sm">💬 WhatsApp</a></p>
-                <p className="mb-2"><a href="mailto:info@plutoassociates.com" className="text-wp-blue text-sm">✉️ Email Us</a></p>
-                <p className="mb-2"><a href="tel:+977-9802356987" className="text-wp-blue text-sm">📞 Call Now</a></p>
+                <p className="mb-2"><a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer" className="text-wp-blue text-sm">💬 WhatsApp</a></p>
+                <p className="mb-2"><a href={`mailto:${site.email}`} className="text-wp-blue text-sm">✉️ Email Us</a></p>
+                <p className="mb-2"><a href={`tel:${site.phone}`} className="text-wp-blue text-sm">📞 Call Now</a></p>
               </div>
             </div>
           </div>
@@ -160,7 +163,7 @@ export default function ContactPage() {
       <section className="relative h-[300px] lg:h-[400px]">
         <iframe
           title="Pluto Associates Location"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.2!2d85.324!3d27.7172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDQzJzAxLjkiTiA4NcKwMTknMjYuNCJF!5e0!3m2!1sen!2snp!4v1"
+          src={site.mapsEmbed}
           allowFullScreen
           loading="lazy"
           className="w-full h-full border-none"
