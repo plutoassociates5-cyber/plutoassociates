@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { getArticles, saveArticles } from '../utils/storage';
+import { getArticles, saveArticles, deleteArticle } from '../utils/storage';
 import { useToast } from '../context/ToastContext';
 import Modal from './Modal';
 
@@ -33,7 +33,7 @@ export default function Dashboard({ onEdit, onNavigate }) {
 
   const handleDelete = () => {
     if (!delTarget) return;
-    saveArticles(articles.filter((a) => a.id !== delTarget));
+    deleteArticle(delTarget);
     setArticles(getArticles());
     toast('Article moved to trash.');
     setDelTarget(null);
