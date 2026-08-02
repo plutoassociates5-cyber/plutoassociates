@@ -1,0 +1,30 @@
+const S = (category, question, answer, keywords, featured = false) => ({
+  category, question, answer,
+  keywords: keywords.split('|').map((k) => k.trim()).filter(Boolean),
+  featured,
+});
+
+export const companySeed = [
+  S('corporate-law',
+    'What is corporate law and when do I need a corporate lawyer in Nepal?',
+    'Corporate law is the set of rules governing how companies in Nepal are created, owned, managed and closed down. It spans registration, governance, shareholding, compliance, contracts and the rights and duties of directors and shareholders. You most need a corporate lawyer at the points where a mistake is expensive or hard to reverse: when you incorporate, raise investment, structure or buy a business, sign a major contract, or face a dispute. Many healthy businesses keep a lawyer on retainer so advice is available before a problem grows. Our corporate team can review your structure, filings and agreements and tell you plainly where you carry exposure, so you can act early rather than react after damage.',
+    'corporate law nepal|when do i need a corporate lawyer|corporate lawyer kathmandu|business law advice nepal', true),
+  S('company-registration',
+    'How do I register a company in Nepal?',
+    'Company registration in Nepal is led by the Office of the Company Registrar (OCR) under the Companies Act. In general you choose a company type and a unique name, prepare the memorandum and articles, and submit them with the identification of the proposed directors and shareholders. Once the OCR approves, you receive the certificate of incorporation. You then complete the picture with PAN registration, and depending on your activity, VAT and any sector licence. The required details can change, so a filing lawyer confirms the current position and prepares the documents so the application is accepted the first time, which avoids the delays and repeated resubmissions common in self-filing.',
+    'register company nepal|how to register company kathmandu|company registration process',
+    false),
+  S('company-registration',
+    'How much does company registration cost in Nepal?',
+    'There is no single fixed price for company registration in Nepal; the total depends on the company type, its share capital, government and stamp fees, notarisation and legal work preparing the documents. The government charges are generally modest; the larger part is usually the professional fee for preparing the memorandum and articles correctly and guiding the filing through OCR. What registration costs rarely approaches the cost of getting it wrong, since a rejected filing or a poorly structured company costs far more to fix. At Pluto we confirm the then-current fee schedule at the time of your enquiry, give a transparent, fixed quote before starting, and base the fee on a clear scope so there are no surprise invoices.',
+    'company registration cost nepal|how much to register a company|company registration fees kathmandu', false),
+  S('company-registration',
+    'Can foreigners own a company in Nepal?',
+    'Yes, in broad terms foreigners can own companies in Nepal, but the route is governed by the Foreign Investment and Technology Transfer Act (FITTA) and the sector policy of Nepal. For most businesses, a foreign investor sets up a subsidiary company or a joint venture with local partners, and the investment must satisfy the minimum thresholds and fall within eligible sectors. Some sectors are reserved for Nepali investors. The practical steps combine company registration with foreign investment approval. We help foreign investors determine eligibility, decide between a wholly foreign-owned entity and a joint venture, and handle both the approval and the registration so the investment is compliant from the outset.',
+    'can foreigners own a company in nepal|foreign investment nepal company|do i need a local partner in nepal',
+  ),
+  S('corporate-law',
+    'What is the difference between a private and a public company in Nepal?',
+    'A private company in Nepal restricts who may hold its shares and does not offer shares to the public; a public company can invite the public to subscribe and operates under a broader disclosure and governance framework. Private companies are common for closely held, family or joint-venture businesses because the owners keep control over who becomes a shareholder. A public company is used when the business intends to list or raise broad capital, and it carries heavier obligations. Choosing the right type early matters because the two differ in registration, governance and reporting, and converting later involves its own approvals. Our team helps match the entity type to your ownership and capital plans.',
+    'private vs public company nepal|company types nepal|private limited company nepal'),
+];

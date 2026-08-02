@@ -1,0 +1,31 @@
+const S = (category, question, answer, keywords) => ({
+  category, question, answer,
+  keywords: keywords.split('|').map((k) => k.trim()).filter(Boolean),
+});
+
+export const governanceSeed = [
+  S('corporate-governance',
+    'What is corporate governance and why does it matter in Nepal?',
+    'Corporate governance is the system of rules and processes through which a company in Nepal is directed and controlled. It covers how shareholders appoint directors, how board decisions are made and recorded, how records are kept, and how the company stays compliant. It matters because it protects the owners from each other, keeps regulatory filings in order, reduces director exposure, and makes the company credible to investors and lenders. Weak governance rarely looks expensive on the day it is ignored; it shows up later, when a minority shareholder, a new investor or a borrower asks to see a clean record. We help boards run properly and help companies make themselves investable.',
+    'corporate governance nepal|board of directors duties|company governance kathmandu'),
+  S('corporate-governance',
+    'What are my rights as a shareholder in a Nepali company?',
+    'Shareholder rights in Nepal come largely from the Companies Act and from a company agreements of shareholders and articles. They generally include the right to receive information and accounts, to attend and vote at general meetings, to receive dividends when declared, to approve certain major decisions, and to participate in the transfer of shares. The precise rights depend on the class of shares you hold and on any private agreement among the shareholders. Minority shareholders in particular benefit from a well-drafted shareholder agreement that sets out reserved decisions and exit terms. We regularly document these arrangements so that rights are written, not assumed.',
+    'shareholder rights nepal|minority shareholder rights|shareholder agreement protection|rights of shareholders'),
+  S('corporate-governance',
+    'What are the duties of a director in a Nepali company?',
+    'A director of a Nepali company is expected to act honestly, in good faith and in the best interests of the company, rather than personal interest; to avoid conflicts; and to keep proper records. Directors are responsible for convening and recording meetings, for the accuracy of filings made in the company, and for lawful management of affairs. If they act without authority or cause loss, they can in some circumstances be personally accountable. The precise scope of a director duties is defined by the Companies Act and the company own articles. Directors who understand their duties before they act to much lower risk. We guide boards on their obligations and on what to document.',
+    'director duties nepal|board of directors responsibilities|director liability kathmandu'),
+  S('compliance',
+    'What are the annual compliance obligations of a company in Nepal?',
+    'A Nepali company must keep its statutory records in order and make periodic filings. In broad terms this includes maintaining the register of shareholders and directors, holding shareholder and board meetings and recording them properly, filing the annual return and other statutory returns, and keeping tax filings and records up to date. The exact obligations depend on the company type and size, sometimes of the Compliances may be exempt, but what matters most is that the filings are timely, because missed deadlines can carry penalties and later block renewals and transactions. We help businesses keep a compliance calendar and prepare and file the required documents on time.',
+    'company compliance obligations nepal|annual filings company nepal|statutory compliance kathmandu'),
+  S('compliance',
+    'What happens if my company misses annual compliance?',
+    'Missed compliance rarely has no effect; it usually shows up as fines or penalties and a company record that is no longer clean with the registrar. A non-compliant registration can then delay everyday tasks the business needs, such as renewing a licence, adding or removing a director, transferring shares, obtaining a clean company status certificate, or raising finance. The ordinary course is to bring the record current, often by paying an arrears charge rather than anything more, and the company is generally better off regularising than leaving a gap. Where a record has fallen behind we identify what is missing, calculate the position and clear it so the company returns to good standing.',
+    'missed annual compliance nepal|company in default nepal|restore company registration nepal'),
+  S('compliance',
+    'What is the registered office and why does a company need one?',
+    'A registered office is the official, current address of a company, and having one is a basic requirement of a company in Nepal. It is the place where the registrar and others are taken to reach the company, and where official documents are understood to be served on it. Changing it requires the company to update the registrar, which a company commonly overlooks when it relocates. A wrong or stale registered address makes the company easy to lose from the official record. Because it is so fundamental, we help keep the registered office record correct and complete the paperwork whenever the company moves.',
+    'registered office nepal|registered address company nepal|company address registrar'),
+];

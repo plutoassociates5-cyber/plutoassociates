@@ -1,0 +1,31 @@
+const S = (category, question, answer, keywords) => ({
+  category, question, answer,
+  keywords: keywords.split('|').map((k) => k.trim()).filter(Boolean),
+});
+
+export const otherSeed = [
+  S('nonprofit',
+    'How do I register an NGO or an INGO in Nepal?',
+    'A local organisation in Nepal is generally registered with the District Administration Office as a non-profit, while an international non-governmental organisation (INGO) must additionally be affiliated with, or approved by, the relevant authority; the permission path depends on the sector and the source of funding. The distinction matters because NGOs and INGOs follow different approval and reporting routes. Both begin with the purpose and the constitution, then continue with registration and annual reporting, the last of which is where many organisations fall behind. The exact approvals and reports are workable once the type is confirmed. We help founders and international partners register, coordinate the approvals and build a reporting habit that keeps the organisation in good standing.',
+    'register an ngo in nepal|ingo registration kathmandu|open a nonprofit nepal'),
+  S('documents',
+    'What is a power of attorney and when do I need one in Nepal?',
+    'A power of attorney is a document that gives someone the legal authority to act for you in defined matters, such as signing documents, handling money or the transfer of property. It is needed whenever you want another person to act in your place, often when you are outside Nepal or unable to act, and the scope can be broad or limited to one transaction. The document must be made and witnessed and, for many property matters, in the form the law requires, so that the authority is actually valid in Nepal. Without it, a bank, a registrar or a counterparty cannot accept another person signing on your behalf. We prepare powers of attorney that give exactly the authority you want, no more and no less, and guide the execution so it is accepted by the authority concerned.',
+    'power of attorney nepal|what is a power of attorney|give authority to sign for me nepal'),
+  S('advisory',
+    'When should I hire a corporate lawyer in Nepal?',
+    'The costliest advice is usually the advice you needed before you acted; the wisest times to involve a corporate lawyer are before a commitment is made. Generally you should hire a corporate lawyer when you incorporate, structure ownership, take investment or give equity, buy or sell a business, sign a major contract, change directors or shareholders, face a compliance or statutory deadline, or enter a dispute. These are the points where a small mistake easily outweighs the fee. Early advice is also cheaper and closer to prevention. For many companies a retainer makes sense, so the lawyer already knows the records and can act fast when a deadline or issue appears. We can be that lawyer under a simple, predictable arrangement.',
+    'when to hire a corporate lawyer|need a business lawyer nepal|hire a corporate lawyer kathmandu'),
+  S('advisory',
+    'How does a legal retainer work?',
+    'A legal retainer is a fixed arrangement under which a lawyer is available to a business for a period, usually for a set monthly or annual fee, covering a defined amount of advice and support. It gives the business a lawyer who learns the records in advance, so the advice is quicker. Retainers usually cover routine advice and document matters within scope; major transactions or a dispute that goes to a court are typically outside the ordinary retained fee. The value is in being able to ask "is this fine?" before you sign, and in having someone already to the file. We structure retainers to flat, predictable fees and a clear scope.',
+    'what is a legal retainer|corporate retainer fee nepal|business lawyer retainer'),
+  S('advisory',
+    'Can I get a legal consultation online in Nepal?',
+    'Yes. We offer a legal consultation online, by video or message, so you can ask about a corporate matter without travelling to Kathmandu. An online consultation works best for advice, structuring options, document questions and a plan of action; physical signatures, notarisation and court steps are still handled in person but are arranged through the same team. Gaining clarity on "what should I do" and "what does it cost" is often as valuable as the final document. We confirm the facts, give you a plain answer and a clear next step, and only hold forms of work that, by their nature, must be done in person.',
+    'online legal consultation nepal|consult a lawyer online|ask a lawyer kathmandu'),
+  S('nrn',
+    'Can Nepalis living abroad (NRNs) invest or buy property in Nepal?',
+    'Yes. Non-Resident Nepalis (NRNs) and foreign nationals, subject to the rules, can in principle invest in Nepal and take part in the growth of the economy, provided they follow the rules on property and investment. Those rules include the types of assets a non-resident may hold and the sectors open to them, and the answer can depend on NRN status and on the sector, so the current position should always be confirmed rather than assumed. The same rules also affect how income and returns are brought home to the investor. With the structure and documentation handled properly, the investment can be lawful and its returns managed cleanly. We help NRNs and foreign investors plan the structure and complete the required paperwork.',
+    'can nrn buy property in nepal|nrn investment nepal|foreign investment property nepal'),
+];

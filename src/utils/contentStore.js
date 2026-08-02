@@ -22,6 +22,7 @@ import teamSudeep from '../assets/team-sudeep.jpg';
 import teamNikesh from '../assets/team-nikesh.jpeg';
 import teamSujan from '../assets/team-sujan.jpeg';
 import teamNeehal from '../assets/team-motey.jpeg';
+import { FAQ_SEED } from '../knowledge/faqSeed.js';
 
 /* ------------------------------------------------------------------ */
 /* SSR-safe localStorage shim (used only during Node prerender so the  */
@@ -370,13 +371,7 @@ const TAGS_SEED = [
   'Labor Act 2074',
 ].map((t, i) => ({ id: 't' + (i + 1), name: t, slug: t.toLowerCase().replace(/[^a-z0-9]+/g, '-') }));
 
-const FAQS_SEED = [
-  { id: 'f1', area: 'fdi', question: 'How can foreign investors set up a business in Nepal?', answer: 'We guide foreign investors through the full process — sector eligibility, FITTA compliance, company registration, and required approvals from the Department of Industry and Investment Board Nepal.', order: 1 },
-  { id: 'f2', area: 'corporate', question: 'What services are included in corporate compliance?', answer: 'Company registration, board and shareholder resolutions, annual filings with the Office of the Company Registrar, and drafting of commercial agreements.', order: 2 },
-  { id: 'f3', area: 'energy', question: 'What does a power purchase agreement (PPA) involve?', answer: 'Negotiation of tariffs, terms, conditions, and dispute mechanisms between an independent power producer and the electricity buyer, ensuring bankable and enforceable terms.', order: 3 },
-  { id: 'f4', area: 'ip', question: 'How do I register a trademark in Nepal?', answer: 'We handle the entire trademark filing process — search, application with the Department of Industry, examination, and registration, including renewals and oppositions.', order: 4 },
-  { id: 'f5', area: 'labor', question: 'Which labor regulations apply to my company in Nepal?', answer: 'The Labor Act, 2074 and the Social Security Act, 2074 govern employment contracts, working hours, severance, and mandatory social security contributions.', order: 5 },
-];
+const FAQS_SEED = FAQ_SEED;
 
 const HOMEPAGE_SEED = {
   hero: {

@@ -15,6 +15,8 @@ export default function MediaLibrary() {
   const [drop, setDrop] = useState(false);
   const fileRef = useRef(null);
   const site = getSettings();
+  const replaceRef = useRef(null);
+  const [replaceId, setReplaceId] = useState(null);
 
   const folders = useMemo(() => [...new Set(items.map((i) => i.folder).filter(Boolean))], [items]);
 
@@ -94,6 +96,30 @@ export default function MediaLibrary() {
     persist(items.map((i) => (i.id === id ? { ...i, folder: f.trim() } : i)));
   };
 
+  const setCaption = (id) => {
+    const cap = prompt('Caption (shown under the image):');
+    if (cap == null) return;
+    persist(items.map((i) => (i.id === id ? { ...i, caption: cap } : i)));
+    toast('✓ Caption saved.');
+  };
+
+  const onReplace = async (e) => {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f || !f.type.startsWith('image/')) { toast('Please choose an image.', 'err'); return; }
+    const dataUrl = await readFileAsDataUrl(f);
+    let src = dataUrl;
+    if (!isSvg(dataUrl)) {
+      try {
+        const r = await resizeDataUrl(dataUrl, { maxWidth: site.imgMaxWidth || 1600, quality: (site.imgQuality ?? 85) / 100 });
+        src = r.dataUrl;
+      } catch { /* keep original */ }
+    }
+    persist(items.map((i) => (i.id === replaceId ? { ...i, dataUrl: src, size: Math.round(src.length * 0.75), name: f.name.replace(/\.[^.]+$/, '') } : i)));
+    setReplaceId(null);
+    toast('✓ Image replaced.');
+  };
+
   const del = (id) => {
     if (!confirm('Delete this asset? This cannot be undone.')) return;
     persist(items.filter((i) => i.id !== id));
@@ -139,7 +165,9 @@ export default function MediaLibrary() {
               <span className="absolute top-2 right-2 px-1.5 py-0.5 bg-black/60 text-white text-[0.6rem] rounded">{i.folder || 'root'}</span>
               <div className="absolute inset-x-0 bottom-0 flex justify-center gap-2 py-1.5 bg-black/55 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button className="text-white text-[0.62rem] cursor-pointer bg-transparent border-none" onClick={() => setAlt(i.id)}>Alt</button>
+                <button className="text-white text-[0.62rem] cursor-pointer bg-transparent border-none" onClick={() => setCaption(i.id)}>Caption</button>
                 <button className="text-white text-[0.62rem] cursor-pointer bg-transparent border-none" onClick={() => rename(i.id)}>Rename</button>
+                <button className="text-white text-[0.62rem] cursor-pointer bg-transparent border-none" onClick={() => { setReplaceId(i.id); replaceRef.current && replaceRef.current.click(); }}>Replace</button>
                 <button className="text-white text-[0.62rem] cursor-pointer bg-transparent border-none" onClick={() => moveFolder(i.id)}>Folder</button>
                 <button className="text-accent-red text-[0.62rem] cursor-pointer bg-transparent border-none" onClick={() => del(i.id)}>Delete</button>
               </div>
@@ -147,11 +175,14 @@ export default function MediaLibrary() {
             <div className="p-2">
               <p className="text-[0.68rem] font-medium text-[#1d2327] truncate" title={i.name}>{i.name}</p>
               <p className="text-[0.6rem] text-text-light">{(i.size / 1024).toFixed(1)} KB · used {countUsage(i.id)}×</p>
+              {i.caption && <p className="text-[0.6rem] text-text-light italic truncate" title={i.caption}>{i.caption}</p>}
             </div>
           </div>
         ))}
         {filtered.length === 0 && <div className="col-span-full text-center py-16 text-text-light text-sm">No assets found.</div>}
       </div>
+
+      <input ref={replaceRef} type="file" accept="image/*" hidden onChange={onReplace} />
     </>
   );
 }

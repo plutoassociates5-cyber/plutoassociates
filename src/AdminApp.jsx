@@ -10,13 +10,15 @@ import ArticleEditor from './components/ArticleEditor';
 import Settings from './components/Settings';
 import PracticeAreasManager from './components/admin/PracticeAreasManager';
 import LawyersManager from './components/admin/LawyersManager';
-import FaqsManager from './components/admin/FaqsManager';
+import KnowledgeManager from './components/admin/KnowledgeManager';
 import CategoriesManager from './components/admin/CategoriesManager';
 import TagsManager from './components/admin/TagsManager';
 import MediaLibrary from './components/admin/MediaLibrary';
 import HomepageManager from './components/admin/HomepageManager';
 import SiteSettings from './components/admin/SiteSettings';
 import ContactInbox from './components/admin/ContactInbox';
+import ServicesDashboard from './components/admin/ServicesDashboard';
+import ServiceEditor from './components/admin/ServiceEditor';
 
 function AdminLayout() {
   const { user, logout } = useAuth();
@@ -44,13 +46,19 @@ function AdminLayout() {
       case 'lawyers':
         return <LawyersManager />;
       case 'faqs':
-        return <FaqsManager />;
+        return <KnowledgeManager />;
       case 'categories':
         return <CategoriesManager />;
       case 'tags':
         return <TagsManager />;
       case 'media':
         return <MediaLibrary />;
+      case 'services':
+        return <ServicesDashboard onEdit={(id) => openPage('service-edit', id)} onAdd={() => openPage('service-new')} />;
+      case 'service-new':
+        return <ServiceEditor editId={null} onNavigate={openPage} />;
+      case 'service-edit':
+        return <ServiceEditor editId={editId} onNavigate={openPage} />;
       case 'homepage':
         return <HomepageManager />;
       case 'messages':
