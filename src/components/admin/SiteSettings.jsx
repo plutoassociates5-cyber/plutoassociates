@@ -25,7 +25,17 @@ export default function SiteSettings() {
 
   const applyLogo = ({ dataUrl }) => { set('logo', dataUrl); setPendingLogo(null); };
 
-  const save = () => { saveSettings(s); applyFavicon(s.logo); toast('✓ Site settings saved. The website will reflect these changes immediately.'); };
+  const save = () => {
+    try {
+      const before = (window.localStorage.getItem('pa_site') || '').length;
+      saveSettings(s);
+      applyFavicon(s.logo);
+      const baked = new Date().toLocaleTimeString();
+      toast(`✓ Site settings saved (${baked}). The website will reflect these changes immediately.`);
+    } catch (err) {
+      toast(`⚠️ Could not save — storage is full. Reduce photo sizes and try again.`, 'err');
+    }
+  };
 
   const input = 'w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]';
   const Row = ({ label, hint, children }) => (
