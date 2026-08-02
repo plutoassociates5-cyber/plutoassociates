@@ -12,7 +12,7 @@ export default function Modal({ show, title, message, onConfirm, onCancel }) {
           <button className="px-5 py-2 font-sans text-xs font-semibold cursor-pointer border-none" style={{ background: '#f0f0f0', color: '#333' }} onClick={onCancel}>
             Cancel
           </button>
-          <button className="px-5 py-2 font-sans text-xs font-semibold cursor-pointer border-none text-white" style={{ background: 'var(--red)' }} onClick={onConfirm}>
+          <button className="px-5 py-2 font-sans text-xs font-semibold cursor-pointer border-none text-white" style={{ background: 'var(--color-accent-red)' }} onClick={onConfirm}>
             Delete
           </button>
         </div>
