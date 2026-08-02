@@ -1,18 +1,23 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import AdminApp from './AdminApp';
+import RouteSEO from './seo';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import PracticeAreasPage from './pages/PracticeAreasPage';
 import TeamsPage from './pages/TeamsPage';
 import PublicationsPage from './pages/PublicationsPage';
 import ContactPage from './pages/ContactPage';
+import NotFoundPage from './pages/NotFoundPage';
 import ScrollToTop from './components/PublicHooks';
 import { ToastProvider } from './context/ToastContext';
+
+const AdminApp = lazy(() => import('./AdminApp'));
 
 export default function App() {
   return (
     <ToastProvider>
       <ScrollToTop />
+      <RouteSEO />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
@@ -20,7 +25,15 @@ export default function App() {
         <Route path="/teams" element={<TeamsPage />} />
         <Route path="/publications" element={<PublicationsPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/admin/*" element={<AdminApp />} />
+        <Route
+          path="/admin/*"
+          element={
+            <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-navy">Loading…</div>}>
+              <AdminApp />
+            </Suspense>
+          }
+        />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </ToastProvider>
   );
