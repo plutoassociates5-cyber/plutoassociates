@@ -4,6 +4,7 @@ import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup } from '../components/PublicUtils';
 import { getPracticeAreas } from '../utils/contentStore';
+import { getFaqs } from '../utils/contentStore';
 import { getPublishedArticles } from '../seo';
 
 function formatDate(d) {
@@ -19,6 +20,7 @@ export default function PracticeAreaDetailPage() {
   const prev = index > 0 ? AREAS[index - 1] : null;
   const next = index !== -1 && index < AREAS.length - 1 ? AREAS[index + 1] : null;
   const others = AREAS.filter((a) => a.id !== slug).slice(0, 3);
+  const areaFaqs = getFaqs().filter((f) => f.area === slug);
   const related = getPublishedArticles()
     .filter((a) => a.status === 'published' && a.category === area?.id)
     .slice(0, 3);
@@ -180,6 +182,34 @@ export default function PracticeAreaDetailPage() {
             </div>
           )}
           <Link to="/publications" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all mt-6">View All Publications →</Link>
+        </div>
+      </section>
+
+      <section className="py-14 bg-white">
+        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="font-serif text-2xl text-navy mb-2">FAQs — {area.title}</h2>
+          <p className="text-text-body mb-7">Common questions our clients ask about this practice area.</p>
+          {areaFaqs.length === 0 ? (
+            <div className="flex items-center justify-between flex-wrap gap-4 bg-off-white border border-light-gray rounded-xl p-6">
+              <p className="text-text-light">No FAQs published for this area yet.</p>
+              <Link to="/faq" className="inline-flex items-center gap-2 text-sm font-semibold text-gold no-underline border-b-2 border-gold hover:gap-3 transition-all">See all FAQs →</Link>
+            </div>
+          ) : (
+            <>
+              <div className="flex flex-col gap-3">
+                {areaFaqs.map((f) => (
+                  <details key={f.id} className="group border border-light-gray rounded-xl overflow-hidden bg-[#fbfbfc]">
+                    <summary className="list-none cursor-pointer flex items-center justify-between gap-4 px-5 py-4 font-serif text-navy text-base leading-snug">
+                      <span>{f.question}</span>
+                      <span className="w-6 h-6 rounded-full bg-gold/10 text-gold flex items-center justify-center text-base shrink-0">+</span>
+                    </summary>
+                    <div className="px-5 pb-5 text-text-body leading-relaxed border-t border-light-gray pt-4">{f.answer}</div>
+                  </details>
+                ))}
+              </div>
+              <Link to="/faq" className="inline-flex items-center gap-2 text-sm font-semibold text-gold no-underline border-b-2 border-gold hover:gap-3 transition-all mt-6">See all FAQs →</Link>
+            </>
+          )}
         </div>
       </section>
 

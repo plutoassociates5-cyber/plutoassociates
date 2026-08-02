@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getArticles, getSeedArticles } from './utils/storage';
-import { getPracticeAreas } from './utils/contentStore';
+import { getPracticeAreas, getFaqs } from './utils/contentStore';
 
 /**
  * Central SEO configuration for Pluto Associates (Vite + React SPA).
@@ -84,6 +84,15 @@ export const ROUTES = {
       'Contact Pluto Associates in Kathmandu, Nepal. Call +977-9802356987, email info@plutoassociates.com or request a legal consultation within 24 hours.',
     keywords: 'contact law firm Nepal, lawyer consultation Kathmandu, law firm phone Nepal, legal advice Nepal contact',
     canonical: '/contact',
+    ogType: 'website',
+    robots: 'index, follow',
+  },
+  '/faq': {
+    title: 'FAQs — Pluto Associates | Advocates & Legal Consultants Nepal',
+    description:
+      'Frequently asked questions about Pluto Associates\' services: FDI, corporate law, energy, litigation, intellectual property and legal consultations in Nepal.',
+    keywords: 'law firm FAQ Nepal, legal questions Nepal, Pluto Associates FAQs, legal consultation questions, corporate law FAQ Nepal',
+    canonical: '/faq',
     ogType: 'website',
     robots: 'index, follow',
   },
@@ -349,6 +358,24 @@ export function buildJsonLd(path) {
           worksFor: { '@type': 'LegalService', name: SITE.legalName, url: SITE.url },
           ...(p.email ? { email: `mailto:${p.email}` } : {}),
         })),
+      ],
+    };
+  }
+
+  if (path === '/faq') {
+    const faqs = getFaqs();
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        webPageLd('FAQs', '/faq', ROUTES['/faq'].description),
+        {
+          '@type': 'FAQPage',
+          mainEntity: faqs.map((f) => ({
+            '@type': 'Question',
+            name: f.question,
+            acceptedAnswer: { '@type': 'Answer', text: f.answer },
+          })),
+        },
       ],
     };
   }

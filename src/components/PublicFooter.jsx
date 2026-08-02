@@ -38,6 +38,7 @@ export default function PublicFooter() {
               <li><Link to="/about" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">About Us</Link></li>
               <li><Link to="/teams" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Our Team</Link></li>
               <li><Link to="/publications" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Publications</Link></li>
+              <li><Link to="/faq" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">FAQs</Link></li>
               <li><Link to="/contact" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Contact</Link></li>
             </ul>
           </div>

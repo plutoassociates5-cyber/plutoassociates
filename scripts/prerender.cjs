@@ -158,6 +158,7 @@ function buildSitemap(entry, published) {
     { loc: '/about', lastmod: today, freq: 'monthly', priority: '0.8' },
     { loc: '/practice-areas', lastmod: today, freq: 'monthly', priority: '0.9' },
     { loc: '/teams', lastmod: today, freq: 'monthly', priority: '0.8' },
+    { loc: '/faq', lastmod: today, freq: 'weekly', priority: '0.7' },
     { loc: '/publications', lastmod: today, freq: 'weekly', priority: '0.7' },
     { loc: '/contact', lastmod: today, freq: 'monthly', priority: '0.7' },
   ];
@@ -215,6 +216,7 @@ function buildSitemap(entry, published) {
     { path: '/about', dir: path.join(DIST, 'about') },
     { path: '/practice-areas', dir: path.join(DIST, 'practice-areas') },
     { path: '/teams', dir: path.join(DIST, 'teams') },
+    { path: '/faq', dir: path.join(DIST, 'faq') },
     { path: '/publications', dir: path.join(DIST, 'publications') },
     { path: '/contact', dir: path.join(DIST, 'contact') },
   ];
