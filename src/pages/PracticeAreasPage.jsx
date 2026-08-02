@@ -59,15 +59,25 @@ export default function PracticeAreasPage() {
                   <span className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-white/95 backdrop-blur flex items-center justify-center text-xl shadow-md">{area.icon}</span>
                   <span className="absolute bottom-3 right-4 text-[0.62rem] tracking-widest font-semibold text-white/80">{String(idx + 1).padStart(2, '0')}</span>
                 </div>
-                <div className="p-6 flex flex-col flex-1">
+<div className="p-6 flex flex-col flex-1">
                   <h3 className="font-serif text-[1.15rem] leading-snug text-navy mb-3">{area.title}</h3>
-                  <p className="text-sm text-text-body leading-relaxed mb-5 flex-1">{area.desc}</p>
+                  <p className="text-sm text-text-body leading-relaxed mb-4">{area.desc}</p>
+                  {area.highlights && area.highlights.length > 0 && (
+                    <ul className="list-none p-0 m-0 mb-6 flex flex-col gap-2">
+                      {area.highlights.map((h, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-sm text-text-body">
+                          <span className="w-4 h-4 mt-0.5 rounded-full bg-gold/15 text-gold text-[0.6rem] font-bold flex items-center justify-center shrink-0">✓</span>
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-gold no-underline group/link border-b border-transparent hover:border-gold transition-colors self-start"
+                    className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-gold no-underline border-b border-transparent hover:border-gold transition-colors self-start"
                   >
                     Discuss your matter
-                    <span className="transition-transform duration-300 group-hover/link:translate-x-1">→</span>
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                   </Link>
                 </div>
               </article>
