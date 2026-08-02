@@ -40,7 +40,7 @@ function AdminLayout() {
   return (
     <div id="app" className="show">
       <Sidebar page={page} onNavigate={openPage} user={user} onLogout={logout} />
-      <div className="ml-0 lg:ml-[200px] flex flex-col min-h-screen w-full">
+      <div className="ml-[200px] flex flex-col min-h-screen w-[calc(100%-200px)]">
         <AdminBar onNavigate={openPage} />
         <div className="flex-1 p-6">{renderPage()}</div>
       </div>
