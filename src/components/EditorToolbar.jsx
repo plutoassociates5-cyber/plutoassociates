@@ -1,4 +1,19 @@
 export default function EditorToolbar({ onCmd }) {
+  const triggerImage = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = () => {
+      const f = input.files && input.files[0];
+      if (!f) return;
+      if (f.size > 8 * 1024 * 1024) { alert('Image must be under 8MB.'); return; }
+      const reader = new FileReader();
+      reader.onload = () => insertImage(reader.result);
+      reader.readAsDataURL(f);
+    };
+    input.click();
+  };
+
   return (
     <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
       <div className="flex items-center gap-px px-2 py-1.5 border-b border-wp-border flex-wrap">
@@ -75,7 +90,7 @@ export default function EditorToolbar({ onCmd }) {
         <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('insertHorizontalRule')} title="Horizontal Line">—</button>
         <button className="w-auto px-2 text-[0.72rem] whitespace-nowrap h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={insertLink}>🔗 Link</button>
         <button className="w-auto px-2 text-[0.72rem] whitespace-nowrap h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('unlink')}>🔗✕</button>
-        <button className="w-auto px-2 text-[0.72rem] whitespace-nowrap h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={insertImage}>🖼 Image</button>
+        <button className="w-auto px-2 text-[0.72rem] whitespace-nowrap h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={triggerImage}>🖼 Image</button>
         <button className="w-auto px-2 text-[0.72rem] whitespace-nowrap h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={insertTable}>⊞ Table</button>
         <div className="w-px h-5 bg-wp-border mx-1 shrink-0" />
         <button className="w-7 h-7 flex items-center justify-center bg-transparent border border-transparent cursor-pointer text-sm text-[#444] transition-all duration-100 rounded hover:bg-wp-gray hover:border-wp-border hover:text-black" onClick={() => onCmd('undo')} title="Undo (Ctrl+Z)">↩</button>
@@ -98,12 +113,15 @@ function insertLink() {
   }
 }
 
-function insertImage() {
-  const url = prompt('Enter image URL:', 'https://');
-  if (!url) return;
+function insertImage(src) {
+  if (!src) {
+    const u = prompt('Enter image URL:', 'https://');
+    if (!u) return;
+    src = u;
+  }
   const alt = prompt('Alt text (for SEO):', '') || '';
   const cap = prompt('Caption (optional):', '') || '';
-  let html = `<img src="${url}" alt="${alt}" style="max-width:100%;height:auto;margin:1rem 0">`;
+  let html = `<img src="${src}" alt="${alt}" style="max-width:100%;height:auto;margin:1rem 0">`;
   if (cap) html += `<span class="wp-caption">${cap}</span>`;
   document.execCommand('insertHTML', false, html);
 }
