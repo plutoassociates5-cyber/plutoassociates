@@ -36,22 +36,41 @@ export default function PracticeAreasPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-24">
+      <section className="py-16 lg:py-24 bg-[#f6f7f8]">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 text-center justify-center reveal-anim">What We Do</div>
-          <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight mb-5 font-semibold text-center">Our Practice Areas</h2>
-          <p className="text-base text-text-light max-w-[600px] leading-relaxed mx-auto mb-12 text-center">
-            Comprehensive legal services across Nepal's most dynamic sectors
-          </p>
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="inline-flex items-center gap-2 text-[0.72rem] font-semibold tracking-[3px] uppercase text-gold mb-4 px-4 py-1.5 border border-gold/30 rounded-full bg-gold/5 reveal-anim">What We Do</span>
+            <h2 className="font-serif text-[clamp(2rem,4vw,2.6rem)] text-navy leading-tight mb-4 font-semibold reveal-anim">Our Practice Areas</h2>
+            <p className="text-base text-text-light leading-relaxed reveal-anim">
+              Comprehensive legal services across Nepal's most dynamic sectors — delivered by a team that pairs deep regulatory insight with a commitment to our clients' success.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {AREAS.map((area, idx) => (
-              <div key={area.id} id={area.id} className="bg-white border border-light-gray overflow-hidden cursor-pointer transition-all duration-400 hover:shadow-lg hover:-translate-y-[3px] reveal-anim">
-                <img src={area.img} alt={area.title} title={area.title} loading="lazy" className="w-full h-48 object-cover" />
-                <div className="p-5">
-                  <h3 className="font-serif text-xl text-navy mb-3">{area.icon} {area.title}</h3>
-                  <p className="text-sm text-text-body leading-relaxed">{area.desc}</p>
+              <article
+                key={area.id}
+                id={area.id}
+                className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col reveal-anim"
+              >
+                <div className="relative h-52 overflow-hidden">
+                  <img src={area.img} alt={area.title} title={area.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/10 to-transparent" />
+                  <span className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-white/95 backdrop-blur flex items-center justify-center text-xl shadow-md">{area.icon}</span>
+                  <span className="absolute bottom-3 right-4 text-[0.62rem] tracking-widest font-semibold text-white/80">{String(idx + 1).padStart(2, '0')}</span>
                 </div>
-              </div>
+                <div className="p-6 flex flex-col flex-1">
+                  <h3 className="font-serif text-[1.15rem] leading-snug text-navy mb-3">{area.title}</h3>
+                  <p className="text-sm text-text-body leading-relaxed mb-5 flex-1">{area.desc}</p>
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-gold no-underline group/link border-b border-transparent hover:border-gold transition-colors self-start"
+                  >
+                    Discuss your matter
+                    <span className="transition-transform duration-300 group-hover/link:translate-x-1">→</span>
+                  </Link>
+                </div>
+              </article>
             ))}
           </div>
         </div>
