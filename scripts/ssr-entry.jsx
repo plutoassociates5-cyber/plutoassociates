@@ -2,6 +2,7 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import App from '../src/App';
 import { ROUTES, SITE, buildJsonLd, getPublishedArticles, resolveRouteMeta } from '../src/seo';
+import { getPracticeAreas } from '../src/utils/contentStore';
 
 /**
  * SSR entry used by scripts/prerender.cjs to statically generate HTML for
@@ -15,4 +16,4 @@ export function renderApp(path) {
   );
 }
 
-export { ROUTES, SITE, buildJsonLd, getPublishedArticles, resolveRouteMeta };
+export { ROUTES, SITE, buildJsonLd, getPublishedArticles, resolveRouteMeta, getPracticeAreas };

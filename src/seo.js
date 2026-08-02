@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getArticles, getSeedArticles } from './utils/storage';
+import { getPracticeAreas } from './utils/contentStore';
 
 /**
  * Central SEO configuration for Pluto Associates (Vite + React SPA).
@@ -122,6 +123,10 @@ export function findArticleBySlug(slug) {
   return getPublishedArticles().find((a) => a.slug === slug);
 }
 
+export function findPracticeAreaBySlug(slug) {
+  return getPracticeAreas().find((a) => a.id === slug);
+}
+
 function plainText(html) {
   return String(html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
@@ -153,7 +158,26 @@ export function resolveRouteMeta(path) {
     const article = m ? findArticleBySlug(decodeURIComponent(m[1])) : undefined;
     return article ? articleMeta(article) : ROUTES['/404'];
   }
+  if (p.startsWith('/practice-areas/')) {
+    const m = p.match(/^\/practice-areas\/([^/]+)\/?$/);
+    const area = m ? findPracticeAreaBySlug(decodeURIComponent(m[1])) : undefined;
+    return area ? practiceAreaMeta(area) : ROUTES['/404'];
+  }
   return ROUTES[p] || ROUTES['/404'];
+}
+
+function practiceAreaMeta(area) {
+  const desc = area.desc || area.heading || area.title;
+  return {
+    title: `${area.heading || area.title} | Pluto Associates Nepal`,
+    description: desc,
+    keywords: `${area.title}, legal services Nepal, ${area.title} lawyer, Pluto Associates law firm Nepal`,
+    canonical: `/practice-areas/${area.id}`,
+    ogType: 'website',
+    robots: 'index, follow',
+    ogImage: area.img ? `${SITE.url}${area.img}` : SITE.ogImage,
+    area,
+  };
 }
 
 function normalizePath(path) {
@@ -327,6 +351,53 @@ export function buildJsonLd(path) {
         })),
       ],
     };
+  }
+
+  const practiceAreaMatch = path.match(/^\/practice-areas\/([^/]+)\/?$/);
+  if (practiceAreaMatch) {
+    const area = findPracticeAreaBySlug(decodeURIComponent(practiceAreaMatch[1]));
+    if (!area) return null;
+    const areaUrl = `${SITE.url}/practice-areas/${area.id}`;
+    const image = area.img ? `${SITE.url}${area.img}` : SITE.ogImage;
+    const graph = [
+      breadcrumbLd([
+        { name: 'Home', path: '/' },
+        { name: 'Practice Areas', path: '/practice-areas' },
+        { name: area.title, path: `/practice-areas/${area.id}` },
+      ]),
+      {
+        '@type': 'Service',
+        name: area.heading || area.title,
+        url: areaUrl,
+        image,
+        description: area.desc || area.heading || area.title,
+        provider: {
+          '@type': 'LegalService',
+          name: SITE.legalName,
+          url: SITE.url,
+          telephone: SITE.telephone,
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: SITE.address.addressLocality,
+            addressCountry: SITE.address.addressCountry,
+          },
+        },
+        areaServed: { '@type': 'Country', name: 'Nepal' },
+        serviceType: area.title,
+      },
+    ];
+    if (area.services && area.services.length) {
+      graph.push({
+        '@type': 'ItemList',
+        name: 'Services',
+        itemListElement: area.services.map((s, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: s,
+        })),
+      });
+    }
+    return { '@context': 'https://schema.org', '@graph': graph };
   }
 
   const articleMatch = path.match(/^\/publications\/([^/]+)\/?$/);

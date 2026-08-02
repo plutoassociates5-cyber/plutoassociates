@@ -161,6 +161,7 @@ function buildSitemap(entry, published) {
     { loc: '/publications', lastmod: today, freq: 'weekly', priority: '0.7' },
     { loc: '/contact', lastmod: today, freq: 'monthly', priority: '0.7' },
   ];
+  const practiceAreas = entry.getPracticeAreas();
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
@@ -172,6 +173,16 @@ function buildSitemap(entry, published) {
       `    <lastmod>${r.lastmod}</lastmod>`,
       `    <changefreq>${r.freq}</changefreq>`,
       `    <priority>${r.priority}</priority>`,
+      '  </url>'
+    );
+  }
+  for (const area of practiceAreas) {
+    lines.push(
+      '  <url>',
+      `    <loc>${entry.SITE.url}/practice-areas/${area.id}</loc>`,
+      `    <lastmod>${today}</lastmod>`,
+      '    <changefreq>monthly</changefreq>',
+      '    <priority>0.8</priority>',
       '  </url>'
     );
   }
@@ -263,10 +274,28 @@ function buildSitemap(entry, published) {
     console.log(`prerendered ${routePath} -> ${path.relative(ROOT, outFile)} (${Math.round(html.length / 1024)} KB)`);
   }
 
-  // Dynamic sitemap (overwrites the static public/sitemap.xml copy) incl. article URLs
+  // Practice areas -> /practice-areas/<id> (unique title/desc/OG + Service JSON-LD)
+  const practiceAreas = entry.getPracticeAreas();
+  for (const area of practiceAreas) {
+    const routePath = `/practice-areas/${area.id}`;
+    const dir = path.join(DIST, 'practice-areas', area.id);
+    const meta = entry.resolveRouteMeta(routePath);
+    const html = assembleHtml(entry, {
+      ...meta,
+      body: entry.renderApp(routePath),
+      jsonLd: entry.buildJsonLd(routePath),
+      preloadImage: area.img,
+    });
+    fs.mkdirSync(dir, { recursive: true });
+    const outFile = path.join(dir, 'index.html');
+    fs.writeFileSync(outFile, html, 'utf8');
+    console.log(`prerendered ${routePath} -> ${path.relative(ROOT, outFile)} (${Math.round(html.length / 1024)} KB)`);
+  }
+
+  // Dynamic sitemap (overwrites the static public/sitemap.xml copy) incl. article + area URLs
   const sitemap = buildSitemap(entry, published);
   fs.writeFileSync(path.join(DIST, 'sitemap.xml'), sitemap, 'utf8');
-  console.log(`wrote dist/sitemap.xml (${6 + published.length} URLs)`);
+  console.log(`wrote dist/sitemap.xml (${6 + practiceAreas.length + published.length} URLs)`);
 
   console.log('Prerendering complete.');
 })().catch((err) => {

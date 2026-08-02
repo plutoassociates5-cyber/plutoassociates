@@ -4,6 +4,7 @@ import RouteSEO from './seo';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import PracticeAreasPage from './pages/PracticeAreasPage';
+import PracticeAreaDetailPage from './pages/PracticeAreaDetailPage';
 import TeamsPage from './pages/TeamsPage';
 import PublicationsPage from './pages/PublicationsPage';
 import ArticlePage from './pages/ArticlePage';
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/practice-areas" element={<PracticeAreasPage />} />
+          <Route path="/practice-areas/:slug" element={<PracticeAreaDetailPage />} />
           <Route path="/teams" element={<TeamsPage />} />
           <Route path="/publications" element={<PublicationsPage />} />
           <Route path="/publications/:slug" element={<ArticlePage />} />
