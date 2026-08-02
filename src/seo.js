@@ -244,7 +244,7 @@ const webPageLd = (name, path, description) => ({
 
 const PERSONAS = [
   { name: 'Adv. Sudeep Nepal', jobTitle: 'Founder & Senior Partner', email: 'sudeep@plutoassociates.com' },
-  { name: 'Nikesh Nepal', jobTitle: 'Legal Associate', email: '' },
+  { name: 'Associate Nikesh Nepal', jobTitle: 'Legal Associate', email: '' },
   { name: 'Sujan Subedi', jobTitle: 'Legal Associate', email: 'sujan@plutoassociates.com' },
   { name: 'Neehal Pokharel', jobTitle: 'Legal Associate', email: '' },
 ];

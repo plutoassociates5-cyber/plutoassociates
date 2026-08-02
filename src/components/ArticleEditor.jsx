@@ -284,7 +284,7 @@ export default function ArticleEditor({ editId, onNavigate }) {
                 <select value={authorVal} onChange={(e) => setAuthorVal(e.target.value)} className="w-full px-2.5 py-2 border border-wp-border font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]">
                   <option value="SN|Adv. Sudeep Nepal">Adv. Sudeep Nepal (Founder)</option>
                   <option value="SS|Associate Sujan Subedi">Associate Sujan Subedi</option>
-                  <option value="NN|Nikesh Nepal">Nikesh Nepal</option>
+                  <option value="NN|Associate Nikesh Nepal">Associate Nikesh Nepal</option>
                   <option value="NP|Associate Neehal Pokharel">Associate Neehal Pokharel</option>
                 </select>
               </div>

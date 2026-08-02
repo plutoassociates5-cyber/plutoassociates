@@ -68,8 +68,8 @@ export default function TeamsPage() {
 
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
-              <img src={teamNikesh} alt="Nikesh Nepal, Legal Associate at Pluto Associates" title="Nikesh Nepal — Legal Associate" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
-              <h3 className="font-serif text-lg text-navy mb-2">Nikesh Nepal</h3>
+              <img src={teamNikesh} alt="Associate Nikesh Nepal, Legal Associate at Pluto Associates" title="Associate Nikesh Nepal — Legal Associate" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
+              <h3 className="font-serif text-lg text-navy mb-2">Associate Nikesh Nepal</h3>
               <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">Legal Associate</div>
               <p className="text-sm text-text-body">Civil Law, Corporate Law, Contract Drafting</p>
             </div>
