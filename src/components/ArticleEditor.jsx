@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { getArticles, saveArticles, uid, slugify } from '../utils/storage';
+import { getArticles, saveArticles, uid, slugify, uniqueSlug } from '../utils/storage';
 import { useToast } from '../context/ToastContext';
 import EditorToolbar from './EditorToolbar';
 import PublishPanel from './PublishPanel';
@@ -27,7 +27,11 @@ export default function ArticleEditor({ editId, onNavigate }) {
   const [date, setDate] = useState(existing?.date || new Date().toISOString().split('T')[0]);
   const [tags, setTags] = useState(existing?.tags || []);
   const [featImage, setFeatImage] = useState(existing?.featuredImage || null);
+  const [featImageAlt, setFeatImageAlt] = useState(existing?.featuredImageAlt || '');
   const [keywords, setKeywords] = useState(existing?.metaKeywords || '');
+  const [seoTitle, setSeoTitle] = useState(existing?.seoTitle || '');
+  const [seoDesc, setSeoDesc] = useState(existing?.seoDesc || '');
+  const [canonical, setCanonical] = useState(existing?.canonical || '');
   const [sourceMode, setSourceMode] = useState(false);
   const [visualTab, setVisualTab] = useState(true);
 
@@ -107,9 +111,12 @@ export default function ArticleEditor({ editId, onNavigate }) {
     const status = action === 'draft' ? 'draft' : action === 'preview' ? 'draft' : 'published';
 
     let articles = getArticles();
+    let finalSlug = (slug || '').trim() ? slug.trim() : slugify(trimmedTitle);
+    const slugCollides = articles.some((a) => a.id !== editId && a.slug === finalSlug);
+    if (slugCollides) finalSlug = uniqueSlug(finalSlug, articles, editId);
     const art = {
       title: trimmedTitle,
-      slug: slug || slugify(trimmedTitle),
+      slug: finalSlug,
       excerpt: excerpt,
       content: finalContent,
       category: category,
@@ -119,9 +126,11 @@ export default function ArticleEditor({ editId, onNavigate }) {
       status: status,
       tags: tags.slice(),
       featuredImage: featImage,
-      seoTitle: '',
-      seoDesc: excerpt,
+      featuredImageAlt: featImageAlt.trim(),
+      seoTitle: seoTitle.trim(),
+      seoDesc: seoDesc.trim(),
       metaKeywords: keywords,
+      canonical: canonical.trim(),
       modifiedAt: now,
     };
 
@@ -292,7 +301,7 @@ export default function ArticleEditor({ editId, onNavigate }) {
 
           <CategoryPanel category={category} onChange={setCategory} />
           <TagsPanel tags={tags} onChange={setTags} />
-          <FeaturedImagePanel image={featImage} onChange={setFeatImage} />
+          <FeaturedImagePanel image={featImage} onChange={setFeatImage} alt={featImageAlt} onAltChange={setFeatImageAlt} />
 
           <SEOPanel
             title={title}
@@ -302,6 +311,12 @@ export default function ArticleEditor({ editId, onNavigate }) {
             tags={tags}
             keywords={keywords}
             onKwChange={setKeywords}
+            seoTitle={seoTitle}
+            seoDesc={seoDesc}
+            canonical={canonical}
+            onSeoTitleChange={setSeoTitle}
+            onSeoDescChange={setSeoDesc}
+            onCanonicalChange={setCanonical}
           />
         </div>
       </div>

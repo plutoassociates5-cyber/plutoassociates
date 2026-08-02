@@ -1,28 +1,28 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup } from '../components/PublicUtils';
-import { getArticles } from '../utils/storage';
+import { getPublishedArticles } from '../seo';
 import hero1 from '../assets/hero-1.jpeg';
+
+const CATEGORY_LABELS = {
+  general: 'General', fdi: 'FDI & Investment', corporate: 'Corporate Law',
+  labor: 'Labor & Employment', energy: 'Energy Law', tax: 'Taxation',
+  ip: 'Intellectual Property', litigation: 'Litigation',
+};
+
+function getCategoryLabel(cat) {
+  return CATEGORY_LABELS[cat] || cat;
+}
 
 export default function PublicationsPage() {
   const [articles, setArticles] = useState([]);
   const [filter, setFilter] = useState('all');
-  const [selected, setSelected] = useState(null);
-  const closeBtnRef = useRef(null);
 
   useEffect(() => {
-    setArticles(getArticles().filter((a) => a.status === 'published'));
+    setArticles(getPublishedArticles());
   }, []);
-
-  useEffect(() => {
-    if (!selected) return;
-    closeBtnRef.current?.focus();
-    const onKey = (e) => { if (e.key === 'Escape') setSelected(null); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [selected]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,15 +52,6 @@ export default function PublicationsPage() {
     return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
-  const getCategoryLabel = (cat) => {
-    const labels = {
-      general: 'General', fdi: 'FDI & Investment', corporate: 'Corporate Law',
-      labor: 'Labor & Employment', energy: 'Energy Law', tax: 'Taxation',
-      ip: 'Intellectual Property', litigation: 'Litigation',
-    };
-    return labels[cat] || cat;
-  };
-
   return (
     <div>
       <PublicNavbar />
@@ -69,7 +60,6 @@ export default function PublicationsPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-navy/88 to-navy/65" />
         <div className="relative z-10 pt-[70px]">
           <h1 className="font-serif text-[clamp(2.2rem,5vw,3.5rem)] text-white font-bold mb-3">Publications</h1>
-
         </div>
       </section>
 
@@ -103,12 +93,10 @@ export default function PublicationsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filtered.map((article) => (
-                <button
+                <Link
                   key={article.id}
-                  type="button"
-                  aria-haspopup="dialog"
-                  onClick={() => setSelected(article)}
-                  className="bg-white border border-light-gray p-6 transition-all duration-400 cursor-pointer hover:shadow-md hover:-translate-y-0.5 reveal-anim text-left w-full"
+                  to={`/publications/${article.slug}`}
+                  className="bg-white border border-light-gray p-6 transition-all duration-400 hover:shadow-md hover:-translate-y-0.5 reveal-anim text-left w-full no-underline block"
                 >
                   <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-2">{getCategoryLabel(article.category)}</div>
                   <h3 className="font-serif text-lg text-navy mb-2 leading-snug">{article.title}</h3>
@@ -116,48 +104,12 @@ export default function PublicationsPage() {
                   <div className="text-[0.72rem] text-text-light mt-3">
                     {formatDate(article.date)} · {article.authorName}
                   </div>
-                </button>
+                </Link>
               ))}
             </div>
           )}
         </div>
       </section>
-
-      {selected && (
-        <div
-          className="fixed inset-0 bg-black/80 z-[99999] flex items-center justify-center p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${selected.title} — article preview`}
-          onClick={() => setSelected(null)}
-        >
-          <div className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto p-8 lg:p-10 relative" onClick={(e) => e.stopPropagation()}>
-            <button
-              ref={closeBtnRef}
-              type="button"
-              aria-label="Close article"
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-mid-gray border-none text-lg cursor-pointer hover:bg-gold transition-colors duration-200"
-              onClick={() => setSelected(null)}
-            >✕</button>
-            <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-2">{getCategoryLabel(selected.category)}</div>
-            <h2 className="font-serif text-[clamp(1.5rem,3vw,2.2rem)] text-navy leading-tight mb-4">{selected.title}</h2>
-            <div className="text-xs text-text-light mb-6">
-              By {selected.authorName} · {formatDate(selected.date)}
-            </div>
-            <div
-              className="text-sm text-text-body leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: selected.content || '' }}
-            />
-            {selected.tags && selected.tags.length > 0 && (
-              <div className="mt-6 pt-4 border-t border-light-gray">
-                {selected.tags.map((tag) => (
-                  <span key={tag} className="inline-block text-xs text-text-body bg-off-white px-3 py-1 rounded-full mr-1.5 mb-1.5">{tag}</span>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       <section className="py-20 lg:py-24 text-center relative overflow-hidden bg-gradient-to-br from-teal to-navy">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">

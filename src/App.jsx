@@ -6,6 +6,7 @@ import AboutPage from './pages/AboutPage';
 import PracticeAreasPage from './pages/PracticeAreasPage';
 import TeamsPage from './pages/TeamsPage';
 import PublicationsPage from './pages/PublicationsPage';
+import ArticlePage from './pages/ArticlePage';
 import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ScrollToTop from './components/PublicHooks';
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/practice-areas" element={<PracticeAreasPage />} />
           <Route path="/teams" element={<TeamsPage />} />
           <Route path="/publications" element={<PublicationsPage />} />
+          <Route path="/publications/:slug" element={<ArticlePage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route
             path="/admin/*"

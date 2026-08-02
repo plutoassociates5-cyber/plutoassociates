@@ -42,7 +42,6 @@ export function HeroSlideshow({ slides }) {
           key={idx}
           className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${idx === current ? 'opacity-100' : 'opacity-0'}`}
           style={idx === current || idx === next ? { backgroundImage: `url(${slide.image})` } : undefined}
-          {...(idx === 0 ? { fetchpriority: 'high' } : {})}
         />
       ))}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">

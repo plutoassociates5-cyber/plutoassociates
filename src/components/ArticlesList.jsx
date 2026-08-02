@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { getArticles, saveArticles } from '../utils/storage';
+import { getArticles, saveArticles, deleteArticle, getSeedArticles } from '../utils/storage';
 import { useToast } from '../context/ToastContext';
 import Modal from './Modal';
 
@@ -32,7 +32,7 @@ export default function ArticlesList({ onEdit, onNavigate }) {
 
   const handleDelete = () => {
     if (!delTarget) return;
-    saveArticles(articles.filter((a) => a.id !== delTarget));
+    deleteArticle(delTarget);
     setArticles(getArticles());
     toast('Article moved to trash.');
     setDelTarget(null);
@@ -61,13 +61,38 @@ export default function ArticlesList({ onEdit, onNavigate }) {
     return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
+  const handleExport = () => {
+    const seedIds = new Set(getSeedArticles().map((a) => a.id));
+    const local = articles.filter((a) => !seedIds.has(a.id));
+    const blob = new Blob([JSON.stringify(local, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'pluto-articles-seed.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast(
+      local.length
+        ? `Exported ${local.length} article${local.length === 1 ? '' : 's'} to pluto-articles-seed.json. Append them to src/content/articles.json to make them permanent.`
+        : 'Nothing new to export — all articles are already part of the seed.',
+      local.length ? 'info' : undefined
+    );
+  };
+
   return (
     <>
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
         <h1 className="text-xl lg:text-2xl text-[#1d2327] font-normal font-sans">Articles</h1>
-        <button className="bg-wp-blue text-white border-none px-3.5 py-1.5 text-xs font-semibold cursor-pointer font-sans hover:bg-[#005a87]" onClick={() => onNavigate('new')}>
-          + Add New
-        </button>
+        <div className="flex gap-2">
+          <button className="bg-white text-[#333] border border-wp-border px-3.5 py-1.5 text-xs font-semibold cursor-pointer font-sans hover:bg-wp-gray" onClick={handleExport}>
+            ⬇ Export
+          </button>
+          <button className="bg-wp-blue text-white border-none px-3.5 py-1.5 text-xs font-semibold cursor-pointer font-sans hover:bg-[#005a87]" onClick={() => onNavigate('new')}>
+            + Add New
+          </button>
+        </div>
       </div>
 
       <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)] overflow-x-auto">

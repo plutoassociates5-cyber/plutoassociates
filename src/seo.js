@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { getArticles, getSeedArticles } from './utils/storage';
 
 /**
  * Central SEO configuration for Pluto Associates (Vite + React SPA).
@@ -103,6 +104,56 @@ const ADMIN_ROUTE = {
   ogType: 'website',
   robots: 'noindex, nofollow',
 };
+
+/* ------------------------------------------------------------------ */
+/* Article lookup (published articles, seed + admin overrides)         */
+/* ------------------------------------------------------------------ */
+
+function articleSource() {
+  const merged = getArticles();
+  return merged && merged.length ? merged : getSeedArticles();
+}
+
+export function getPublishedArticles() {
+  return articleSource().filter((a) => a.status === 'published');
+}
+
+export function findArticleBySlug(slug) {
+  return getPublishedArticles().find((a) => a.slug === slug);
+}
+
+function plainText(html) {
+  return String(html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function articleMeta(article) {
+  const plain = plainText(article.content);
+  return {
+    title: article.seoTitle || `${article.title} | Pluto Associates Nepal`,
+    description: article.seoDesc || article.excerpt || plain.substring(0, 155),
+    keywords: article.metaKeywords || '',
+    canonical: article.canonical || `/publications/${article.slug}`,
+    ogType: 'article',
+    robots: 'index, follow',
+    ogImage: article.featuredImage ? `${SITE.url}${article.featuredImage}` : SITE.ogImage,
+    article,
+  };
+}
+
+/**
+ * Resolve the metadata object for any pathname (static routes + article URLs).
+ * Used by both the client <RouteSEO /> and the build-time prerenderer so the
+ * prerendered <head> matches what the SPA renders.
+ */
+export function resolveRouteMeta(path) {
+  if (path.startsWith('/admin')) return ADMIN_ROUTE;
+  if (path.startsWith('/publications/')) {
+    const m = path.match(/^\/publications\/([^/]+)\/?$/);
+    const article = m ? findArticleBySlug(decodeURIComponent(m[1])) : undefined;
+    return article ? articleMeta(article) : ROUTES['/404'];
+  }
+  return ROUTES[path] || ROUTES['/404'];
+}
 
 /* ------------------------------------------------------------------ */
 /* JSON-LD structured data builders                                    */
@@ -272,6 +323,46 @@ export function buildJsonLd(path) {
     };
   }
 
+  const articleMatch = path.match(/^\/publications\/([^/]+)\/?$/);
+  if (articleMatch) {
+    const article = findArticleBySlug(decodeURIComponent(articleMatch[1]));
+    if (!article) return null;
+    const plain = plainText(article.content);
+    const desc = article.seoDesc || article.excerpt || plain.substring(0, 155);
+    const datePublished = article.date || (article.createdAt ? article.createdAt.split('T')[0] : undefined);
+    const dateModified = article.modifiedAt || article.date || datePublished;
+    const articleUrl = `${SITE.url}/publications/${article.slug}`;
+    const image = article.featuredImage ? `${SITE.url}${article.featuredImage}` : SITE.ogImage;
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        breadcrumbLd([
+          { name: 'Home', path: '/' },
+          { name: 'Publications', path: '/publications' },
+          { name: article.title, path: `/publications/${article.slug}` },
+        ]),
+        {
+          '@type': 'Article',
+          headline: article.title,
+          description: desc,
+          image,
+          author: { '@type': 'Person', name: article.authorName || SITE.legalName },
+          publisher: {
+            '@type': 'Organization',
+            name: SITE.legalName,
+            url: SITE.url,
+            logo: { '@type': 'ImageObject', url: SITE.logo },
+          },
+          mainEntityOfPage: articleUrl,
+          datePublished,
+          dateModified,
+          inLanguage: 'en',
+          isPartOf: { '@type': 'WebPage', name: 'Publications', url: `${SITE.url}/publications` },
+        },
+      ],
+    };
+  }
+
   const map = {
     '/about': 'About Us',
     '/publications': 'Publications',
@@ -331,7 +422,12 @@ function upsertJsonLd(jsonLd) {
 }
 
 function applyRoute(route) {
-  const canonical = route.canonical ? `${SITE.url}${route.canonical}` : null;
+  const canonical = route.canonical
+    ? route.canonical.startsWith('http')
+      ? route.canonical
+      : `${SITE.url}${route.canonical}`
+    : null;
+  const ogImage = route.ogImage || SITE.ogImage;
 
   document.title = route.title;
   upsertMeta('name', 'description', route.description);
@@ -343,11 +439,11 @@ function applyRoute(route) {
   upsertMeta('property', 'og:description', route.description || SITE.description);
   upsertMeta('property', 'og:url', canonical || SITE.url);
   upsertMeta('property', 'og:type', route.ogType || 'website');
-  upsertMeta('property', 'og:image', SITE.ogImage);
+  upsertMeta('property', 'og:image', ogImage);
 
   upsertMeta('name', 'twitter:title', route.title);
   upsertMeta('name', 'twitter:description', route.description || SITE.description);
-  upsertMeta('name', 'twitter:image', SITE.ogImage);
+  upsertMeta('name', 'twitter:image', ogImage);
   upsertMeta('name', 'twitter:card', 'summary_large_image');
 }
 
@@ -358,11 +454,9 @@ export default function RouteSEO() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const route = pathname.startsWith('/admin')
-      ? ADMIN_ROUTE
-      : ROUTES[pathname] || ROUTES['/404'];
+    const route = resolveRouteMeta(pathname);
     applyRoute(route);
-    upsertJsonLd(buildJsonLd(pathname.startsWith('/admin') ? null : pathname));
+    upsertJsonLd(pathname.startsWith('/admin') ? null : buildJsonLd(pathname));
   }, [pathname]);
 
   return null;

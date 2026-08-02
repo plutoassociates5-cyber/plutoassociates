@@ -101,9 +101,10 @@ async function bundleSsr() {
 /* 3. Assemble a full HTML document per route                          */
 /* ------------------------------------------------------------------ */
 function assembleHtml(entry, route) {
-  const { title, description, keywords, robots, canonical, ogType, jsonLd, preloadImage } = route;
+  const { title, description, keywords, robots, canonical, ogType, jsonLd, preloadImage, ogImage } = route;
   const pageUrl = canonical ? `${entry.SITE.url}${canonical}` : entry.SITE.url;
   const desc = description || entry.SITE.description;
+  const pageOgImage = ogImage || entry.SITE.ogImage;
 
   const parts = [
     '<!DOCTYPE html>',
@@ -123,14 +124,14 @@ function assembleHtml(entry, route) {
     `    <meta property="og:title" content="${esc(title)}" />`,
     `    <meta property="og:description" content="${esc(desc)}" />`,
     `    <meta property="og:url" content="${pageUrl}" />`,
-    `    <meta property="og:image" content="${entry.SITE.ogImage}" />`,
+    `    <meta property="og:image" content="${pageOgImage}" />`,
     '    <meta property="og:image:width" content="1200" />',
     '    <meta property="og:image:height" content="630" />',
     '    <meta property="og:locale" content="en_US" />',
     '    <meta name="twitter:card" content="summary_large_image" />',
     `    <meta name="twitter:title" content="${esc(title)}" />`,
     `    <meta name="twitter:description" content="${esc(desc)}" />`,
-    `    <meta name="twitter:image" content="${entry.SITE.ogImage}" />`,
+    `    <meta name="twitter:image" content="${pageOgImage}" />`,
     '    ' + FONT_LINKS,
     preloadImage ? `    <link rel="preload" as="image" href="${preloadImage}" />` : '',
   ];
@@ -150,6 +151,45 @@ function assembleHtml(entry, route) {
 /* ------------------------------------------------------------------ */
 /* 4. Main                                                             */
 /* ------------------------------------------------------------------ */
+function buildSitemap(entry, published) {
+  const today = new Date().toISOString().split('T')[0];
+  const staticRoutes = [
+    { loc: '/', lastmod: today, freq: 'weekly', priority: '1.0' },
+    { loc: '/about', lastmod: today, freq: 'monthly', priority: '0.8' },
+    { loc: '/practice-areas', lastmod: today, freq: 'monthly', priority: '0.9' },
+    { loc: '/teams', lastmod: today, freq: 'monthly', priority: '0.8' },
+    { loc: '/publications', lastmod: today, freq: 'weekly', priority: '0.7' },
+    { loc: '/contact', lastmod: today, freq: 'monthly', priority: '0.7' },
+  ];
+  const lines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+  ];
+  for (const r of staticRoutes) {
+    lines.push(
+      '  <url>',
+      `    <loc>${entry.SITE.url}${r.loc}</loc>`,
+      `    <lastmod>${r.lastmod}</lastmod>`,
+      `    <changefreq>${r.freq}</changefreq>`,
+      `    <priority>${r.priority}</priority>`,
+      '  </url>'
+    );
+  }
+  for (const a of published) {
+    const lastmod = (a.modifiedAt || a.date || today).substring(0, 10);
+    lines.push(
+      '  <url>',
+      `    <loc>${entry.SITE.url}/publications/${a.slug}</loc>`,
+      `    <lastmod>${lastmod}</lastmod>`,
+      '    <changefreq>monthly</changefreq>',
+      '    <priority>0.7</priority>',
+      '  </url>'
+    );
+  }
+  lines.push('</urlset>', '');
+  return lines.join('\n');
+}
+
 (async () => {
   if (!fs.existsSync(path.join(DIST, 'index.html'))) {
     console.error('dist/index.html not found — run `vite build` first.');
@@ -191,6 +231,29 @@ function assembleHtml(entry, route) {
   const notFoundHtml = assembleHtml(entry, { ...entry.ROUTES['/404'], body: notFoundBody, jsonLd: null });
   fs.writeFileSync(path.join(DIST, '404.html'), notFoundHtml, 'utf8');
   console.log('prerendered /404 -> dist/404.html');
+
+  // Published articles -> /publications/<slug> (unique title/desc/OG + Article JSON-LD)
+  const published = entry.getPublishedArticles();
+  for (const art of published) {
+    const routePath = `/publications/${art.slug}`;
+    const dir = path.join(DIST, 'publications', art.slug);
+    const meta = entry.resolveRouteMeta(routePath);
+    const html = assembleHtml(entry, {
+      ...meta,
+      body: entry.renderApp(routePath),
+      jsonLd: entry.buildJsonLd(routePath),
+      preloadImage: art.featuredImage,
+    });
+    fs.mkdirSync(dir, { recursive: true });
+    const outFile = path.join(dir, 'index.html');
+    fs.writeFileSync(outFile, html, 'utf8');
+    console.log(`prerendered ${routePath} -> ${path.relative(ROOT, outFile)} (${Math.round(html.length / 1024)} KB)`);
+  }
+
+  // Dynamic sitemap (overwrites the static public/sitemap.xml copy) incl. article URLs
+  const sitemap = buildSitemap(entry, published);
+  fs.writeFileSync(path.join(DIST, 'sitemap.xml'), sitemap, 'utf8');
+  console.log(`wrote dist/sitemap.xml (${6 + published.length} URLs)`);
 
   console.log('Prerendering complete.');
 })().catch((err) => {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function FeaturedImagePanel({ image, onChange }) {
+export default function FeaturedImagePanel({ image, onChange, alt, onAltChange }) {
   const [url, setUrl] = useState(image || '');
 
   const handleClick = () => {
@@ -14,6 +14,7 @@ export default function FeaturedImagePanel({ image, onChange }) {
   const handleRemove = () => {
     setUrl('');
     onChange(null);
+    if (onAltChange) onAltChange('');
   };
 
   if (!url) {
@@ -39,12 +40,20 @@ export default function FeaturedImagePanel({ image, onChange }) {
       </div>
       <div className="p-4">
         <div className="w-full border border-wp-border">
-          <img src={url} alt="Featured" className="w-full block" />
+          <img src={url} alt={alt || 'Featured'} className="w-full block" />
         </div>
         <div className="mt-2 flex gap-2">
           <a onClick={handleClick} className="text-[0.72rem] text-wp-blue cursor-pointer no-underline">Change image</a>
           <a className="text-accent-red text-[0.72rem] cursor-pointer no-underline" onClick={handleRemove}>Remove</a>
         </div>
+        <label className="block text-[0.7rem] font-semibold text-[#333] mb-1 mt-4">Alt Text <span className="font-normal text-text-light">(accessibility & SEO)</span></label>
+        <input
+          type="text"
+          value={alt || ''}
+          onChange={(e) => onAltChange && onAltChange(e.target.value)}
+          placeholder="Describe the image for search engines"
+          className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue"
+        />
       </div>
     </div>
   );
