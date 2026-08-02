@@ -142,7 +142,7 @@ function assembleHtml(entry, route) {
   const scripts = (template.match(/<script type="module"[^>]*><\/script>/g) || []).map((m) => '    ' + m);
 
   parts.push(...cssLinks);
-  if (jsonLd) parts.push(`    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`);
+  if (jsonLd) parts.push(`    <script type="application/ld+json" data-seo-jsonld="true">${JSON.stringify(jsonLd)}</script>`);
   parts.push('  </head>', '  <body>', `    <div id="root">${route.body}</div>`, ...preloads, ...scripts, '  </body>', '</html>');
   return parts.filter(Boolean).join('\n');
 }
