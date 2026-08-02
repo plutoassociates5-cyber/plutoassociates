@@ -18,23 +18,25 @@ export default function App() {
     <ToastProvider>
       <ScrollToTop />
       <RouteSEO />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/practice-areas" element={<PracticeAreasPage />} />
-        <Route path="/teams" element={<TeamsPage />} />
-        <Route path="/publications" element={<PublicationsPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route
-          path="/admin/*"
-          element={
-            <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-navy">Loading…</div>}>
-              <AdminApp />
-            </Suspense>
-          }
-        />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <main id="main-content">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/practice-areas" element={<PracticeAreasPage />} />
+          <Route path="/teams" element={<TeamsPage />} />
+          <Route path="/publications" element={<PublicationsPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route
+            path="/admin/*"
+            element={
+              <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-navy">Loading…</div>}>
+                <AdminApp />
+              </Suspense>
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </main>
     </ToastProvider>
   );
 }

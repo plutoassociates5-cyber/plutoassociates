@@ -54,22 +54,22 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center p-6 lg:p-8 border border-white/10 reveal-anim">
               <div className="text-3xl mb-3">📍</div>
-              <h4 className="font-serif text-lg text-white mb-2">Visit Us</h4>
+              <h3 className="font-serif text-lg text-white mb-2">Visit Us</h3>
               <p className="text-sm text-white/70">Kathmandu, Nepal</p>
             </div>
             <div className="text-center p-6 lg:p-8 border border-white/10 reveal-anim">
               <div className="text-3xl mb-3">📞</div>
-              <h4 className="font-serif text-lg text-white mb-2">Call Us</h4>
+              <h3 className="font-serif text-lg text-white mb-2">Call Us</h3>
               <a href="tel:+977-9802356987" className="text-sm text-gold hover:underline">+977-9802356987</a>
             </div>
             <div className="text-center p-6 lg:p-8 border border-white/10 reveal-anim">
               <div className="text-3xl mb-3">✉️</div>
-              <h4 className="font-serif text-lg text-white mb-2">Email Us</h4>
+              <h3 className="font-serif text-lg text-white mb-2">Email Us</h3>
               <a href="mailto:info@plutoassociates.com" className="text-sm text-gold hover:underline">info@plutoassociates.com</a>
             </div>
             <div className="text-center p-6 lg:p-8 border border-white/10 reveal-anim">
               <div className="text-3xl mb-3">💬</div>
-              <h4 className="font-serif text-lg text-white mb-2">WhatsApp</h4>
+              <h3 className="font-serif text-lg text-white mb-2">WhatsApp</h3>
               <a href="https://wa.me/9779802356987" target="_blank" rel="noopener noreferrer" className="text-sm text-gold hover:underline">Chat Now</a>
             </div>
           </div>
@@ -80,7 +80,7 @@ export default function ContactPage() {
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-start">
             <div className="reveal-anim">
-              <h3 className="font-serif text-2xl text-navy mb-4">Request a Consultation</h3>
+              <h2 className="font-serif text-2xl text-navy mb-4">Request a Consultation</h2>
               <div className="bg-off-white p-4 rounded-md mb-6 text-[0.85rem] leading-relaxed">
                 <strong>How consultations work:</strong><br />
                 Fill out the form below and it will open your email client with your details pre-filled.
@@ -91,27 +91,27 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div className="mb-4">
-                    <label className="block text-xs font-semibold text-navy mb-1.5">First Name</label>
-                    <input type="text" value={form.fname} onChange={(e) => update('fname', e.target.value)} required className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
+                    <label htmlFor="contact-fname" className="block text-xs font-semibold text-navy mb-1.5">First Name</label>
+                    <input id="contact-fname" name="fname" type="text" value={form.fname} onChange={(e) => update('fname', e.target.value)} required autoComplete="given-name" className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-xs font-semibold text-navy mb-1.5">Last Name</label>
-                    <input type="text" value={form.lname} onChange={(e) => update('lname', e.target.value)} required className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
+                    <label htmlFor="contact-lname" className="block text-xs font-semibold text-navy mb-1.5">Last Name</label>
+                    <input id="contact-lname" name="lname" type="text" value={form.lname} onChange={(e) => update('lname', e.target.value)} required autoComplete="family-name" className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div className="mb-4">
-                    <label className="block text-xs font-semibold text-navy mb-1.5">Email</label>
-                    <input type="email" value={form.email} onChange={(e) => update('email', e.target.value)} required className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
+                    <label htmlFor="contact-email" className="block text-xs font-semibold text-navy mb-1.5">Email</label>
+                    <input id="contact-email" name="email" type="email" value={form.email} onChange={(e) => update('email', e.target.value)} required autoComplete="email" className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
                   </div>
                   <div className="mb-4">
-                    <label className="block text-xs font-semibold text-navy mb-1.5">Phone</label>
-                    <input type="tel" value={form.phone} onChange={(e) => update('phone', e.target.value)} required className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
+                    <label htmlFor="contact-phone" className="block text-xs font-semibold text-navy mb-1.5">Phone</label>
+                    <input id="contact-phone" name="phone" type="tel" value={form.phone} onChange={(e) => update('phone', e.target.value)} required autoComplete="tel" className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
                   </div>
                 </div>
                 <div className="mb-4">
-                  <label className="block text-xs font-semibold text-navy mb-1.5">Practice Area</label>
-                  <select value={form.area} onChange={(e) => update('area', e.target.value)} className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold">
+                  <label htmlFor="contact-area" className="block text-xs font-semibold text-navy mb-1.5">Practice Area</label>
+                  <select id="contact-area" name="area" value={form.area} onChange={(e) => update('area', e.target.value)} className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold">
                     <option value="general">General Inquiry</option>
                     <option value="fdi">FDI & Investment</option>
                     <option value="corporate">Corporate Law</option>
@@ -125,8 +125,8 @@ export default function ContactPage() {
                   </select>
                 </div>
                 <div className="mb-4">
-                  <label className="block text-xs font-semibold text-navy mb-1.5">Message</label>
-                  <textarea rows="5" value={form.message} onChange={(e) => update('message', e.target.value)} required className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
+                  <label htmlFor="contact-message" className="block text-xs font-semibold text-navy mb-1.5">Message</label>
+                  <textarea id="contact-message" name="message" rows="5" value={form.message} onChange={(e) => update('message', e.target.value)} required className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
                 </div>
                 <button type="submit" className="w-full inline-flex items-center justify-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">
                   {sent ? '✓ Message Sent!' : 'Send Message →'}
@@ -136,18 +136,18 @@ export default function ContactPage() {
 
             <div className="reveal-anim">
               <div className="bg-off-white p-6 mb-6">
-                <h4 className="font-serif text-base text-navy mb-3">🕐 Office Hours</h4>
+                <h3 className="font-serif text-base text-navy mb-3">🕐 Office Hours</h3>
                 <p className="text-sm text-text-body mb-2"><strong>Sunday – Friday:</strong> 10:00 AM – 6:00 PM</p>
                 <p className="text-sm text-text-body mb-2"><strong>Saturday:</strong> Closed</p>
                 <p className="text-sm text-text-light/70 mt-2 text-[0.78rem]">Weekend appointments available upon request.</p>
               </div>
               <div className="bg-off-white p-6 mb-6">
-                <h4 className="font-serif text-base text-navy mb-3">👥 Speak with Partners</h4>
+                <h3 className="font-serif text-base text-navy mb-3">👥 Speak with Partners</h3>
                 <p className="text-sm text-text-body mb-2"><strong>Adv. Sudeep Nepal</strong><br />sudeep@plutoassociates.com</p>
                 <p className="text-sm text-text-body mt-2"><strong>Associate Sujan Subedi</strong><br />sujan@plutoassociates.com</p>
               </div>
               <div className="bg-off-white p-6 mb-6">
-                <h4 className="font-serif text-base text-navy mb-3">⚡ Quick Connect</h4>
+                <h3 className="font-serif text-base text-navy mb-3">⚡ Quick Connect</h3>
                 <p className="mb-2"><a href="https://wa.me/9779802356987" target="_blank" rel="noopener noreferrer" className="text-wp-blue text-sm">💬 WhatsApp</a></p>
                 <p className="mb-2"><a href="mailto:info@plutoassociates.com" className="text-wp-blue text-sm">✉️ Email Us</a></p>
                 <p className="mb-2"><a href="tel:+977-9802356987" className="text-wp-blue text-sm">📞 Call Now</a></p>

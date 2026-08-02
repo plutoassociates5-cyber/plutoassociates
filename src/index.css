@@ -34,6 +34,29 @@ body {
   overflow-x: hidden;
 }
 
+/* Accessibility: visible focus ring for keyboard users */
+:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* Accessibility: skip-to-content link (visually hidden until focused) */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100000;
+  background: var(--color-navy);
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.skip-link:focus {
+  left: 0;
+  outline-offset: 0;
+}
+
 /* Scrollbar styling for public pages */
 .public-scroll::-webkit-scrollbar {
   width: 6px;

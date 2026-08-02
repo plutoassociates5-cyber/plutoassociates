@@ -69,24 +69,24 @@ export default function TeamsPage() {
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
               <img src={teamNikesh} alt="Nikesh Nepal" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
-              <h4 className="font-serif text-lg text-navy mb-2">Nikesh Nepal</h4>
+              <h3 className="font-serif text-lg text-navy mb-2">Nikesh Nepal</h3>
               <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">Legal Associate</div>
               <p className="text-sm text-text-body">Civil Law, Corporate Law, Contract Drafting</p>
             </div>
             <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
               <img src={teamGhimire} alt="Sujan Subedi" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
-              <h4 className="font-serif text-lg text-navy mb-2">Sujan Subedi</h4>
+              <h3 className="font-serif text-lg text-navy mb-2">Sujan Subedi</h3>
               <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">Legal Associate</div>
               <p className="text-sm text-text-body">Corporate Law, Litigation, Compliance</p>
             </div>
             <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-white shadow-sm p-6 text-center reveal-anim">
               <img src={teamNeehal} alt="Neehal Pokharel" loading="lazy" className="w-20 h-20 rounded-full object-cover mx-auto mb-4" />
-              <h4 className="font-serif text-lg text-navy mb-2">Neehal Pokharel</h4>
+              <h3 className="font-serif text-lg text-navy mb-2">Neehal Pokharel</h3>
               <div className="text-xs text-gold font-semibold uppercase tracking-[0.5px] mb-2">Legal Associate</div>
               <p className="text-sm text-text-body">Corporate Law, Litigation, Compliance</p>
             </div>
             <div className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] bg-navy shadow-sm p-6 lg:p-8 text-center flex flex-col items-center justify-center text-white reveal-anim">
-              <h4 className="font-serif text-xl mb-3">Join Our Team</h4>
+              <h3 className="font-serif text-xl mb-3">Join Our Team</h3>
               <p className="text-sm text-white/70 mb-4">We're always looking for talented legal professionals.</p>
               <a href="mailto:careers@plutoassociates.com" className="text-gold font-semibold hover:underline inline-block">Send your CV →</a>
             </div>

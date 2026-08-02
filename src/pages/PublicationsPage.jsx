@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
@@ -10,10 +10,19 @@ export default function PublicationsPage() {
   const [articles, setArticles] = useState([]);
   const [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState(null);
+  const closeBtnRef = useRef(null);
 
   useEffect(() => {
     setArticles(getArticles().filter((a) => a.status === 'published'));
   }, []);
+
+  useEffect(() => {
+    if (!selected) return;
+    closeBtnRef.current?.focus();
+    const onKey = (e) => { if (e.key === 'Escape') setSelected(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selected]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -72,15 +81,17 @@ export default function PublicationsPage() {
             Expert analysis on Nepal's evolving legal landscape
           </p>
 
-          <div className="flex gap-2 flex-wrap justify-center mb-8 reveal-anim">
+          <div className="flex gap-2 flex-wrap justify-center mb-8 reveal-anim" role="group" aria-label="Filter publications by category">
             {categories.map((cat) => (
-              <a
+              <button
                 key={cat}
+                type="button"
+                aria-pressed={filter === cat}
                 className={`px-4 py-2 text-sm border border-light-gray cursor-pointer transition-all duration-200 hover:bg-gold hover:text-navy ${filter === cat ? 'bg-gold text-navy' : 'bg-white text-navy'}`}
                 onClick={() => setFilter(cat)}
               >
                 {cat === 'all' ? 'All' : getCategoryLabel(cat)}
-              </a>
+              </button>
             ))}
           </div>
 
@@ -92,14 +103,20 @@ export default function PublicationsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filtered.map((article) => (
-                <div key={article.id} className="bg-white border border-light-gray p-6 transition-all duration-400 cursor-pointer hover:shadow-md hover:-translate-y-0.5 reveal-anim" onClick={() => setSelected(article)}>
+                <button
+                  key={article.id}
+                  type="button"
+                  aria-haspopup="dialog"
+                  onClick={() => setSelected(article)}
+                  className="bg-white border border-light-gray p-6 transition-all duration-400 cursor-pointer hover:shadow-md hover:-translate-y-0.5 reveal-anim text-left w-full"
+                >
                   <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-2">{getCategoryLabel(article.category)}</div>
                   <h3 className="font-serif text-lg text-navy mb-2 leading-snug">{article.title}</h3>
                   <p className="text-sm text-text-body leading-relaxed">{article.excerpt || (article.content ? article.content.replace(/<[^>]*>/g, '').substring(0, 120) : '')}...</p>
                   <div className="text-[0.72rem] text-text-light mt-3">
                     {formatDate(article.date)} · {article.authorName}
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           )}
@@ -107,11 +124,23 @@ export default function PublicationsPage() {
       </section>
 
       {selected && (
-        <div className="fixed inset-0 bg-black/80 z-[99999] flex items-center justify-center p-4" onClick={() => setSelected(null)}>
+        <div
+          className="fixed inset-0 bg-black/80 z-[99999] flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${selected.title} — article preview`}
+          onClick={() => setSelected(null)}
+        >
           <div className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto p-8 lg:p-10 relative" onClick={(e) => e.stopPropagation()}>
-            <button className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-mid-gray border-none text-lg cursor-pointer hover:bg-gold transition-colors duration-200" onClick={() => setSelected(null)}>✕</button>
+            <button
+              ref={closeBtnRef}
+              type="button"
+              aria-label="Close article"
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-mid-gray border-none text-lg cursor-pointer hover:bg-gold transition-colors duration-200"
+              onClick={() => setSelected(null)}
+            >✕</button>
             <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-2">{getCategoryLabel(selected.category)}</div>
-            <h1 className="font-serif text-[clamp(1.5rem,3vw,2.2rem)] text-navy leading-tight mb-4">{selected.title}</h1>
+            <h2 className="font-serif text-[clamp(1.5rem,3vw,2.2rem)] text-navy leading-tight mb-4">{selected.title}</h2>
             <div className="text-xs text-text-light mb-6">
               By {selected.authorName} · {formatDate(selected.date)}
             </div>

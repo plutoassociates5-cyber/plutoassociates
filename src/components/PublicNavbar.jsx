@@ -27,6 +27,7 @@ export default function PublicNavbar() {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <nav className={`fixed top-0 left-0 w-full z-[10000] transition-all duration-300${scrolled ? ' bg-navy shadow-lg shadow-black/20' : ' bg-transparent'}`}>
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 lg:h-24">
@@ -64,6 +65,8 @@ export default function PublicNavbar() {
               className={`lg:hidden flex flex-col gap-[4px] bg-transparent border-none cursor-pointer p-2 z-[10002]${mobileOpen ? ' [&>span:nth-child(1)]:rotate-45 [&>span:nth-child(1)]:translate-y-[6px] [&>span:nth-child(2)]:opacity-0 [&>span:nth-child(3)]:-rotate-45 [&>span:nth-child(3)]:-translate-y-[6px]' : ''}`}
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-menu"
             >
               <span className="w-6 h-[2px] bg-white transition-all duration-300 block"></span>
               <span className="w-6 h-[2px] bg-white transition-all duration-300 block"></span>
@@ -77,8 +80,8 @@ export default function PublicNavbar() {
         className={`fixed inset-0 bg-black/50 z-[10000] transition-opacity duration-500 ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setMobileOpen(false)}
       />
-      <div className={`fixed top-0 -right-full w-[85%] max-w-[360px] h-screen bg-navy z-[10001] transition-all duration-500 flex flex-col${mobileOpen ? ' right-0' : ''}`}>
-        <button className="absolute top-4 right-4 bg-transparent border-none text-white text-2xl cursor-pointer p-2" onClick={() => setMobileOpen(false)}>✕</button>
+      <div className={`fixed top-0 -right-full w-[85%] max-w-[360px] h-screen bg-navy z-[10001] transition-all duration-500 flex flex-col${mobileOpen ? ' right-0' : ''}`} id="mobile-menu" aria-label="Mobile navigation">
+        <button className="absolute top-4 right-4 bg-transparent border-none text-white text-2xl cursor-pointer p-2" onClick={() => setMobileOpen(false)} aria-label="Close menu">✕</button>
         <div className="flex items-center gap-3 p-6 border-b border-white/5">
           <img src={logo} alt="Pluto Associates" className="w-[35px] h-[35px] object-contain" />
           <span className="font-serif text-white text-base font-bold">Pluto Associates</span>

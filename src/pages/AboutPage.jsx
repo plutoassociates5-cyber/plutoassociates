@@ -59,22 +59,22 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white p-6 lg:p-8 border-t-[3px] border-gold shadow-sm reveal-anim">
               <div className="text-3xl mb-4">🎯</div>
-              <h4 className="font-serif text-xl text-navy mb-3">Excellence</h4>
+              <h3 className="font-serif text-xl text-navy mb-3">Excellence</h3>
               <p className="text-sm text-text-body leading-relaxed">We pursue the highest standards of legal work, staying ahead of legal developments to provide cutting-edge advice.</p>
             </div>
             <div className="bg-white p-6 lg:p-8 border-t-[3px] border-gold shadow-sm reveal-anim">
               <div className="text-3xl mb-4">🛡️</div>
-              <h4 className="font-serif text-xl text-navy mb-3">Integrity</h4>
+              <h3 className="font-serif text-xl text-navy mb-3">Integrity</h3>
               <p className="text-sm text-text-body leading-relaxed">Honesty, transparency, and ethical practice form the bedrock of every client relationship we build.</p>
             </div>
             <div className="bg-white p-6 lg:p-8 border-t-[3px] border-gold shadow-sm reveal-anim">
               <div className="text-3xl mb-4">🤝</div>
-              <h4 className="font-serif text-xl text-navy mb-3">Client-First</h4>
+              <h3 className="font-serif text-xl text-navy mb-3">Client-First</h3>
               <p className="text-sm text-text-body leading-relaxed">Our clients' goals drive our strategy. We listen first, then craft solutions that align with their objectives.</p>
             </div>
             <div className="bg-white p-6 lg:p-8 border-t-[3px] border-gold shadow-sm reveal-anim">
               <div className="text-3xl mb-4">🌍</div>
-              <h4 className="font-serif text-xl text-navy mb-3">Accessibility</h4>
+              <h3 className="font-serif text-xl text-navy mb-3">Accessibility</h3>
               <p className="text-sm text-text-body leading-relaxed">We believe quality legal counsel should be accessible. Our pricing is transparent, and our team is always reachable.</p>
             </div>
           </div>
@@ -122,22 +122,22 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
             <div className="text-center p-6 lg:p-8 bg-white shadow-sm reveal-anim">
               <div className="w-12 h-12 bg-gold text-navy font-bold rounded-full flex items-center justify-center mx-auto mb-4 text-lg">01</div>
-              <h4 className="font-serif text-xl text-navy mb-3">Consultation</h4>
+              <h3 className="font-serif text-xl text-navy mb-3">Consultation</h3>
               <p className="text-sm text-text-body leading-relaxed">We begin with a thorough discussion to understand your legal needs, concerns, and objectives.</p>
             </div>
             <div className="text-center p-6 lg:p-8 bg-white shadow-sm reveal-anim">
               <div className="w-12 h-12 bg-gold text-navy font-bold rounded-full flex items-center justify-center mx-auto mb-4 text-lg">02</div>
-              <h4 className="font-serif text-xl text-navy mb-3">Strategy</h4>
+              <h3 className="font-serif text-xl text-navy mb-3">Strategy</h3>
               <p className="text-sm text-text-body leading-relaxed">Our team develops a tailored legal strategy, outlining the approach, timeline, and expected outcomes.</p>
             </div>
             <div className="text-center p-6 lg:p-8 bg-white shadow-sm reveal-anim">
               <div className="w-12 h-12 bg-gold text-navy font-bold rounded-full flex items-center justify-center mx-auto mb-4 text-lg">03</div>
-              <h4 className="font-serif text-xl text-navy mb-3">Execution</h4>
+              <h3 className="font-serif text-xl text-navy mb-3">Execution</h3>
               <p className="text-sm text-text-body leading-relaxed">We implement the strategy with precision, keeping you informed at every stage of the process.</p>
             </div>
             <div className="text-center p-6 lg:p-8 bg-white shadow-sm reveal-anim">
               <div className="w-12 h-12 bg-gold text-navy font-bold rounded-full flex items-center justify-center mx-auto mb-4 text-lg">04</div>
-              <h4 className="font-serif text-xl text-navy mb-3">Resolution</h4>
+              <h3 className="font-serif text-xl text-navy mb-3">Resolution</h3>
               <p className="text-sm text-text-body leading-relaxed">We deliver results and provide ongoing support to ensure your legal matters are fully resolved.</p>
             </div>
           </div>
