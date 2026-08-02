@@ -8,10 +8,15 @@ import CategoryPanel from './CategoryPanel';
 import TagsPanel from './TagsPanel';
 import FeaturedImagePanel from './FeaturedImagePanel';
 
+const DRAFT_KEY = (editId) => `pluto_editor_draft_${editId || 'new'}`;
+
 export default function ArticleEditor({ editId, onNavigate }) {
   const { toast } = useToast();
   const contentRef = useRef(null);
   const sourceRef = useRef(null);
+  const seededRef = useRef(false);
+  const [dirty, setDirty] = useState(false);
+  const [savedAt, setSavedAt] = useState(null);
 
   const existing = editId ? getArticles().find((a) => a.id === editId) : null;
 
@@ -40,11 +45,33 @@ export default function ArticleEditor({ editId, onNavigate }) {
   const [readTime, setReadTime] = useState(0);
 
   useEffect(() => {
-    if (!contentRef.current) return;
-    if (!existing) {
-      contentRef.current.innerHTML = '<p>Write your article content here...</p>';
+    if (!contentRef.current || seededRef.current) return;
+    const existingContent = existing?.content;
+    const storedDraft = !existing ? JSON.parse(localStorage.getItem(DRAFT_KEY(editId)) || 'null') : null;
+    const boot = (existingContent || storedDraft?.content || '<p>Write your article content here...</p>');
+    contentRef.current.innerHTML = boot;
+    seededRef.current = true;
+    if (storedDraft) {
+      if (storedDraft.title) setTitle(storedDraft.title);
+      setContent(storedDraft.content || '');
+      if (storedDraft.slug) { setSlug(storedDraft.slug); setManualSlug(true); }
+      if (storedDraft.excerpt) setExcerpt(storedDraft.excerpt);
     }
+    updateCounts();
   }, []);
+
+  useEffect(() => {
+    if (!dirty) return;
+    const t = setTimeout(() => {
+      const snap = contentRef.current?.innerHTML || content;
+      localStorage.setItem(
+        DRAFT_KEY(editId),
+        JSON.stringify({ title, slug, excerpt, content: snap, category, updatedAt: new Date().toISOString() })
+      );
+      setSavedAt(new Date());
+    }, 700);
+    return () => clearTimeout(t);
+  }, [dirty, title, slug, excerpt, content, category]);
 
   const updateCounts = useCallback(() => {
     const el = contentRef.current;
@@ -58,6 +85,7 @@ export default function ArticleEditor({ editId, onNavigate }) {
 
   const handleTitleChange = (val) => {
     setTitle(val);
+    setDirty(true);
     if (!manualSlug) {
       setSlug(slugify(val));
     }
@@ -67,13 +95,16 @@ export default function ArticleEditor({ editId, onNavigate }) {
     if (cmd === 'formatBlock' && val && val.charAt(0) !== '<') val = '<' + val + '>';
     document.execCommand(cmd, false, val || null);
     contentRef.current?.focus();
+    const html = contentRef.current?.innerHTML || '';
+    setContent(html);
+    setDirty(true);
     updateCounts();
-    setContent(contentRef.current?.innerHTML || '');
   };
 
   const handleContentInput = () => {
     const html = contentRef.current?.innerHTML || '';
     setContent(html);
+    setDirty(true);
     updateCounts();
   };
 
@@ -83,6 +114,7 @@ export default function ArticleEditor({ editId, onNavigate }) {
       if (sourceRef.current) sourceRef.current.value = contentRef.current?.innerHTML || '';
     } else {
       if (contentRef.current) contentRef.current.innerHTML = sourceRef.current?.value || '';
+      setDirty(true);
     }
   };
 
@@ -92,6 +124,7 @@ export default function ArticleEditor({ editId, onNavigate }) {
       setVisualTab(false);
     } else {
       if (contentRef.current) contentRef.current.innerHTML = sourceRef.current?.value || '';
+      setDirty(true);
       setVisualTab(true);
     }
   };
@@ -103,7 +136,7 @@ export default function ArticleEditor({ editId, onNavigate }) {
       return;
     }
 
-    const contentHtml = contentRef.current?.innerHTML || '';
+    const contentHtml = contentRef.current?.innerHTML || content;
     const sourceHtml = sourceRef.current?.value || '';
     const finalContent = !sourceMode ? contentHtml : sourceHtml;
     const authorParts = authorVal.split('|');
@@ -148,6 +181,9 @@ export default function ArticleEditor({ editId, onNavigate }) {
     }
 
     saveArticles(articles);
+    localStorage.removeItem(DRAFT_KEY(editId));
+    setDirty(false);
+    setSavedAt(new Date());
 
     if (action === 'preview') {
       toast('Draft saved. Opening preview...', 'info');
@@ -159,15 +195,18 @@ export default function ArticleEditor({ editId, onNavigate }) {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
-        <h1 className="text-xl lg:text-2xl text-[#1d2327] font-normal font-sans">{existing ? 'Edit Article' : 'Add New Article'}</h1>
-        <div style={{ display: 'flex', gap: '.5rem' }}>
-          <button
-            className="bg-white text-[#333] border border-wp-border px-3.5 py-1.5 text-xs font-semibold cursor-pointer font-sans rounded"
-            onClick={() => save('preview')}
-          >
-            Preview
-          </button>
+      <div className="sticky top-0 z-[50] -mx-4 px-4 py-3 bg-[#f0f0f1]/95 backdrop-blur border-b border-wp-border mb-6 flex justify-between items-center gap-3 flex-wrap rounded-b">
+        <div className="flex items-center gap-3 flex-wrap">
+          <h1 className="text-xl lg:text-2xl text-[#1d2327] font-normal font-sans m-0">{existing ? 'Edit Article' : 'Add New Article'}</h1>
+          {dirty
+            ? <span className="inline-flex items-center gap-1.5 text-[0.72rem] font-semibold text-accent-orange"><span className="w-2 h-2 rounded-full bg-accent-orange animate-pulse inline-block"></span>Unsaved changes</span>
+            : <span className="inline-flex items-center gap-1.5 text-[0.72rem] font-semibold text-accent-green"><span className="w-2 h-2 rounded-full bg-accent-green inline-block"></span>{savedAt ? 'Saved' : 'No changes'}</span>}
+          {savedAt && <span className="hidden sm:inline text-[0.68rem] text-text-light">Autosaved {new Date(savedAt).toLocaleTimeString()}</span>}
+        </div>
+        <div style={{ display: 'flex', gap: '.5rem' }} className="flex-wrap">
+          <button className="bg-white text-[#333] border border-wp-border px-3.5 py-1.5 text-xs font-semibold cursor-pointer font-sans hover:bg-wp-gray" onClick={() => save('preview')}>Preview</button>
+          <button className="bg-white text-[#1d2327] border-2 border-wp-blue px-3.5 py-1.5 text-xs font-semibold cursor-pointer font-sans hover:bg-blue-50" onClick={() => save('draft')}>💾 Save Draft</button>
+          <button className="bg-wp-blue text-white border-none px-3.5 py-1.5 text-xs font-semibold cursor-pointer font-sans hover:bg-[#005a87]" onClick={() => save('published')}>✓ Publish</button>
         </div>
       </div>
 
@@ -226,13 +265,13 @@ export default function ArticleEditor({ editId, onNavigate }) {
                   save('draft');
                 }
               }}
-              dangerouslySetInnerHTML={{ __html: existing?.content || '<p>Write your article content here...</p>' }}
             />
             <textarea
               className="min-h-[450px] p-4 font-mono text-xs border-none w-full resize-y outline-none leading-relaxed text-[#333] bg-gray-50"
               ref={sourceRef}
               style={{ display: visualTab ? 'none' : 'block' }}
               defaultValue={existing?.content || ''}
+              onInput={() => { setDirty(true); updateCounts(); }}
             />
             <div className="px-4 py-1.5 bg-wp-gray border-t border-wp-border text-[0.7rem] text-text-light flex gap-6">
               <span>{wordCount} words</span>
