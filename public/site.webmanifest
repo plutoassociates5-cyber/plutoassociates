@@ -1,0 +1,28 @@
+{
+  "name": "Pluto Associates — Advocates & Legal Consultants",
+  "short_name": "Pluto Associates",
+  "description": "Pluto Associates is a full-service law firm in Kathmandu, Nepal specialising in corporate law, FDI, litigation, intellectual property and more.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0a1628",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
