@@ -4,21 +4,24 @@ import SmartLogo from './SmartLogo';
 
 export default function PublicFooter() {
   const site = getSettings();
-  const logoSize = Math.round(((site.logoConfig && site.logoConfig.size) || 80) * 0.9);
+  const b = site.brand || {};
+  const logoSize = Math.round(((b.header && b.header.logoSize) || (site.logoConfig && site.logoConfig.size) || 80) * 0.9);
+  const footerDesc = (b.footer && b.footer.description) || site.footerAbout;
+  const footerCopy = ((b.footer && b.footer.copyright) || site.copyright).replace('{year}', new Date().getFullYear());
 
   return (
-    <footer className="bg-navy text-text-light pt-16 lg:pt-24">
+    <footer className="pt-16 lg:pt-24" style={{ background: 'var(--brand-footer, #0a1628)', color: 'var(--brand-dark-text, #ffffff)' }}>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
             <Link to="/" className="flex items-center no-underline gap-3">
-              <SmartLogo size={logoSize} alt={site.name} />
+              <SmartLogo size={logoSize} variant="footer" alt={site.name} />
               <div className="flex flex-col">
                 <span className="font-serif text-white text-base font-semibold leading-tight">{site.name}</span>
                 <span className="text-[0.6rem] text-text-light tracking-wider">{site.tagline}</span>
               </div>
             </Link>
-            <p className="mt-4 text-sm leading-relaxed text-text-light">{site.footerAbout}</p>
+            <p className="mt-4 text-sm leading-relaxed text-text-light">{footerDesc}</p>
           </div>
 
           <div>
@@ -55,12 +58,14 @@ export default function PublicFooter() {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8 pb-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm">
-          <span>{site.copyright.replace('{year}', new Date().getFullYear())}</span>
+          <span>{footerCopy}</span>
           <div className="flex gap-6">
             {site.social?.facebook && <a href={site.social.facebook} target="_blank" rel="noopener noreferrer" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Facebook</a>}
             {site.social?.linkedin && <a href={site.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">LinkedIn</a>}
-            {site.social?.twitter && <a href={site.social.twitter} target="_blank" rel="noopener noreferrer" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Twitter</a>}
+            {site.social?.twitter && <a href={site.social.twitter} target="_blank" rel="noopener noreferrer" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Twitter / X</a>}
             {site.social?.instagram && <a href={site.social.instagram} target="_blank" rel="noopener noreferrer" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Instagram</a>}
+            {site.social?.youtube && <a href={site.social.youtube} target="_blank" rel="noopener noreferrer" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">YouTube</a>}
+            {site.social?.tiktok && <a href={site.social.tiktok} target="_blank" rel="noopener noreferrer" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">TikTok</a>}
           </div>
         </div>
       </div>

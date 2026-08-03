@@ -74,9 +74,9 @@ export function getSeedArticles() {
 
 export function getCreds() {
   try {
-    return JSON.parse(localStorage.getItem(CRED_KEY)) || { u: 'pluto', p: 'pluto@2025', n: 'Admin' };
+    return JSON.parse(localStorage.getItem(CRED_KEY)) || { u: 'pluto', p: 'pluto@2025', n: 'Admin', role: 'super' };
   } catch {
-    return { u: 'pluto', p: 'pluto@2025', n: 'Admin' };
+    return { u: 'pluto', p: 'pluto@2025', n: 'Admin', role: 'super' };
   }
 }
 

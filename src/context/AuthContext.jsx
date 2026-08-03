@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (sessionStorage.getItem(SESS_KEY) === '1') {
       const c = getCreds();
-      setUser({ name: c.n || 'Admin' });
+      setUser({ name: c.n || 'Admin', role: c.role || 'super' });
     }
   }, []);
 
@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
     const c = getCreds();
     if (username === c.u && password === c.p) {
       sessionStorage.setItem(SESS_KEY, '1');
-      setUser({ name: c.n || 'Admin' });
+      setUser({ name: c.n || 'Admin', role: c.role || 'super' });
       return true;
     }
     return false;

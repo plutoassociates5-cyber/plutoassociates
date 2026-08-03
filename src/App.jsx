@@ -16,39 +16,42 @@ import NotFoundPage from './pages/NotFoundPage';
 import ScrollToTop from './components/PublicHooks';
 import SiteFavicon from './components/SiteFavicon';
 import { ToastProvider } from './context/ToastContext';
+import { BrandProvider } from './context/BrandContext';
 
 const AdminApp = lazy(() => import('./AdminApp'));
 
 export default function App() {
   return (
     <ToastProvider>
-      <ScrollToTop />
-      <SiteFavicon />
-      <RouteSEO />
-      <main id="main-content">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/practice-areas" element={<PracticeAreasPage />} />
-          <Route path="/practice-areas/:slug" element={<PracticeAreaDetailPage />} />
-          <Route path="/teams" element={<TeamsPage />} />
-          <Route path="/faq" element={<FaqPage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/services/:slug" element={<ServiceDetailPage />} />
-          <Route path="/publications" element={<PublicationsPage />} />
-          <Route path="/publications/:slug" element={<ArticlePage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route
-            path="/admin/*"
-            element={
-              <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-navy">Loading…</div>}>
-                <AdminApp />
-              </Suspense>
-            }
-          />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </main>
+      <BrandProvider>
+        <ScrollToTop />
+        <SiteFavicon />
+        <RouteSEO />
+        <main id="main-content">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/practice-areas" element={<PracticeAreasPage />} />
+            <Route path="/practice-areas/:slug" element={<PracticeAreaDetailPage />} />
+            <Route path="/teams" element={<TeamsPage />} />
+            <Route path="/faq" element={<FaqPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/services/:slug" element={<ServiceDetailPage />} />
+            <Route path="/publications" element={<PublicationsPage />} />
+            <Route path="/publications/:slug" element={<ArticlePage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route
+              path="/admin/*"
+              element={
+                <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-navy">Loading…</div>}>
+                  <AdminApp />
+                </Suspense>
+              }
+            />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </main>
+      </BrandProvider>
     </ToastProvider>
   );
 }

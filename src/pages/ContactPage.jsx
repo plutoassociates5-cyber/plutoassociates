@@ -58,7 +58,7 @@ export default function ContactPage() {
             <div className="text-center p-6 lg:p-8 border border-white/10 reveal-anim">
               <div className="text-3xl mb-3">📍</div>
               <h3 className="font-serif text-lg text-white mb-2">Visit Us</h3>
-              <p className="text-sm text-white/70">{site.address}</p>
+              <p className="text-sm text-white/70">{officeAddress(site)}</p>
             </div>
             <div className="text-center p-6 lg:p-8 border border-white/10 reveal-anim">
               <div className="text-3xl mb-3">📞</div>
@@ -185,4 +185,10 @@ export default function ContactPage() {
       <WhatsAppPopup />
     </div>
   );
+}
+
+function officeAddress(site) {
+  const o = (site.brand && site.brand.office) || {};
+  const parts = [o.officeName, o.street, o.city, o.province, o.postalCode, o.country].filter(Boolean);
+  return parts.length ? parts.join(', ') : site.address;
 }

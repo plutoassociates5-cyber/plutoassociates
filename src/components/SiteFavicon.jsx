@@ -33,7 +33,9 @@ export function applyFavicon(logo) {
 
 export default function SiteFavicon() {
   useEffect(() => {
-    applyFavicon(getSettings()?.logo);
+    const s = getSettings();
+    const assets = (s.brand && s.brand.assets) || {};
+    applyFavicon(assets.favicon || s.logo);
   }, []);
   return null;
 }

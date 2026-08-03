@@ -25,6 +25,7 @@ export default function Sidebar({ page, onNavigate, user, onLogout }) {
       label: 'Website',
       items: [
         { pg: 'messages', icon: '\uD83D\uDCE7', text: 'Contact Inbox' },
+        { pg: 'brand', icon: '\uD83C\uDFA8', text: 'Brand Identity' },
         { pg: 'logo', icon: '\uD83D\uDDBC\uFE0F', text: 'Logo & Branding' },
         { pg: 'site', icon: '\u2699\uFE0F', text: 'Site Settings' },
       ],

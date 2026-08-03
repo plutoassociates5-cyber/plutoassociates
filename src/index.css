@@ -1,30 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy: #0a1628;
-  --color-navy-light: #132038;
+  --color-navy: var(--brand-primary, #0a1628);
+  --color-navy-light: var(--brand-dark-surface, #132038);
   --color-navy-mid: #1a2d4a;
-  --color-teal: #0d4f4f;
-  --color-teal-light: #147272;
-  --color-gold: #c9a84c;
-  --color-gold-light: #d4b85c;
-  --color-gold-dark: #a8893e;
-  --color-off-white: #f8f7f4;
-  --color-light-gray: #f0eeeb;
-  --color-mid-gray: #e0ddd8;
-  --color-text-dark: #1a1a1a;
-  --color-text-body: #4a4a4a;
-  --color-text-light: #7a7a7a;
-  --color-wp-blue: #0073aa;
+  --color-teal: var(--brand-secondary, #0d4f4f);
+  --color-teal-light: var(--brand-secondary-light, #147272);
+  --color-gold: var(--brand-accent, #c9a84c);
+  --color-gold-light: var(--brand-accent-light, #d4b85c);
+  --color-gold-dark: var(--brand-accent-dark, #a8893e);
+  --color-off-white: var(--brand-surface, #f8f7f4);
+  --color-light-gray: var(--brand-surface-alt, #f0eeeb);
+  --color-mid-gray: var(--brand-border, #e0ddd8);
+  --color-text-dark: var(--brand-text, #1a1a1a);
+  --color-text-body: var(--brand-text-body, #4a4a4a);
+  --color-text-light: var(--brand-muted, #7a7a7a);
+  --color-wp-blue: var(--brand-info, #0073aa);
   --color-wp-gray: #f1f1f1;
   --color-wp-border: #ddd;
-  --color-accent-red: #e74c3c;
-  --color-accent-green: #27ae60;
-  --color-accent-orange: #e67e22;
+  --color-accent-red: var(--brand-error, #e74c3c);
+  --color-accent-green: var(--brand-success, #27ae60);
+  --color-accent-orange: var(--brand-warning, #e67e22);
   --color-accent-purple: #8e44ad;
-  --color-accent-blue: #2980b9;
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Inter', -apple-system, sans-serif;
+  --color-accent-blue: var(--brand-info, #2980b9);
+  --font-serif: var(--brand-font-heading, 'Playfair Display', Georgia, serif);
+  --font-sans: var(--brand-font-body, 'Inter', -apple-system, sans-serif);
 }
 
 body {

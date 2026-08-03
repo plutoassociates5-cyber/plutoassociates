@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getArticles, getSeedArticles } from './utils/storage';
-import { getPracticeAreas, getFaqs } from './utils/contentStore';
+import { getPracticeAreas, getFaqs, getSettings } from './utils/contentStore';
 import { getServiceBySlug, getServiceGroups } from './services/store.js';
 
 /**
@@ -28,11 +28,56 @@ export const SITE = {
   geo: { latitude: 27.7172, longitude: 85.324 },
 };
 
+/**
+ * Merge the static SITE defaults with live settings (brand identity) so all
+ * SEO metadata, canonical URLs and JSON-LD reflect admin-controlled values.
+ * Returns a fresh object each call (cheap: reads settings + merges).
+ */
+export function identity() {
+  const s = getSettings();
+  const b = s.brand || {};
+  const seo = b.seo || {};
+  const office = b.office || {};
+  const cc = office.country
+    ? office.country.length === 2
+      ? office.country.toUpperCase()
+      : office.country === 'Nepal' ? 'NP' : office.country
+    : SITE.address.addressCountry;
+  return {
+    ...SITE,
+    name: s.name || SITE.name,
+    tagline: s.tagline || SITE.tagline,
+    legalName: seo.legalName || SITE.legalName,
+    orgName: seo.orgName || s.name || SITE.name,
+    url: seo.canonicalUrl || SITE.url,
+    description: seo.description || SITE.description,
+    ogImage: seo.ogImage || (b.assets && b.assets.ogImage) || SITE.ogImage,
+    logo: seo.logoForSchema || SITE.logo,
+    telephone: s.phone || SITE.telephone,
+    email: s.email || SITE.email,
+    address: {
+      streetAddress: office.street || SITE.address.streetAddress,
+      addressLocality: office.city || SITE.address.addressLocality,
+      addressCountry: cc,
+    },
+    openingHours: seo.openingHours || SITE.openingHours,
+    geo: {
+      latitude: office.latitude || SITE.geo.latitude,
+      longitude: office.longitude || SITE.geo.longitude,
+    },
+    twitterCard: seo.twitterCard || 'summary_large_image',
+    robots: seo.robots || 'index, follow',
+    metaTitle: seo.metaTitle || '',
+    metaDescription: seo.metaDescription || '',
+    schemaEnabled: seo.schema !== false,
+  };
+}
+
 /* ------------------------------------------------------------------ */
 /* Route metadata                                                      */
 /* ------------------------------------------------------------------ */
 
-const DEFAULT_DESC = SITE.description;
+const DEFAULT_DESC = identity().description;
 
 export const ROUTES = {
   '/': {
@@ -151,6 +196,7 @@ function plainText(html) {
 }
 
 function articleMeta(article) {
+  const I = identity();
   const plain = plainText(article.content);
   return {
     title: article.seoTitle || `${article.title} | Pluto Associates Nepal`,
@@ -159,7 +205,7 @@ function articleMeta(article) {
     canonical: article.canonical || `/publications/${article.slug}`,
     ogType: 'article',
     robots: 'index, follow',
-    ogImage: article.featuredImage ? `${SITE.url}${article.featuredImage}` : SITE.ogImage,
+    ogImage: article.featuredImage ? `${I.url}${article.featuredImage}` : I.ogImage,
     article,
   };
 }
@@ -171,6 +217,11 @@ function articleMeta(article) {
  */
 export function resolveRouteMeta(path) {
   const p = normalizePath(path);
+  const route = resolveRawRoute(p);
+  return decorateRoute(route);
+}
+
+function resolveRawRoute(p) {
   if (p.startsWith('/admin')) return ADMIN_ROUTE;
   if (p.startsWith('/publications/')) {
     const m = p.match(/^\/publications\/([^/]+)\/?$/);
@@ -190,7 +241,37 @@ export function resolveRouteMeta(path) {
   return ROUTES[p] || ROUTES['/404'];
 }
 
+/**
+ * Apply live brand/SEO identity on top of a static route definition: title
+ * template, site name, description override, canonical base URL, robots and
+ * the Open Graph image fallback.
+ */
+function decorateRoute(route) {
+  if (!route) return route;
+  const I = identity();
+  let title = route.title || I.name;
+  if (I.metaTitle) {
+    const page = String(title).split('|')[0].trim();
+    title = I.metaTitle.replace('{page}', page);
+  } else {
+    title = String(title).replace(/Pluto Associates/g, I.name);
+  }
+  let description = route.description || I.description;
+  if (I.metaDescription && route === ROUTES['/']) description = I.metaDescription;
+  const ogImage = route.ogImage && !route.ogImage.startsWith('http') ? `${I.url}${route.ogImage}` : route.ogImage || I.ogImage;
+  return {
+    ...route,
+    title,
+    description,
+    ogImage,
+    robots: I.robots || route.robots,
+    twitterCard: I.twitterCard,
+    baseUrl: I.url,
+  };
+}
+
 function practiceAreaMeta(area) {
+  const I = identity();
   const desc = area.desc || area.heading || area.title;
   return {
     title: `${area.heading || area.title} | Pluto Associates Nepal`,
@@ -199,12 +280,13 @@ function practiceAreaMeta(area) {
     canonical: `/practice-areas/${area.id}`,
     ogType: 'website',
     robots: 'index, follow',
-    ogImage: area.img ? `${SITE.url}${area.img}` : SITE.ogImage,
+    ogImage: area.img ? `${I.url}${area.img}` : I.ogImage,
     area,
   };
 }
 
 function serviceMeta(service) {
+  const I = identity();
   return {
     title: service.seoTitle || `${service.name} | Pluto Associates Nepal`,
     description: service.seoDescription || service.shortDescription || plainText(service.content).substring(0, 155),
@@ -212,7 +294,7 @@ function serviceMeta(service) {
     canonical: `/services/${service.slug}`,
     ogType: 'website',
     robots: 'index, follow',
-    ogImage: service.ogImage || (service.featuredImage ? `${SITE.url}${service.featuredImage}` : SITE.ogImage),
+    ogImage: service.ogImage || (service.featuredImage ? `${I.url}${service.featuredImage}` : I.ogImage),
     service,
   };
 }
@@ -226,88 +308,104 @@ function normalizePath(path) {
 /* JSON-LD structured data builders                                    */
 /* ------------------------------------------------------------------ */
 
-const legalServiceLd = {
-  '@type': ['LegalService', 'LocalBusiness'],
-  name: SITE.legalName,
-  url: SITE.url,
-  image: SITE.ogImage,
-  logo: SITE.logo,
-  telephone: SITE.telephone,
-  email: SITE.email,
-  priceRange: '$$',
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: SITE.address.addressLocality,
-    addressCountry: SITE.address.addressCountry,
-  },
-  geo: {
-    '@type': 'GeoCoordinates',
-    latitude: SITE.geo.latitude,
-    longitude: SITE.geo.longitude,
-  },
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '10:00',
-      closes: '18:00',
+function legalServiceLd() {
+  const I = identity();
+  return {
+    '@type': ['LegalService', 'LocalBusiness'],
+    name: I.legalName,
+    url: I.url,
+    image: I.ogImage,
+    logo: I.logo,
+    telephone: I.telephone,
+    email: I.email,
+    priceRange: '$$',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: I.address.streetAddress,
+      addressLocality: I.address.addressLocality,
+      addressCountry: I.address.addressCountry,
     },
-  ],
-  areaServed: { '@type': 'Country', name: 'Nepal' },
-  knowsAbout: [
-    'Corporate Law',
-    'Foreign Direct Investment',
-    'Litigation & Dispute Resolution',
-    'Intellectual Property',
-    'Energy & Infrastructure',
-    'Banking & Finance',
-    'Taxation',
-    'Labor & Employment Law',
-    'Real Estate',
-  ],
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: I.geo.latitude,
+      longitude: I.geo.longitude,
+    },
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '10:00',
+        closes: '18:00',
+      },
+    ],
+    areaServed: { '@type': 'Country', name: 'Nepal' },
+    knowsAbout: [
+      'Corporate Law',
+      'Foreign Direct Investment',
+      'Litigation & Dispute Resolution',
+      'Intellectual Property',
+      'Energy & Infrastructure',
+      'Banking & Finance',
+      'Taxation',
+      'Labor & Employment Law',
+      'Real Estate',
+    ],
+  };
+}
+
+function organizationLd() {
+  const I = identity();
+  return {
+    '@type': 'Organization',
+    name: I.legalName,
+    url: I.url,
+    logo: I.logo,
+    image: I.ogImage,
+    email: I.email,
+    telephone: I.telephone,
+  };
+}
+
+function websiteLd() {
+  const I = identity();
+  return {
+    '@type': 'WebSite',
+    name: I.orgName,
+    url: I.url,
+    description: I.description,
+    inLanguage: 'en',
+    publisher: { '@type': 'Organization', name: I.legalName, url: I.url },
+  };
+}
+
+const breadcrumbLd = (items) => {
+  const I = identity();
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      item: `${I.url}${item.path}`,
+    })),
+  };
 };
 
-const organizationLd = {
-  '@type': 'Organization',
-  name: SITE.legalName,
-  url: SITE.url,
-  logo: SITE.logo,
-  image: SITE.ogImage,
-  email: SITE.email,
-  telephone: SITE.telephone,
+const webPageLd = (name, path, description) => {
+  const I = identity();
+  return {
+    '@type': 'WebPage',
+    name,
+    url: `${I.url}${path}`,
+    description,
+    inLanguage: 'en',
+    isPartOf: { '@type': 'WebSite', name: I.orgName, url: I.url },
+    breadcrumb: breadcrumbLd([
+      { name: 'Home', path: '/' },
+      { name, path },
+    ]),
+  };
 };
-
-const websiteLd = {
-  '@type': 'WebSite',
-  name: SITE.name,
-  url: SITE.url,
-  description: SITE.description,
-  inLanguage: 'en',
-  publisher: { '@type': 'Organization', name: SITE.legalName, url: SITE.url },
-};
-
-const breadcrumbLd = (items) => ({
-  '@type': 'BreadcrumbList',
-  itemListElement: items.map((item, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    name: item.name,
-    item: `${SITE.url}${item.path}`,
-  })),
-});
-
-const webPageLd = (name, path, description) => ({
-  '@type': 'WebPage',
-  name,
-  url: `${SITE.url}${path}`,
-  description,
-  inLanguage: 'en',
-  isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.url },
-  breadcrumb: breadcrumbLd([
-    { name: 'Home', path: '/' },
-    { name, path },
-  ]),
-});
 
 const PERSONAS = [
   { name: 'Adv. Sudeep Nepal', jobTitle: 'Founder & Senior Partner', email: 'sudeep@plutoassociates.com' },
@@ -328,16 +426,19 @@ const PRACTICE_SERVICES = [
   { name: 'Taxation', urlPath: '/practice-areas#tax' },
 ];
 
-const practiceAreasLd = {
-  '@type': 'ItemList',
-  name: 'Pluto Associates Practice Areas',
-  itemListElement: PRACTICE_SERVICES.map((s, i) => ({
-    '@type': 'ListItem',
-    position: i + 1,
-    name: s.name,
-    url: `${SITE.url}${s.urlPath}`,
-  })),
-};
+function practiceAreasLd() {
+  const I = identity();
+  return {
+    '@type': 'ItemList',
+    name: `${I.orgName} Practice Areas`,
+    itemListElement: PRACTICE_SERVICES.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: s.name,
+      url: `${I.url}${s.urlPath}`,
+    })),
+  };
+}
 
 /**
  * Build the JSON-LD @graph for a given route path.
@@ -345,19 +446,20 @@ const practiceAreasLd = {
  * @returns {Object} schema.org @graph
  */
 export function buildJsonLd(path) {
+  const I = identity();
   if (path === '/') {
     return {
       '@context': 'https://schema.org',
       '@graph': [
-        { '@type': 'LegalService', ...legalServiceLd },
-        { '@type': 'Organization', ...organizationLd },
-        { '@type': 'WebSite', ...websiteLd },
+        { '@type': 'LegalService', ...legalServiceLd() },
+        { '@type': 'Organization', ...organizationLd() },
+        { '@type': 'WebSite', ...websiteLd() },
         {
           '@type': 'WebPage',
           name: ROUTES['/'].title,
-          url: `${SITE.url}/`,
+          url: `${I.url}/`,
           description: ROUTES['/'].description,
-          isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.url },
+          isPartOf: { '@type': 'WebSite', name: I.orgName, url: I.url },
         },
         breadcrumbLd([{ name: 'Home', path: '/' }]),
       ],
@@ -369,7 +471,7 @@ export function buildJsonLd(path) {
       '@context': 'https://schema.org',
       '@graph': [
         webPageLd('Practice Areas', '/practice-areas', ROUTES['/practice-areas'].description),
-        practiceAreasLd,
+        practiceAreasLd(),
       ],
     };
   }
@@ -383,7 +485,7 @@ export function buildJsonLd(path) {
           '@type': 'Person',
           name: p.name,
           jobTitle: p.jobTitle,
-          worksFor: { '@type': 'LegalService', name: SITE.legalName, url: SITE.url },
+          worksFor: { '@type': 'LegalService', name: I.legalName, url: I.url },
           ...(p.email ? { email: `mailto:${p.email}` } : {}),
         })),
       ],
@@ -412,8 +514,8 @@ export function buildJsonLd(path) {
   if (practiceAreaMatch) {
     const area = findPracticeAreaBySlug(decodeURIComponent(practiceAreaMatch[1]));
     if (!area) return null;
-    const areaUrl = `${SITE.url}/practice-areas/${area.id}`;
-    const image = area.img ? `${SITE.url}${area.img}` : SITE.ogImage;
+    const areaUrl = `${I.url}/practice-areas/${area.id}`;
+    const image = area.img ? `${I.url}${area.img}` : I.ogImage;
     const graph = [
       breadcrumbLd([
         { name: 'Home', path: '/' },
@@ -428,13 +530,13 @@ export function buildJsonLd(path) {
         description: area.desc || area.heading || area.title,
         provider: {
           '@type': 'LegalService',
-          name: SITE.legalName,
-          url: SITE.url,
-          telephone: SITE.telephone,
+          name: I.legalName,
+          url: I.url,
+          telephone: I.telephone,
           address: {
             '@type': 'PostalAddress',
-            addressLocality: SITE.address.addressLocality,
-            addressCountry: SITE.address.addressCountry,
+            addressLocality: I.address.addressLocality,
+            addressCountry: I.address.addressCountry,
           },
         },
         areaServed: { '@type': 'Country', name: 'Nepal' },
@@ -463,8 +565,8 @@ export function buildJsonLd(path) {
     const desc = article.seoDesc || article.excerpt || plain.substring(0, 155);
     const datePublished = article.date || (article.createdAt ? article.createdAt.split('T')[0] : undefined);
     const dateModified = article.modifiedAt || article.date || datePublished;
-    const articleUrl = `${SITE.url}/publications/${article.slug}`;
-    const image = article.featuredImage ? `${SITE.url}${article.featuredImage}` : SITE.ogImage;
+    const articleUrl = `${I.url}/publications/${article.slug}`;
+    const image = article.featuredImage ? `${I.url}${article.featuredImage}` : I.ogImage;
     return {
       '@context': 'https://schema.org',
       '@graph': [
@@ -478,18 +580,18 @@ export function buildJsonLd(path) {
           headline: article.title,
           description: desc,
           image,
-          author: { '@type': 'Person', name: article.authorName || SITE.legalName },
+          author: { '@type': 'Person', name: article.authorName || I.legalName },
           publisher: {
             '@type': 'Organization',
-            name: SITE.legalName,
-            url: SITE.url,
-            logo: { '@type': 'ImageObject', url: SITE.logo },
+            name: I.legalName,
+            url: I.url,
+            logo: { '@type': 'ImageObject', url: I.logo },
           },
           mainEntityOfPage: articleUrl,
           datePublished,
           dateModified,
           inLanguage: 'en',
-          isPartOf: { '@type': 'WebPage', name: 'Publications', url: `${SITE.url}/publications` },
+          isPartOf: { '@type': 'WebPage', name: 'Publications', url: `${I.url}/publications` },
         },
       ],
     };
@@ -508,7 +610,7 @@ export function buildJsonLd(path) {
             '@type': 'ListItem',
             position: i + 1,
             name: s.name,
-            url: `${SITE.url}/services/${s.slug}`,
+            url: `${I.url}/services/${s.slug}`,
           })),
           itemListOrder: 'Ascending',
           ...(gi === 0 ? {} : {}),
@@ -521,9 +623,9 @@ export function buildJsonLd(path) {
   if (serviceMatch) {
     const service = getServiceBySlug(decodeURIComponent(serviceMatch[1]));
     if (!service) return null;
-    const svcUrl = `${SITE.url}/services/${service.slug}`;
+    const svcUrl = `${I.url}/services/${service.slug}`;
     const desc = service.seoDescription || service.shortDescription || plainText(service.content).substring(0, 155);
-    const image = service.featuredImage ? `${SITE.url}${service.featuredImage}` : SITE.ogImage;
+    const image = service.featuredImage ? `${I.url}${service.featuredImage}` : I.ogImage;
     const graph = [
       breadcrumbLd([
         { name: 'Home', path: '/' },
@@ -539,14 +641,14 @@ export function buildJsonLd(path) {
         serviceType: service.name,
         provider: {
           '@type': 'LegalService',
-          name: SITE.legalName,
-          url: SITE.url,
-          telephone: SITE.telephone,
-          email: SITE.email,
+          name: I.legalName,
+          url: I.url,
+          telephone: I.telephone,
+          email: I.email,
           address: {
             '@type': 'PostalAddress',
-            addressLocality: SITE.address.addressLocality,
-            addressCountry: SITE.address.addressCountry,
+            addressLocality: I.address.addressLocality,
+            addressCountry: I.address.addressCountry,
           },
         },
         areaServed: { '@type': 'Country', name: 'Nepal' },
@@ -632,12 +734,13 @@ function upsertJsonLd(jsonLd) {
 }
 
 function applyRoute(route) {
+  const I = identity();
   const canonical = route.canonical
     ? route.canonical.startsWith('http')
       ? route.canonical
-      : `${SITE.url}${route.canonical}`
+      : `${I.url}${route.canonical}`
     : null;
-  const ogImage = route.ogImage || SITE.ogImage;
+  const ogImage = route.ogImage || I.ogImage;
 
   document.title = route.title;
   upsertMeta('name', 'description', route.description);
@@ -646,15 +749,15 @@ function applyRoute(route) {
   upsertLink('canonical', canonical);
 
   upsertMeta('property', 'og:title', route.title);
-  upsertMeta('property', 'og:description', route.description || SITE.description);
-  upsertMeta('property', 'og:url', canonical || SITE.url);
+  upsertMeta('property', 'og:description', route.description || I.description);
+  upsertMeta('property', 'og:url', canonical || I.url);
   upsertMeta('property', 'og:type', route.ogType || 'website');
   upsertMeta('property', 'og:image', ogImage);
 
   upsertMeta('name', 'twitter:title', route.title);
-  upsertMeta('name', 'twitter:description', route.description || SITE.description);
+  upsertMeta('name', 'twitter:description', route.description || I.description);
   upsertMeta('name', 'twitter:image', ogImage);
-  upsertMeta('name', 'twitter:card', 'summary_large_image');
+  upsertMeta('name', 'twitter:card', route.twitterCard || I.twitterCard);
 }
 
 /**
@@ -667,7 +770,8 @@ export default function RouteSEO() {
     const normalized = normalizePath(pathname);
     const route = resolveRouteMeta(normalized);
     applyRoute(route);
-    upsertJsonLd(normalized.startsWith('/admin') ? null : buildJsonLd(normalized));
+    const enabled = identity().schemaEnabled;
+    upsertJsonLd(normalized.startsWith('/admin') || !enabled ? null : buildJsonLd(normalized));
   }, [pathname]);
 
   return null;

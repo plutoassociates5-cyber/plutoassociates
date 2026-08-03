@@ -16,6 +16,11 @@ import { normalizeLogoConfig } from '../utils/logoDefaults';
 
 const VARIANTS = { nav: 80, sticky: 58, footer: 72, mobile: 54, badge: 84 };
 
+const ASSET_KEYS = {
+  nav: 'logo', sticky: 'logoSticky', footer: 'logoFooter', print: 'logoPrint',
+  email: 'logoEmail', dark: 'logoDark', light: 'logoLight', badge: 'logo', default: 'logo',
+};
+
 /**
  * Minimum internal padding (as % of the badge diameter) that guarantees the
  * whole rectangular image — including its corners — stays inside the circle.
@@ -79,7 +84,9 @@ export default function SmartLogo({
 }) {
   const site = getSettings();
   const cfg = normalizeLogoConfig(config || site.logoConfig);
-  const logo = src || site.logo || '';
+  const assets = (site.brand && site.brand.assets) || {};
+  const assetKey = ASSET_KEYS[variant] || 'logo';
+  const logo = src || assets[assetKey] || site.logo || assets.logo || '';
   const [analysis, setAnalysis] = useState(null);
   const [failed, setFailed] = useState(false);
 

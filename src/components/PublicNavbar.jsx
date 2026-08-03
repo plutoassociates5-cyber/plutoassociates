@@ -32,11 +32,16 @@ export default function PublicNavbar() {
   }, []);
 
   useEffect(() => {
-    const base = Number((site.logoConfig && site.logoConfig.size) || 80);
-    if (base && base >= 40 && base <= 140) {
+    const h = (site.brand && site.brand.header) || {};
+    const base = Number(h.logoSize || (site.logoConfig && site.logoConfig.size) || 80);
+    const sticky = Number(h.stickyLogoSize || 0);
+    if (base >= 40 && base <= 140) {
       document.documentElement.style.setProperty('--logo-base', base + 'px');
     }
-  }, [site.logoConfig]);
+    if (sticky >= 36 && sticky <= 110) {
+      document.documentElement.style.setProperty('--logo-size-sticky', sticky + 'px');
+    }
+  }, [site.brand, site.logoConfig]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -68,7 +73,7 @@ export default function PublicNavbar() {
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <nav className={`fixed top-0 left-0 w-full z-[10000] transition-all duration-300${scrolled ? ' bg-navy shadow-lg shadow-black/20' : ' bg-transparent'}`}>
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-[66px] lg:h-[72px]' : 'h-[78px] lg:h-[96px]'}`}>
+          <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-[var(--brand-sticky-h,66px)] lg:h-[var(--brand-sticky-h,72px)]' : 'h-[var(--brand-mobile-h,78px)] lg:h-[var(--brand-header-h,96px)]'}`}>
             <Link to="/" className={`pluto-brand flex items-center no-underline gap-3 sm:gap-4 transition-all duration-300 ${scrolled ? 'is-scrolled' : ''}`}>
               <SmartLogo size="var(--logo-size)" alt="Pluto Associates — Advocates and Legal Consultants" eager />
               <span className="flex flex-col justify-center leading-tight min-w-0">

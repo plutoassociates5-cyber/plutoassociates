@@ -396,6 +396,75 @@ const HOMEPAGE_SEED = {
   },
 };
 
+const BRAND_ASSETS_SEED = {
+  logo: '', logoDark: '', logoLight: '', logoSticky: '', logoFooter: '',
+  logoPrint: '', logoEmail: '', favicon: '', appleTouchIcon: '', androidIcon: '',
+  ogImage: '', twitterCardImage: '', heroImage: '', placeholderImage: '',
+  notFoundImage: '', loaderLogo: '', watermark: '',
+};
+
+const BRAND_COLORS_SEED = {
+  primary: '#0a1628', secondary: '#0d4f4f', accent: '#c9a84c',
+  background: '#ffffff', surface: '#f8f7f4', surfaceAlt: '#f0eeeb',
+  header: '#0a1628', footer: '#0a1628',
+  button: '#c9a84c', buttonHover: '#ffffff',
+  link: '#0a1628', linkHover: '#c9a84c',
+  border: '#e0ddd8', text: '#1a1a1a', textBody: '#4a4a4a', muted: '#7a7a7a',
+  success: '#27ae60', warning: '#e67e22', error: '#e74c3c', info: '#2980b9',
+  darkBg: '#0a1628', darkSurface: '#132038', darkText: '#ffffff',
+};
+
+const BRAND_TYPOGRAPHY_SEED = {
+  headingFont: "'Playfair Display', Georgia, serif",
+  bodyFont: "'Inter', -apple-system, sans-serif",
+  navFont: "'Inter', -apple-system, sans-serif",
+  buttonFont: "'Inter', -apple-system, sans-serif",
+  headingWeight: 700, bodyWeight: 400,
+  headingSize: 1, paragraphSize: 1,
+  letterSpacing: 0, lineHeight: 1.6,
+};
+
+const BRAND_HEADER_SEED = {
+  height: 96, stickyHeight: 72, mobileHeight: 78,
+  logoSize: 80, stickyLogoSize: 58,
+  navAlign: 'center', navSpacing: 28,
+  searchVisible: true, ctaVisible: true, shadow: true,
+  transparent: true, fixed: true, sticky: true,
+  announcementBar: false, announcementText: '',
+  topContactBar: false,
+};
+
+const BRAND_FOOTER_SEED = {
+  layout: '4col', description: '',
+  quickLinks: true, practiceAreas: true, services: false, resources: false,
+  newsletter: false, copyright: '', privacyPolicy: '', terms: '',
+  hours: true, map: false,
+};
+
+const BRAND_OFFICE_SEED = {
+  officeName: '', street: '', city: '', province: '', postalCode: '',
+  country: 'Nepal', mapsLink: '', latitude: 27.7172, longitude: 85.324,
+  hours: '', holidayHours: '', officeImages: [],
+};
+
+const BRAND_SEO_SEED = {
+  title: '', description: '', metaTitle: '', metaDescription: '', keywords: '',
+  orgName: '', legalName: '', logoForSchema: '', ogImage: '',
+  twitterCard: 'summary_large_image', canonicalUrl: 'https://plutoassociates.com',
+  robots: 'index, follow', schema: true,
+  googleVerification: '', bingVerification: '', gaId: '', metaPixel: '',
+};
+
+export const BRAND_SEED = {
+  assets: { ...BRAND_ASSETS_SEED },
+  colors: { ...BRAND_COLORS_SEED },
+  typography: { ...BRAND_TYPOGRAPHY_SEED },
+  header: { ...BRAND_HEADER_SEED },
+  footer: { ...BRAND_FOOTER_SEED },
+  office: { ...BRAND_OFFICE_SEED },
+  seo: { ...BRAND_SEO_SEED },
+};
+
 const SITE_SETTINGS_SEED = {
   name: 'Pluto Associates',
   tagline: 'Advocates & Legal Consultants',
@@ -407,12 +476,13 @@ const SITE_SETTINGS_SEED = {
   mapsEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.2!2d85.324!3d27.7172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjfCsDQzJzAxLjkiTiA4NcKwMTknMjYuNCJF!5e0!3m2!1sen!2snp!4v1',
   hours: 'Sunday – Friday: 10:00 AM – 6:00 PM',
   hoursSat: 'Saturday: Closed',
-  social: { facebook: 'https://facebook.com', linkedin: 'https://linkedin.com', twitter: 'https://twitter.com', instagram: 'https://instagram.com', youtube: '' },
+  social: { facebook: 'https://facebook.com', linkedin: 'https://linkedin.com', twitter: 'https://twitter.com', instagram: 'https://instagram.com', youtube: '', tiktok: '', telegram: '', threads: '', gbp: '' },
   footerAbout: 'Pluto Associates is a full-service law firm based in Kathmandu, Nepal, providing expert legal solutions across corporate law, FDI, litigation, intellectual property, and more.',
   copyright: '© {year} Pluto Associates. All rights reserved.',
   imgMaxWidth: 1600,
   imgQuality: 85,
   logoConfig: { ...LOGO_CONFIG_DEFAULTS },
+  brand: deepClone(BRAND_SEED),
 };
 
 /* ------------------------------------------------------------------ */
@@ -490,12 +560,39 @@ export function getHomepage() {
   }
 }
 
+export function deepClone(v) {
+  if (v === null || typeof v !== 'object') return v;
+  if (Array.isArray(v)) return v.map(deepClone);
+  const out = {};
+  for (const k of Object.keys(v)) out[k] = deepClone(v[k]);
+  return out;
+}
+
+export function deepMerge(base, override) {
+  if (override === null || typeof override !== 'object') return override;
+  const out = deepClone(base);
+  for (const k of Object.keys(override)) {
+    const ov = override[k];
+    if (ov !== null && typeof ov === 'object' && !Array.isArray(ov) &&
+        out[k] && typeof out[k] === 'object' && !Array.isArray(out[k])) {
+      out[k] = deepMerge(out[k], ov);
+    } else {
+      out[k] = deepClone(ov);
+    }
+  }
+  return out;
+}
+
 function getSite() {
   try {
     const s = JSON.parse(localStorage.getItem('pa_site'));
-    return s ? { ...SITE_SETTINGS_SEED, ...s } : SITE_SETTINGS_SEED;
+    if (!s) return deepClone(SITE_SETTINGS_SEED);
+    const merged = { ...SITE_SETTINGS_SEED, ...s };
+    merged.brand = deepMerge(BRAND_SEED, s.brand || {});
+    merged.social = deepMerge(SITE_SETTINGS_SEED.social, s.social || {});
+    return merged;
   } catch {
-    return SITE_SETTINGS_SEED;
+    return deepClone(SITE_SETTINGS_SEED);
   }
 }
 export function getSettings() { return getSite(); }
