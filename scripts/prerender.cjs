@@ -25,6 +25,9 @@ const FONT_LINKS =
   '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n    ' +
   '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />';
 
+const JS_ENABLE =
+  '<script>document.documentElement.classList.add(\'js\');</script>';
+
 const STATIC_LINKS =
   '<link rel="icon" href="/favicon.ico" sizes="32x32" />\n    ' +
   '<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />\n    ' +
@@ -134,6 +137,7 @@ function assembleHtml(entry, route) {
     `    <meta name="twitter:image" content="${pageOgImage}" />`,
     '    ' + FONT_LINKS,
     preloadImage ? `    <link rel="preload" as="image" href="${preloadImage}" />` : '',
+    '    ' + JS_ENABLE,
   ];
 
   // Vite-built CSS / modulepreload / entry script from the SPA shell

@@ -71,7 +71,7 @@ export default function HomePage() {
     <div>
       <PublicNavbar />
 
-      <section className="relative h-screen min-h-[600px] overflow-hidden">
+      <section className="relative h-screen h-svh min-h-[600px] overflow-hidden">
         <HeroSlideshow slides={HERO_SLIDES} />
         <div className="absolute inset-0 bg-gradient-to-br from-navy/85 via-navy/60 to-navy/30" />
         <div className="relative z-10 h-full flex items-center pt-[70px]">

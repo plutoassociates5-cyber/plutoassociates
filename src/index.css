@@ -34,6 +34,15 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove the tap highlight flash on mobile taps */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Accessibility: visible focus ring for keyboard users */
 :focus-visible {
   outline: 3px solid var(--color-gold);
@@ -82,9 +91,24 @@ body {
   from { opacity: 0; transform: translateX(50px); }
   to { opacity: 1; transform: translateX(0); }
 }
-.reveal-anim { animation: fadeUp 0.7s ease forwards; }
-.reveal-left-anim { animation: fadeLeft 0.7s ease forwards; }
-.reveal-right-anim { animation: fadeRight 0.7s ease forwards; }
+/* Reveal animations — hidden only once JS has enabled the effect, so
+   content stays visible for crawlers and users without JavaScript. */
+.js .reveal-anim, .js .reveal-left-anim, .js .reveal-right-anim {
+  opacity: 0;
+}
+.js .reveal-anim.visible { animation: fadeUp 0.7s ease forwards; }
+.js .reveal-left-anim.visible { animation: fadeLeft 0.7s ease forwards; }
+.js .reveal-right-anim.visible { animation: fadeRight 0.7s ease forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js .reveal-anim, .js .reveal-left-anim, .js .reveal-right-anim {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+}
 
 @keyframes ping {
   75%, 100% { transform: scale(1.5); opacity: 0; }
