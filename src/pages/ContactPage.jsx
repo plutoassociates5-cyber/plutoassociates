@@ -26,6 +26,8 @@ export default function ContactPage() {
     return () => observer.disconnect();
   }, []);
 
+const GMAIL_TO = 'plutoassociates5@gmail.com';
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const subject = encodeURIComponent(`Consultation Request - ${form.area} - ${form.fname} ${form.lname}`);
@@ -33,9 +35,13 @@ export default function ContactPage() {
       `Name: ${form.fname} ${form.lname}\nEmail: ${form.email}\nPhone: ${form.phone}\nArea: ${form.area}\n\nMessage:\n${form.message}`
     );
     addMessage({ id: uid('msg'), name: `${form.fname} ${form.lname}`, email: form.email, phone: form.phone, area: form.area, subject: `Consultation Request - ${form.area}`, message: form.message, status: 'new', date: new Date().toISOString() });
-    window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${GMAIL_TO}&su=${subject}&body=${body}`;
+    const win = window.open(gmailUrl, '_blank', 'noopener');
+    if (!win || win.closed) {
+      window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
+    }
     setSent(true);
-    toast('Opening your email client to send the consultation request.');
+    toast('Opening Gmail to send your consultation request to ' + GMAIL_TO + '.');
   };
 
   const update = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
@@ -86,9 +92,9 @@ export default function ContactPage() {
               <h2 className="font-serif text-2xl text-navy mb-4">Request a Consultation</h2>
               <div className="bg-off-white p-4 rounded-md mb-6 text-[0.85rem] leading-relaxed">
                 <strong>How consultations work:</strong><br />
-                Fill out the form below and it will open your email client with your details pre-filled.
-                Send the email to <strong>{site.email}</strong> and our team will reply within 24 hours.
-                You can also email us directly or call <strong>{site.phone}</strong>.
+                Fill out the form below and it will open Gmail with your details pre-filled to <strong>{GMAIL_TO}</strong>.
+                Our team will reply to your email within 24 hours.
+                You can also email us directly at <strong>{site.email}</strong> or call <strong>{site.phone}</strong>.
               </div>
               <p className="text-sm text-text-body mb-6">Fill out the form and our team will get back to you within 24 hours.</p>
               <form onSubmit={handleSubmit}>
