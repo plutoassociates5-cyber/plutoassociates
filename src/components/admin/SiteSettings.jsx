@@ -78,6 +78,9 @@ export default function SiteSettings() {
           <Row label="Phone"><input className={input} value={s.phone} onChange={(e) => set('phone', e.target.value)} /></Row>
           <Row label="WhatsApp Number" hint="Digits only, with country code"><input className={input} value={s.whatsapp} onChange={(e) => set('whatsapp', e.target.value)} /></Row>
           <Row label="Email"><input className={input} value={s.email} onChange={(e) => set('email', e.target.value)} /></Row>
+          <Row label="Formspree Form ID" hint="Sends contact messages straight to your inbox. Get yours at formspree.io and set it to deliver to your email. Leave blank to disable direct sending.">
+            <input className={input} value={s.formspreeId || ''} placeholder="e.g. xzbyqkjv" onChange={(e) => set('formspreeId', e.target.value)} />
+          </Row>
           <Row label="Google Maps Embed URL"><input className={input} value={s.mapsEmbed} onChange={(e) => set('mapsEmbed', e.target.value)} /></Row>
           <Row label="Office Hours"><input className={input} value={s.hours} onChange={(e) => set('hours', e.target.value)} /></Row>
           <Row label="Saturday Hours"><input className={input} value={s.hoursSat} onChange={(e) => set('hoursSat', e.target.value)} /></Row>
