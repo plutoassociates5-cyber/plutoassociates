@@ -57,9 +57,11 @@ export default function SiteSettings() {
           <h2 className="text-sm font-semibold text-[#1d2327] mb-4 pb-3 border-b border-wp-border">🏢 Company</h2>
           <Row label="Site Name"><input className={input} value={s.name} onChange={(e) => set('name', e.target.value)} /></Row>
           <Row label="Tagline"><input className={input} value={s.tagline} onChange={(e) => set('tagline', e.target.value)} /></Row>
-          <Row label="Logo" hint="PNG/SVG, up to 3MB">
+          <Row label="Logo" hint="PNG/SVG, up to 3MB. Shown in a round badge and auto-fitted.">
             <div className="flex items-center gap-3">
-              <img src={s.logo} alt="Logo" className="w-10 h-10 object-contain bg-light-gray" />
+              <span className="flex items-center justify-center w-14 h-14 rounded-full bg-light-gray overflow-hidden p-1.5 shrink-0">
+                <img src={s.logo} alt="Logo" className="w-full h-full object-contain" />
+              </span>
               <label className="bg-wp-blue text-white px-3 py-1.5 text-xs font-semibold cursor-pointer">Upload<input type="file" accept="image/*" hidden onChange={onLogo} /></label>
             </div>
           </Row>
