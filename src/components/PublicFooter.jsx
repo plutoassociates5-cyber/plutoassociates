@@ -10,9 +10,7 @@ export default function PublicFooter() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
             <Link to="/" className="flex items-center no-underline gap-3">
-              <span className="flex items-center justify-center h-12 shrink-0 overflow-hidden rounded-full bg-white/10 ring-1 ring-white/10 backdrop-blur-sm px-[3px]">
-                <img src={site.logo} alt={site.name} loading="lazy" className="h-10 w-auto max-w-full max-h-full object-contain" />
-              </span>
+              <img src={site.logo} alt={site.name} loading="lazy" className="h-12 w-auto object-contain shrink-0" />
               <div className="flex flex-col">
                 <span className="font-serif text-white text-base font-semibold leading-tight">{site.name}</span>
                 <span className="text-[0.6rem] text-text-light tracking-wider">{site.tagline}</span>
