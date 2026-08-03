@@ -12,7 +12,6 @@ export default function ContactPage() {
   const site = getSettings();
   const [form, setForm] = useState({ fname: '', lname: '', email: '', phone: '', area: 'general', message: '' });
   const [sent, setSent] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,50 +26,16 @@ export default function ContactPage() {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (submitting) return;
-    setSubmitting(true);
-
-    const sender = { name: `${form.fname} ${form.lname}`, email: form.email, phone: form.phone, area: form.area, subject: `Consultation Request - ${form.area}`, message: form.message };
-
-    addMessage({ id: uid('msg'), ...sender, status: 'new', date: new Date().toISOString() });
-
-    const formId = (site.formspreeId || '').trim();
-    if (!formId) {
-      setSubmitting(false);
-      toast('⚠️ Form delivery is not configured yet. Your message was saved in the admin inbox.', 'err');
-      setSent(true);
-      return;
-    }
-
-    try {
-      const res = await fetch(`https://formspree.io/f/${formId}`, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: sender.name,
-          email: sender.email,
-          phone: sender.phone,
-          practiceArea: form.area,
-          subject: sender.subject,
-          message: sender.message,
-          _replyto: sender.email,
-          _subject: sender.subject,
-        }),
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error((err && err.errors && err.errors[0] && err.errors[0].message) || `Send failed (${res.status})`);
-      }
-      setSent(true);
-      setForm({ fname: '', lname: '', email: '', phone: '', area: 'general', message: '' });
-      toast('✓ Your message has been sent to ' + (site.email || 'our team') + '. We will reply within 24 hours.');
-    } catch (err) {
-      toast('⚠️ ' + (err.message || 'Could not send your message. Please email us directly at ' + site.email + '.'), 'err');
-    } finally {
-      setSubmitting(false);
-    }
+    const subject = encodeURIComponent(`Consultation Request - ${form.area} - ${form.fname} ${form.lname}`);
+    const body = encodeURIComponent(
+      `Name: ${form.fname} ${form.lname}\nEmail: ${form.email}\nPhone: ${form.phone}\nArea: ${form.area}\n\nMessage:\n${form.message}`
+    );
+    addMessage({ id: uid('msg'), name: `${form.fname} ${form.lname}`, email: form.email, phone: form.phone, area: form.area, subject: `Consultation Request - ${form.area}`, message: form.message, status: 'new', date: new Date().toISOString() });
+    window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
+    setSent(true);
+    toast('Opening your email client to send the consultation request to ' + site.email + '.');
   };
 
   const update = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
@@ -121,8 +86,8 @@ export default function ContactPage() {
               <h2 className="font-serif text-2xl text-navy mb-4">Request a Consultation</h2>
               <div className="bg-off-white p-4 rounded-md mb-6 text-[0.85rem] leading-relaxed">
                 <strong>How consultations work:</strong><br />
-                Fill out the form below and hit <strong>Send Message</strong> — your message goes straight to <strong>{site.email}</strong>.
-                Our team will reply to your email within 24 hours.
+                Fill out the form below and hit <strong>Send Message</strong> — your email app opens with the message ready to send to <strong>{site.email}</strong>.
+                Our team will reply within 24 hours.
                 You can also email us directly or call <strong>{site.phone}</strong>.
               </div>
               <p className="text-sm text-text-body mb-6">Fill out the form and our team will get back to you within 24 hours.</p>
@@ -166,8 +131,8 @@ export default function ContactPage() {
                   <label htmlFor="contact-message" className="block text-xs font-semibold text-navy mb-1.5">Message</label>
                   <textarea id="contact-message" name="message" rows="5" value={form.message} onChange={(e) => update('message', e.target.value)} required className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none transition-all duration-200 focus:border-gold" />
                 </div>
-                <button type="submit" disabled={submitting} className="w-full inline-flex items-center justify-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline disabled:opacity-60 disabled:cursor-not-allowed">
-                  {submitting ? 'Sending…' : sent ? '✓ Message Sent!' : 'Send Message →'}
+                <button type="submit" className="w-full inline-flex items-center justify-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">
+                  {sent ? '✓ Message Ready!' : 'Send Message →'}
                 </button>
               </form>
             </div>
