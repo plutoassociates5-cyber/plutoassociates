@@ -7,6 +7,7 @@ export const LOGO_CONFIG_DEFAULTS = {
   padding: 10,         // manual internal padding in px (also the floor when autoPad is on)
   autoFit: true,       // scale any uploaded image to fit without distortion
   autoPad: true,       // compute padding from the image aspect ratio to avoid border contact
+  fit: 'auto',         // 'auto' (square/portrait fill the circle, landscape stays whole) | 'contain' | 'cover'
   borderWidth: 1,      // circle border thickness in px
   borderColor: 'rgba(255,255,255,0.20)',
   shadow: true,        // soft professional shadow
@@ -23,6 +24,7 @@ export function normalizeLogoConfig(cfg) {
     padding: Math.min(40, Math.max(0, num(c.padding, d.padding))),
     autoFit: c.autoFit !== false,
     autoPad: c.autoPad !== false,
+    fit: c.fit === 'contain' || c.fit === 'cover' ? c.fit : 'auto',
     borderWidth: Math.min(8, Math.max(0, num(c.borderWidth, d.borderWidth))),
     borderColor: c.borderColor || d.borderColor,
     shadow: c.shadow !== false,

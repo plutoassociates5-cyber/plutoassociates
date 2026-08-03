@@ -84,13 +84,18 @@ export default function SmartLogo({
   const [failed, setFailed] = useState(false);
 
   const D = typeof size === 'number' ? size : size || cfg.size || VARIANTS[variant] || 80;
-  const aspect = analysis ? analysis.aspect : 1;
+  const aspect = analysis ? analysis.aspect : 1.3;
   const basePx = typeof D === 'number' ? D : cfg.size || VARIANTS[variant] || 80;
 
+  // Square/portrait logos fill the circle (circular crop); landscape wordmarks
+  // stay fully visible. Until the image loads, assume landscape (safest).
+  const fitMode = cfg.fit === 'contain' || cfg.fit === 'cover' ? cfg.fit : (aspect < 1.15 ? 'cover' : 'contain');
+  const useCover = fitMode === 'cover';
+
   const pct =
-    cfg.autoPad
-      ? Math.min(30, Math.max(idealPaddingPct(aspect) * 1.12, (cfg.padding / Math.max(1, basePx)) * 100))
-      : (cfg.padding / Math.max(1, basePx)) * 100;
+    useCover || !cfg.autoPad
+      ? useCover ? 0 : (cfg.padding / Math.max(1, basePx)) * 100
+      : Math.min(30, Math.max(idealPaddingPct(aspect) * 1.12, (cfg.padding / Math.max(1, basePx)) * 100));
 
   const hasLogo = Boolean(logo);
   const showFallback = !hasLogo || failed;
@@ -116,7 +121,7 @@ export default function SmartLogo({
 
   const imgStyle = {
     padding: pct + '%',
-    objectFit: 'contain',
+    objectFit: useCover ? 'cover' : 'contain',
     objectPosition: 'center',
   };
 

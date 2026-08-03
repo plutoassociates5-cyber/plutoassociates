@@ -135,6 +135,15 @@ export default function LogoManager() {
             <div className="text-xs font-semibold text-[#1d2327] pb-2 border-b border-wp-border">⚙️ Display</div>
             <Slider label="Circle size" k="size" cfg={cfg} setCfg={setCfg} min={40} max={140} />
             <Slider label="Internal padding" k="padding" cfg={cfg} setCfg={setCfg} min={0} max={40} />
+            <Control label="Fit style">
+              <div className="flex gap-1.5 flex-wrap">
+                {[['auto', 'Auto'], ['contain', 'Full logo'], ['cover', 'Fill circle']].map(([k, label]) => (
+                  <button key={k} onClick={() => setCfg({ ...cfg, fit: k })} className={`px-3 py-1.5 text-xs font-semibold cursor-pointer border ${cfg.fit === k ? 'bg-wp-blue text-white border-wp-blue' : 'bg-white text-[#555] border-wp-border hover:bg-wp-gray'}`}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </Control>
             <Toggle label="Auto fit" k="autoFit" hint="Scale image to fit, never stretch or crop" cfg={cfg} setCfg={setCfg} />
             <Toggle label="Auto padding" k="autoPad" hint="Adapt padding to image shape so it never touches the border" cfg={cfg} setCfg={setCfg} />
             <Toggle label="Soft shadow" k="shadow" hint="Professional drop shadow under the badge" cfg={cfg} setCfg={setCfg} />
