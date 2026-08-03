@@ -166,15 +166,19 @@ export default function ServiceDetailPage() {
                   Typical timeline
                 </h2>
                 <div className="flex flex-col gap-4">
-                  {(service.timeline || []).map((t, i) => (
-                    <div key={i} className="flex items-start gap-3 text-sm">
-                      <span className="w-8 h-8 rounded-full bg-navy text-gold flex items-center justify-center text-xs font-bold shrink-0">{i + 1}</span>
-                      <div>
-                        {t.duration && <span className="text-gold font-semibold text-xs uppercase tracking-wide">{t.duration}</span>}
-                        <p className="text-text-body">{t.step}</p>
+                  {(service.timeline || []).map((t, i) => {
+                    const step = Array.isArray(t) ? t[0] : (t.step || '');
+                    const duration = Array.isArray(t) ? t[1] : (t.duration || '');
+                    return (
+                      <div key={i} className="flex items-start gap-3 text-sm">
+                        <span className="w-8 h-8 rounded-full bg-navy text-gold flex items-center justify-center text-xs font-bold shrink-0">{i + 1}</span>
+                        <div>
+                          {duration && <span className="text-gold font-semibold text-xs uppercase tracking-wide">{duration}</span>}
+                          {step && <p className="text-text-body">{step}</p>}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}

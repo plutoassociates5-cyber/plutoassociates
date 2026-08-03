@@ -6,7 +6,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  getServices, getServiceCategories, addServiceCategory, upsertService, slugify, uniqueSlug,
+  getServices, getServiceCategories, addServiceCategory, upsertService, slugify, uniqueSlug, uid,
 } from '../../services/store';
 import { getSettings } from '../../utils/contentStore';
 import { readFileAsDataUrl, isSvg } from '../../utils/image';
@@ -169,7 +169,13 @@ export default function ServiceEditor({ editId, onNavigate }) {
 
   const save = (status) => {
     if (!s.name.trim()) { toast('Service name is required.', 'err'); return; }
-    const rec = { ...s, status, slug: currentSlug, updatedAt: new Date().toISOString().split('T')[0] };
+    const rec = {
+      ...s,
+      id: s.id || uid(),
+      status,
+      slug: currentSlug,
+      updatedAt: new Date().toISOString().split('T')[0],
+    };
     upsertService(rec);
     localStorage.removeItem(DRAFT_KEY(s.id));
     toast(status === 'draft' ? '✓ Draft saved.' : status === 'archived' ? 'Archived.' : '✓ Service published.');
@@ -263,7 +269,7 @@ export default function ServiceEditor({ editId, onNavigate }) {
           <Section title="Related Services">
             <div className="flex flex-wrap gap-2">
               {all.filter((x) => x.id !== s.id).map((x) => (
-                <button key={x.id} className={`px-3 py-1.5 text-xs font-semibold cursor-pointer border ${relatedIds.has(x.id) ? 'bg-wp-blue text-white border-wp-blue' : 'bg-white text-[#555] border-wp-border hover:bg-wp-gray'}`} onClick={() => toggleRelated(x.id)}>{x.name}</button>
+                <button key={x.id} className={`px-3 py-1.5 text-xs font-semibold cursor-pointer border ${relatedSet.has(x.id) ? 'bg-wp-blue text-white border-wp-blue' : 'bg-white text-[#555] border-wp-border hover:bg-wp-gray'}`} onClick={() => toggleRelated(x.id)}>{x.name}</button>
               ))}
             </div>
           </Section>

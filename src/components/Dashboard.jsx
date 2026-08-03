@@ -103,7 +103,7 @@ export default function Dashboard({ onEdit, onNavigate }) {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mb-6">
         {cards.map((c) => (
-          <div key={c.label} className="bg-white p-4 pl-5 border-l-4 border-l-wp-blue shadow-[0_1px_3px_rgba(0,0,0,0.08)] cursor-pointer hover:shadow-md transition-shadow" onClick={() => onNavigate(c.label === 'Practice Areas' ? 'practice-areas' : c.label === 'Lawyers' ? 'lawyers' : c.label === 'Categories' ? 'categories' : c.label === 'Tags' ? 'tags' : c.label === 'FAQs' ? 'faqs' : c.label === 'Media Assets' ? 'media' : c.label === 'Practice Inbox' ? 'messages' : 'all')}>
+          <div key={c.label} className="bg-white p-4 pl-5 border-l-4 border-l-wp-blue shadow-[0_1px_3px_rgba(0,0,0,0.08)] cursor-pointer hover:shadow-md transition-shadow" onClick={() => onNavigate(c.label === 'Practice Areas' ? 'practice-areas' : c.label === 'Lawyers' ? 'lawyers' : c.label === 'Categories' ? 'categories' : c.label === 'Tags' ? 'tags' : c.label === 'FAQs' ? 'faqs' : c.label === 'Media Assets' ? 'media' : c.label === 'Contact Inbox' ? 'messages' : 'all')}>
             <div className="text-[0.62rem] text-text-light uppercase tracking-[1px] font-semibold block mb-1">{c.label}</div>
             <div className="text-2xl lg:text-3xl font-bold text-[#1d2327] leading-none">{c.value}</div>
           </div>
