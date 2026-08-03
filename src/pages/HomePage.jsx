@@ -6,6 +6,7 @@ import { WhatsAppPopup } from '../components/PublicUtils';
 import { HeroSlideshow } from '../components/PublicHooks';
 import { getHomepage } from '../utils/contentStore';
 import { getPublishedArticles } from '../seo';
+import { getServiceGroups } from '../services/store';
 import hero1 from '../assets/hero-1.jpeg';
 import hero2 from '../assets/hero-2.jpeg';
 import hero3 from '../assets/hero-3.jpeg';
@@ -48,6 +49,7 @@ const PROCESS = [
 
 export default function HomePage() {
   const hp = getHomepage();
+  const servicesGroups = getServiceGroups();
   const latest = getPublishedArticles()
     .slice()
     .sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0))
@@ -150,6 +152,38 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {hp.servicesSection?.visible !== false && (
+        <section className="py-16 lg:py-24">
+          <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+              <div>
+                <span className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 inline-block reveal-anim">What We Do</span>
+                <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight font-semibold reveal-anim">{hp.servicesSection.title}</h2>
+                <p className="text-base text-text-light max-w-[620px] leading-relaxed mt-3 reveal-anim">{hp.servicesSection.subtitle}</p>
+              </div>
+              <Link to="/services" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all self-start md:self-auto reveal-anim">{hp.servicesSection.ctaLabel || 'View All Services'} →</Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {servicesGroups.map((g) => (
+                <Link
+                  key={g.id}
+                  to={'/services#group-' + g.id}
+                  className="group bg-white border border-light-gray p-7 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-gold no-underline block reveal-anim"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gold/10 text-2xl flex items-center justify-center">{g.icon}</div>
+                    <span className="text-xs text-text-light font-semibold uppercase tracking-[1px]">{g.count} services</span>
+                  </div>
+                  <h3 className="font-serif text-lg text-navy mb-2 group-hover:text-gold transition-colors">{g.name}</h3>
+                  <p className="text-sm text-text-body leading-relaxed">{g.intro}</p>
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-gold mt-4 group-hover:gap-3 transition-all">Explore <span>→</span></span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="py-16 lg:py-24">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">

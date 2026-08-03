@@ -12,6 +12,7 @@
  * to an async backend is a contained change inside this file + the adapter.
  */
 import { localAdapter } from './adapters/local.js';
+import { SERVICE_GROUPS, SERVICE_CATALOG, getGroupById } from './taxonomy.js';
 
 let adapter = localAdapter;
 
@@ -65,24 +66,23 @@ function rawSet(key, value) {
 /* Seed data                                                           */
 /* ------------------------------------------------------------------ */
 
-const SEED_CATS = [
-  { id: 'corporate', name: 'Corporate & Commercial' },
-  { id: 'fdi', name: 'Foreign Direct Investment' },
-  { id: 'compliance', name: 'Corporate Compliance' },
-  { id: 'commercial', name: 'Commercial Transactions' },
-  { id: 'tax', name: 'Tax & Regulatory Advisory' },
-  { id: 'employment', name: 'Employment & Labour' },
-  { id: 'ip', name: 'Intellectual Property' },
-  { id: 'technology', name: 'Technology & Data Privacy' },
-  { id: 'real-estate', name: 'Real Estate & Property' },
-  { id: 'litigation', name: 'Litigation' },
-  { id: 'criminal', name: 'Criminal Defence' },
-  { id: 'arbitration', name: 'Arbitration & ADR' },
-  { id: 'banking', name: 'Banking & Finance' },
-  { id: 'ngo', name: 'NGO / INGO Compliance' },
-  { id: 'advisory', name: 'Legal Advisory' },
-  { id: 'documentation', name: 'Documentation & Notarization' },
-];
+const CATEGORY_NAMES = {
+  corporate: 'Corporate & Commercial', fdi: 'Foreign Direct Investment',
+  governance: 'Corporate Governance', compliance: 'Corporate Compliance',
+  licensing: 'Business Licensing', 'due-diligence': 'Legal Due Diligence',
+  mna: 'Mergers & Acquisitions', securities: 'Investment & Securities',
+  commercial: 'Commercial Transactions', 'joint-venture': 'Joint Ventures & Partnerships',
+  advisory: 'Legal Advisory', tax: 'Tax & Regulatory Advisory',
+  litigation: 'Litigation', 'debt-recovery': 'Debt Recovery',
+  'real-estate': 'Real Estate & Property Law', documentation: 'Documentation & Notarization',
+  notarization: 'Notarization & Legalisation', family: 'Family & Personal',
+  estate: 'Wills, Trusts & Succession', employment: 'Employment & Labour Law',
+  ip: 'Intellectual Property', technology: 'Technology & Data Privacy',
+  arbitration: 'Arbitration & Alternative Dispute Resolution',
+  criminal: 'Criminal & Regulatory Defence', ngo: 'NGO / INGO Compliance',
+};
+
+const SEED_CATS = Object.entries(CATEGORY_NAMES).map(([id, name]) => ({ id, name }));
 
 const DEFAULT_WHY = [
   'Deep, specialist experience in the core of the matter',
@@ -108,41 +108,30 @@ const DEFAULT_DOCS =
   'Identification documents and any existing contracts, registrations or records relevant to your matter. We confirm the exact list during your consultation.';
 
 /**
- * Compose the full default service catalogue from a compact spec so it stays
- * production-ready yet easy for a non-technical admin to edit afterwards.
+ * Compose the full default service catalogue from the group taxonomy so it
+ * stays production-ready yet easy for a non-technical admin to edit.
  */
 function buildSeed() {
-  const spec = [
-    ['Corporate Law', 'corporate', '⚖️', true],
-    ['Company Registration & Incorporation', 'corporate', '🏢', true],
-    ['Foreign Direct Investment (FDI)', 'fdi', '🌐', true],
-    ['Corporate Compliance', 'compliance', '✅', true],
-    ['Contract Drafting & Review', 'commercial', '📝', true],
-    ['Commercial Transactions', 'commercial', '🤝', true],
-    ['Mergers & Acquisitions', 'corporate', '🔀', true],
-    ['Due Diligence', 'commercial', '🔍', true],
-    ['Tax & Regulatory Advisory', 'tax', '📊', false],
-    ['Employment & Labour Law', 'employment', '👥', false],
-    ['Intellectual Property', 'ip', '💡', false],
-    ['Technology & Data Privacy Law', 'technology', '💻', false],
-    ['Real Estate & Property Law', 'real-estate', '🏠', false],
-    ['Civil Litigation', 'litigation', '⚖️', false],
-    ['Criminal Defence', 'criminal', '🛡️', false],
-    ['Arbitration & ADR', 'arbitration', '🤝', false],
-    ['Banking & Finance', 'banking', '🏦', false],
-    ['NGO/INGO Legal Compliance', 'ngo', '🏛️', false],
-    ['Legal Opinions', 'advisory', '📜', false],
-    ['Documentation & Notarization', 'documentation', '💼', false],
-  ];
+  const number = new Map();
+  SERVICE_CATALOG.forEach(([name]) => {
+    number.set(name, (number.get(name) || 0) + 1);
+  });
+  const seenGroup = new Set();
 
-  return spec.map(([name, category, icon, featured], i) => {
+  return SERVICE_CATALOG.map(([name, group, category], i) => {
     const short = `${name} legal support delivered by the Pluto Associates team — combining regulatory depth with practical, commercially minded advice across Nepal.`;
+    const isGroupLead = !seenGroup.has(group);
+    seenGroup.add(group);
+    const multi = number.get(name) > 1;
+    const labelName = multi ? `${name} — ${getGroupById(group)?.name}` : name;
+    const catName = CATEGORY_NAMES[category] || CATEGORY_NAMES[group] || group;
     return {
-      id: slugify(name),
-      name,
-      slug: slugify(name),
+      id: slugify(labelName),
+      name: labelName,
+      slug: slugify(labelName),
       category,
-      icon,
+      group,
+      icon: getGroupById(group)?.icon || '⚖️',
       shortDescription: short,
       content:
         `<p>At Pluto Associates we deliver dependable ${name.toLowerCase()} support to businesses, investors and individuals in Nepal. Our team combines deep regulatory knowledge with a practical, business-first approach, so you receive advice that is both technically sound and commercially usable.</p>` +
@@ -159,14 +148,14 @@ function buildSeed() {
       timeline: [],
       pricing: '',
       related: [],
-      tags: [],
+      tags: [name, catName, `${getGroupById(group)?.name || ''} Legal Services Nepal`],
       ctaLabel: 'Schedule Consultation',
       contactLabel: 'Contact Us',
       status: 'published',
       scheduledAt: '',
-      featured: !!featured,
+      featured: isGroupLead,
       showHome: i < 6,
-      showMenu: i < 8,
+      showMenu: isGroupLead,
       menuOrder: i + 1,
       seoTitle: `${name} | Pluto Associates Nepal`,
       seoDescription: short,
@@ -220,6 +209,16 @@ export function getServiceBySlug(slug) {
 
 export function getFeaturedServices() {
   return getPublishedServices().filter((s) => s.featured || s.showHome);
+}
+
+/** Groups with live, published services — powers the mega menu + index. */
+export function getServiceGroups() {
+  const published = getPublishedServices();
+  return SERVICE_GROUPS.map((g) => ({
+    ...g,
+    services: published.filter((s) => s.group === g.id),
+    count: published.filter((s) => s.group === g.id).length,
+  })).filter((g) => g.count > 0);
 }
 
 /* ------------------------------------------------------------------ */

@@ -9,6 +9,8 @@ import TeamsPage from './pages/TeamsPage';
 import PublicationsPage from './pages/PublicationsPage';
 import ArticlePage from './pages/ArticlePage';
 import FaqPage from './pages/FaqPage';
+import ServicesPage from './pages/ServicesPage';
+import ServiceDetailPage from './pages/ServiceDetailPage';
 import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ScrollToTop from './components/PublicHooks';
@@ -31,6 +33,8 @@ export default function App() {
           <Route path="/practice-areas/:slug" element={<PracticeAreaDetailPage />} />
           <Route path="/teams" element={<TeamsPage />} />
           <Route path="/faq" element={<FaqPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/services/:slug" element={<ServiceDetailPage />} />
           <Route path="/publications" element={<PublicationsPage />} />
           <Route path="/publications/:slug" element={<ArticlePage />} />
           <Route path="/contact" element={<ContactPage />} />

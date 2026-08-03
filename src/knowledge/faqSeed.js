@@ -11,6 +11,7 @@ import { employmentTaxSeed } from './seed/people.js';
 import { ipPropertySeed } from './seed/propertyIp.js';
 import { disputeSeed } from './seed/dispute.js';
 import { otherSeed } from './seed/other.js';
+import { serviceSeed } from './seed/service.js';
 
 function slugId(question) {
   return ('fq-' + String(question)
@@ -45,6 +46,7 @@ export const FAQ_SEED = withIds([
   ...ipPropertySeed,
   ...disputeSeed,
   ...otherSeed,
+  ...serviceSeed,
 ], 1).sort((a, b) => a.order - b.order);
 
 export default FAQ_SEED;

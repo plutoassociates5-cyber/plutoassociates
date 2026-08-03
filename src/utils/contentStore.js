@@ -387,6 +387,12 @@ const HOMEPAGE_SEED = {
     { label: 'Practice Areas', value: '15+' },
     { label: 'Client Satisfaction Rate', value: '95%' },
   ],
+  servicesSection: {
+    visible: true,
+    title: 'Our Services',
+    subtitle: 'A full suite of legal services across nine practice groups — one trusted team for every matter.',
+    ctaLabel: 'View All Services',
+  },
 };
 
 const SITE_SETTINGS_SEED = {

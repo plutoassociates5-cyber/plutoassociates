@@ -8,6 +8,7 @@ export default function HomepageManager() {
 
   const setHero = (k, v) => setHp((prev) => ({ ...prev, hero: { ...prev.hero, [k]: v } }));
   const setStat = (i, k, v) => setHp((prev) => ({ ...prev, stats: prev.stats.map((s, idx) => (idx === i ? { ...s, [k]: v } : s)) }));
+  const setServicesSection = (k, v) => setHp((prev) => ({ ...prev, servicesSection: { ...prev.servicesSection, [k]: v } }));
 
   const save = () => { saveHomepage(hp); toast('✓ Homepage saved. The public homepage is updated immediately.'); };
 
@@ -57,6 +58,21 @@ export default function HomepageManager() {
             ))}
           </div>
           <p className="text-[0.68rem] text-text-light mt-3">These appear in the dark statistics band on the homepage.</p>
+        </div>
+
+        <div className="bg-white shadow-[0_1px_3px_rgba(0,0,0,0.08)] p-6">
+          <h2 className="text-sm font-semibold text-[#1d2327] mb-4 pb-3 border-b border-wp-border">🛠️ Our Services Section</h2>
+          <Row label="Show section">
+            <label className="flex items-center gap-2 text-xs text-[#333] cursor-pointer">
+              <input type="checkbox" checked={hp.servicesSection.visible} onChange={(e) => setServicesSection('visible', e.target.checked)} className="w-4 h-4 accent-[#0073aa]" />
+              Display on the public homepage
+            </label>
+          </Row>
+          <Row label="Title"><input className={input} value={hp.servicesSection.title} onChange={(e) => setServicesSection('title', e.target.value)} /></Row>
+          <Row label="Subtitle"><textarea className={input} rows="2" value={hp.servicesSection.subtitle} onChange={(e) => setServicesSection('subtitle', e.target.value)} /></Row>
+          <Row label="Button label" hint="Links to /services">
+            <input className={input} value={hp.servicesSection.ctaLabel} onChange={(e) => setServicesSection('ctaLabel', e.target.value)} />
+          </Row>
         </div>
       </div>
     </>

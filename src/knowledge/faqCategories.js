@@ -30,6 +30,8 @@ const CATEGORIES = [
   { id: 'documents', name: 'Legal Documentation', icon: '📜', practiceAreas: ['corporate'], services: ['Documentation & Notarization', 'Legal Opinions'], keywords: ['power of attorney nepal', 'affidavit nepal', 'legal opinion kathmandu'] },
   { id: 'advisory', name: 'Advisory & Retainership', icon: '🕴', practiceAreas: ['corporate'], services: ['Legal Advisory'], keywords: ['corporate lawyer nepal', 'legal retainer', 'business lawyer kathmandu'] },
   { id: 'nrn', name: 'NRN & International Clients', icon: '🌍', practiceAreas: ['fdi'], services: ['Foreign Direct Investment (FDI)', 'Corporate Law'], keywords: ['nrn invest nepal', 'diaspora investment', 'foreign client nepal lawyer'] },
+  { id: 'family-law', name: 'Family & Personal', icon: '❤️', practiceAreas: [], services: ['Family & Personal'], keywords: ['marriage registration nepal', 'divorce kathmandu', 'child custody nepal', 'adoption nepal'] },
+  { id: 'criminal-law', name: 'Criminal Law', icon: '🛡️', practiceAreas: ['litigation'], services: ['Criminal Defence'], keywords: ['criminal defence nepal', 'bail application kathmandu', 'arrested in nepal'] },
   { id: 'general', name: 'General Legal', icon: '💬', practiceAreas: [], services: ['Legal Advisory'], keywords: ['lawyer kathmandu', 'legal advice nepal'] },
 ];
 

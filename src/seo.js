@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getArticles, getSeedArticles } from './utils/storage';
 import { getPracticeAreas, getFaqs } from './utils/contentStore';
+import { getServiceBySlug, getServiceGroups } from './services/store.js';
 
 /**
  * Central SEO configuration for Pluto Associates (Vite + React SPA).
@@ -96,6 +97,15 @@ export const ROUTES = {
     ogType: 'website',
     robots: 'index, follow',
   },
+  '/services': {
+    title: 'Our Services — Pluto Associates | Corporate, Family, IP, Disputes & More',
+    description:
+      'Explore Pluto Associates\' full range of legal services across nine practice groups: corporate & business, commercial & civil, family, employment, intellectual property & technology, disputes, criminal law, NGO/INGO and international clients in Nepal.',
+    keywords: 'legal services Nepal, corporate law Nepal, family law Nepal, employment law Nepal, intellectual property Nepal, dispute resolution Nepal, NGO compliance Nepal, law firm Kathmandu',
+    canonical: '/services',
+    ogType: 'website',
+    robots: 'index, follow',
+  },
   '/404': {
     title: 'Page Not Found — Pluto Associates',
     description: 'The page you are looking for could not be found. Explore Pluto Associates legal services in Nepal.',
@@ -172,6 +182,11 @@ export function resolveRouteMeta(path) {
     const area = m ? findPracticeAreaBySlug(decodeURIComponent(m[1])) : undefined;
     return area ? practiceAreaMeta(area) : ROUTES['/404'];
   }
+  if (p.startsWith('/services/')) {
+    const m = p.match(/^\/services\/([^/]+)\/?$/);
+    const service = m ? getServiceBySlug(decodeURIComponent(m[1])) : undefined;
+    return service ? serviceMeta(service) : ROUTES['/404'];
+  }
   return ROUTES[p] || ROUTES['/404'];
 }
 
@@ -186,6 +201,19 @@ function practiceAreaMeta(area) {
     robots: 'index, follow',
     ogImage: area.img ? `${SITE.url}${area.img}` : SITE.ogImage,
     area,
+  };
+}
+
+function serviceMeta(service) {
+  return {
+    title: service.seoTitle || `${service.name} | Pluto Associates Nepal`,
+    description: service.seoDescription || service.shortDescription || plainText(service.content).substring(0, 155),
+    keywords: service.keywords || `${service.name}, legal services Nepal, Pluto Associates law firm Kathmandu`,
+    canonical: `/services/${service.slug}`,
+    ogType: 'website',
+    robots: 'index, follow',
+    ogImage: service.ogImage || (service.featuredImage ? `${SITE.url}${service.featuredImage}` : SITE.ogImage),
+    service,
   };
 }
 
@@ -465,6 +493,84 @@ export function buildJsonLd(path) {
         },
       ],
     };
+  }
+
+  if (path === '/services') {
+    const groups = getServiceGroups();
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        webPageLd('Our Services', '/services', ROUTES['/services'].description),
+        ...groups.map((g, gi) => ({
+          '@type': 'ItemList',
+          name: g.name,
+          itemListElement: g.services.map((s, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: s.name,
+            url: `${SITE.url}/services/${s.slug}`,
+          })),
+          itemListOrder: 'Ascending',
+          ...(gi === 0 ? {} : {}),
+        })),
+      ],
+    };
+  }
+
+  const serviceMatch = path.match(/^\/services\/([^/]+)\/?$/);
+  if (serviceMatch) {
+    const service = getServiceBySlug(decodeURIComponent(serviceMatch[1]));
+    if (!service) return null;
+    const svcUrl = `${SITE.url}/services/${service.slug}`;
+    const desc = service.seoDescription || service.shortDescription || plainText(service.content).substring(0, 155);
+    const image = service.featuredImage ? `${SITE.url}${service.featuredImage}` : SITE.ogImage;
+    const graph = [
+      breadcrumbLd([
+        { name: 'Home', path: '/' },
+        { name: 'Our Services', path: '/services' },
+        { name: service.name, path: `/services/${service.slug}` },
+      ]),
+      {
+        '@type': 'Service',
+        name: service.name,
+        url: svcUrl,
+        image,
+        description: desc,
+        serviceType: service.name,
+        provider: {
+          '@type': 'LegalService',
+          name: SITE.legalName,
+          url: SITE.url,
+          telephone: SITE.telephone,
+          email: SITE.email,
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: SITE.address.addressLocality,
+            addressCountry: SITE.address.addressCountry,
+          },
+        },
+        areaServed: { '@type': 'Country', name: 'Nepal' },
+        hasOfferCatalog: service.pricing
+          ? {
+              '@type': 'OfferCatalog',
+              name: `${service.name} — Engagement`,
+              itemListElement: [{ '@type': 'Offer', itemOffered: { '@type': 'Service', name: service.name }, description: service.pricing }],
+            }
+          : undefined,
+      },
+    ];
+    const faqs = (service.faqs || []).filter((f) => f.q && f.a);
+    if (faqs.length) {
+      graph.push({
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
+      });
+    }
+    return { '@context': 'https://schema.org', '@graph': graph };
   }
 
   const map = {

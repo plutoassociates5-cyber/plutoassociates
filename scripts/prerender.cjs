@@ -157,6 +157,7 @@ function buildSitemap(entry, published) {
     { loc: '/', lastmod: today, freq: 'weekly', priority: '1.0' },
     { loc: '/about', lastmod: today, freq: 'monthly', priority: '0.8' },
     { loc: '/practice-areas', lastmod: today, freq: 'monthly', priority: '0.9' },
+    { loc: '/services', lastmod: today, freq: 'weekly', priority: '0.9' },
     { loc: '/teams', lastmod: today, freq: 'monthly', priority: '0.8' },
     { loc: '/faq', lastmod: today, freq: 'weekly', priority: '0.7' },
     { loc: '/publications', lastmod: today, freq: 'weekly', priority: '0.7' },
@@ -181,6 +182,17 @@ function buildSitemap(entry, published) {
     lines.push(
       '  <url>',
       `    <loc>${entry.SITE.url}/practice-areas/${area.id}</loc>`,
+      `    <lastmod>${today}</lastmod>`,
+      '    <changefreq>monthly</changefreq>',
+      '    <priority>0.8</priority>',
+      '  </url>'
+    );
+  }
+  const serviceRoutes = entry.getPublishedServices();
+  for (const s of serviceRoutes) {
+    lines.push(
+      '  <url>',
+      `    <loc>${entry.SITE.url}/services/${s.slug}</loc>`,
       `    <lastmod>${today}</lastmod>`,
       '    <changefreq>monthly</changefreq>',
       '    <priority>0.8</priority>',
@@ -215,6 +227,7 @@ function buildSitemap(entry, published) {
     { path: '/', dir: DIST, preload: assetMap['hero-1'] },
     { path: '/about', dir: path.join(DIST, 'about') },
     { path: '/practice-areas', dir: path.join(DIST, 'practice-areas') },
+    { path: '/services', dir: path.join(DIST, 'services') },
     { path: '/teams', dir: path.join(DIST, 'teams') },
     { path: '/faq', dir: path.join(DIST, 'faq') },
     { path: '/publications', dir: path.join(DIST, 'publications') },
@@ -294,10 +307,28 @@ function buildSitemap(entry, published) {
     console.log(`prerendered ${routePath} -> ${path.relative(ROOT, outFile)} (${Math.round(html.length / 1024)} KB)`);
   }
 
+  // Services -> /services/<slug> (unique title/desc/OG + Service/FAQ JSON-LD)
+  const services = entry.getPublishedServices();
+  for (const svc of services) {
+    const routePath = `/services/${svc.slug}`;
+    const dir = path.join(DIST, 'services', svc.slug);
+    const meta = entry.resolveRouteMeta(routePath);
+    const html = assembleHtml(entry, {
+      ...meta,
+      body: entry.renderApp(routePath),
+      jsonLd: entry.buildJsonLd(routePath),
+      preloadImage: svc.featuredImage,
+    });
+    fs.mkdirSync(dir, { recursive: true });
+    const outFile = path.join(dir, 'index.html');
+    fs.writeFileSync(outFile, html, 'utf8');
+    console.log(`prerendered ${routePath} -> ${path.relative(ROOT, outFile)} (${Math.round(html.length / 1024)} KB)`);
+  }
+
   // Dynamic sitemap (overwrites the static public/sitemap.xml copy) incl. article + area URLs
   const sitemap = buildSitemap(entry, published);
   fs.writeFileSync(path.join(DIST, 'sitemap.xml'), sitemap, 'utf8');
-  console.log(`wrote dist/sitemap.xml (${6 + practiceAreas.length + published.length} URLs)`);
+  console.log(`wrote dist/sitemap.xml (${6 + practiceAreas.length + published.length + services.length} URLs)`);
 
   console.log('Prerendering complete.');
 })().catch((err) => {
