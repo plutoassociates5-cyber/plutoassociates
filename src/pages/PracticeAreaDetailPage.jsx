@@ -4,7 +4,8 @@ import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup } from '../components/PublicUtils';
 import { getPracticeAreas } from '../utils/contentStore';
-import { getFaqs } from '../utils/contentStore';
+import { getPublishedFaqs } from '../knowledge/faqEngine';
+import { getAllFaqCategories } from '../knowledge/faqCategories';
 import { getPublishedArticles } from '../seo';
 
 function formatDate(d) {
@@ -20,7 +21,10 @@ export default function PracticeAreaDetailPage() {
   const prev = index > 0 ? AREAS[index - 1] : null;
   const next = index !== -1 && index < AREAS.length - 1 ? AREAS[index + 1] : null;
   const others = AREAS.filter((a) => a.id !== slug).slice(0, 3);
-  const areaFaqs = getFaqs().filter((f) => f.area === slug);
+  const faqCatIds = getAllFaqCategories()
+    .filter((c) => (c.practiceAreas || []).includes(slug))
+    .map((c) => c.id);
+  const areaFaqs = getPublishedFaqs().filter((f) => faqCatIds.includes(f.category));
   const related = getPublishedArticles()
     .filter((a) => a.status === 'published' && a.category === area?.id)
     .slice(0, 3);
