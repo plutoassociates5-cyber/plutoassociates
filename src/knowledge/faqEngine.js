@@ -144,19 +144,39 @@ export function getFaqBySlug(slug) {
 /* Search                                                              */
 /* ------------------------------------------------------------------ */
 
+const STOPWORDS = new Set([
+  'a', 'an', 'the', 'and', 'or', 'but', 'of', 'in', 'on', 'at', 'to', 'for',
+  'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'how', 'what', 'why',
+  'when', 'where', 'who', 'do', 'does', 'did', 'can', 'could', 'should', 'would',
+  'will', 'i', 'you', 'we', 'they', 'he', 'she', 'it', 'me', 'my', 'your', 'our',
+  'their', 'this', 'that', 'these', 'those', 'from', 'as', 'if', 'not', 'no',
+  'so', 'than', 'about', 'into', 'over', 'under', 'between',
+]);
+
 export function searchFaqs(list, query, opts = {}) {
   const q = (query || '').toLowerCase().trim();
   if (!q) return list;
-  const terms = q.split(/\s+/).filter(Boolean);
+  const terms = q.split(/[^a-z0-9]+/).filter((t) => t.length > 2 && !STOPWORDS.has(t));
+  if (terms.length === 0) return list;
+  const required = terms.length === 1 ? 1 : terms.length >= 3 ? terms.length - 1 : terms.length;
+
   const scored = list.map((f) => {
     const hay = [
       f.question, f.answer, (f.tags || []).join(' '),
       (f.metaDescription || ''), (f.category || ''),
     ].join(' ').toLowerCase();
+    const qText = (f.question || '').toLowerCase();
     let hits = 0;
-    terms.forEach((t) => { if (hay.includes(t)) hits += 1; });
-    const relevance = hits / terms.length;
-    const boosted = relevance * (1 + (f.searchWeight || 5) / 10);
+    let qHits = 0;
+    terms.forEach((t) => {
+      if (hay.includes(t)) hits += 1;
+      if (qText.includes(t)) qHits += 1;
+    });
+    if (hits < required) return { f, relevance: 0 };
+    const ratio = hits / terms.length;
+    const phraseBonus = hay.includes(q) ? 1.5 : 1;
+    const questionBonus = qHits > 0 ? 1 + qHits / terms.length : 1;
+    const boosted = ratio * phraseBonus * questionBonus * (1 + (f.searchWeight || 5) / 10);
     return { f, relevance: boosted };
   });
   const res = scored.filter((s) => s.relevance > 0).sort((a, b) => b.relevance - a.relevance);
