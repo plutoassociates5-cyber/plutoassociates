@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { getSettings } from '../utils/contentStore';
+import SmartLogo from './SmartLogo';
 
 export default function PublicFooter() {
   const site = getSettings();
+  const logoSize = Math.round(((site.logoConfig && site.logoConfig.size) || 80) * 0.9);
 
   return (
     <footer className="bg-navy text-text-light pt-16 lg:pt-24">
@@ -10,9 +12,7 @@ export default function PublicFooter() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
             <Link to="/" className="flex items-center no-underline gap-3">
-              <span className="flex items-center justify-center w-14 h-14 rounded-full bg-white/10 ring-1 ring-white/10 backdrop-blur-sm shrink-0 overflow-hidden p-1.5">
-                <img src={site.logo} alt={site.name} loading="lazy" className="w-full h-full object-contain" />
-              </span>
+              <SmartLogo size={logoSize} alt={site.name} />
               <div className="flex flex-col">
                 <span className="font-serif text-white text-base font-semibold leading-tight">{site.name}</span>
                 <span className="text-[0.6rem] text-text-light tracking-wider">{site.tagline}</span>

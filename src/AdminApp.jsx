@@ -16,6 +16,7 @@ import TagsManager from './components/admin/TagsManager';
 import MediaLibrary from './components/admin/MediaLibrary';
 import HomepageManager from './components/admin/HomepageManager';
 import SiteSettings from './components/admin/SiteSettings';
+import LogoManager from './components/admin/LogoManager';
 import ContactInbox from './components/admin/ContactInbox';
 import ServicesDashboard from './components/admin/ServicesDashboard';
 import ServiceEditor from './components/admin/ServiceEditor';
@@ -63,6 +64,8 @@ function AdminLayout() {
         return <HomepageManager />;
       case 'messages':
         return <ContactInbox />;
+      case 'logo':
+        return <LogoManager />;
       case 'site':
         return <SiteSettings />;
       case 'settings':

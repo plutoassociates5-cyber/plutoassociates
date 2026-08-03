@@ -4,6 +4,7 @@ import { applyFavicon } from '../SiteFavicon';
 import { useToast } from '../../context/ToastContext';
 import { readFileAsDataUrl, isSvg } from '../../utils/image';
 import ImageResizeModal from './ImageResizeModal';
+import SmartLogo from '../SmartLogo';
 
 export default function SiteSettings() {
   const { toast } = useToast();
@@ -59,9 +60,7 @@ export default function SiteSettings() {
           <Row label="Tagline"><input className={input} value={s.tagline} onChange={(e) => set('tagline', e.target.value)} /></Row>
           <Row label="Logo" hint="PNG/SVG, up to 3MB. Shown in a round badge and auto-fitted.">
             <div className="flex items-center gap-3">
-              <span className="flex items-center justify-center w-14 h-14 rounded-full bg-light-gray overflow-hidden p-1.5 shrink-0">
-                <img src={s.logo} alt="Logo" className="w-full h-full object-contain" />
-              </span>
+              <SmartLogo src={s.logo} config={s.logoConfig} size={64} eager />
               <label className="bg-wp-blue text-white px-3 py-1.5 text-xs font-semibold cursor-pointer">Upload<input type="file" accept="image/*" hidden onChange={onLogo} /></label>
             </div>
           </Row>

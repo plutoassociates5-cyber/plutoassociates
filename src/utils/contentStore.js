@@ -23,6 +23,7 @@ import teamNikesh from '../assets/team-nikesh.jpeg';
 import teamSujan from '../assets/team-sujan.jpeg';
 import teamNeehal from '../assets/team-motey.jpeg';
 import { FAQ_SEED } from '../knowledge/faqSeed.js';
+import { LOGO_CONFIG_DEFAULTS } from './logoDefaults';
 
 /* ------------------------------------------------------------------ */
 /* SSR-safe localStorage shim (used only during Node prerender so the  */
@@ -411,6 +412,7 @@ const SITE_SETTINGS_SEED = {
   copyright: '© {year} Pluto Associates. All rights reserved.',
   imgMaxWidth: 1600,
   imgQuality: 85,
+  logoConfig: { ...LOGO_CONFIG_DEFAULTS },
 };
 
 /* ------------------------------------------------------------------ */

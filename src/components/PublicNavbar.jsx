@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import logo from '../assets/logo.png';
 import { getSettings } from '../utils/contentStore';
 import { getServiceGroups } from '../services/store';
+import SmartLogo from './SmartLogo';
 import SearchOverlay from './SearchOverlay';
 
 const NAV_ITEMS = [
@@ -23,7 +23,6 @@ export default function PublicNavbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
   const site = getSettings();
-  const logoSrc = site?.logo || logo;
   const groups = getServiceGroups();
 
   useEffect(() => {
@@ -31,6 +30,13 @@ export default function PublicNavbar() {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    const base = Number((site.logoConfig && site.logoConfig.size) || 80);
+    if (base && base >= 40 && base <= 140) {
+      document.documentElement.style.setProperty('--logo-base', base + 'px');
+    }
+  }, [site.logoConfig]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -62,15 +68,13 @@ export default function PublicNavbar() {
       <a href="#main-content" className="skip-link">Skip to main content</a>
       <nav className={`fixed top-0 left-0 w-full z-[10000] transition-all duration-300${scrolled ? ' bg-navy shadow-lg shadow-black/20' : ' bg-transparent'}`}>
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20 lg:h-24">
-            <Link to="/" className="flex items-center no-underline gap-3.5">
-              <span className="flex items-center justify-center w-14 h-14 rounded-full bg-white/10 ring-1 ring-white/10 backdrop-blur-sm shrink-0 overflow-hidden p-1.5">
-                <img src={logoSrc} alt="Pluto Associates — Advocates and Legal Consultants" title="Pluto Associates" className="w-full h-full object-contain" />
+          <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-[66px] lg:h-[72px]' : 'h-[78px] lg:h-[96px]'}`}>
+            <Link to="/" className={`pluto-brand flex items-center no-underline gap-3 sm:gap-4 transition-all duration-300 ${scrolled ? 'is-scrolled' : ''}`}>
+              <SmartLogo size="var(--logo-size)" alt="Pluto Associates — Advocates and Legal Consultants" eager />
+              <span className="flex flex-col justify-center leading-tight min-w-0">
+                <span className={`font-serif text-white font-bold truncate transition-all duration-300 ${scrolled ? 'text-lg' : 'text-xl lg:text-2xl'}`}>{site.name}</span>
+                <span className="hidden sm:block text-[0.62rem] lg:text-[0.68rem] text-white/55 font-medium tracking-[0.14em] uppercase mt-0.5">{site.tagline}</span>
               </span>
-              <div className="flex flex-col">
-                <span className="font-serif text-white text-lg font-semibold leading-tight">Pluto Associates</span>
-                <span className="text-[0.65rem] text-text-light tracking-wider hidden sm:block">Advocates & Legal Consultants</span>
-              </div>
             </Link>
 
             <ul className="hidden lg:flex items-center gap-7 list-none m-0 p-0">
@@ -193,11 +197,12 @@ export default function PublicNavbar() {
       />
       <div className={`fixed top-0 -right-full w-[85%] max-w-[360px] h-screen bg-navy z-[10001] transition-all duration-500 flex flex-col${mobileOpen ? ' right-0' : ''}`} id="mobile-menu" aria-label="Mobile navigation">
         <button className="absolute top-4 right-4 bg-transparent border-none text-white text-2xl cursor-pointer p-2" onClick={() => setMobileOpen(false)} aria-label="Close menu">✕</button>
-        <div className="flex items-center gap-3 p-6 border-b border-white/5">
-          <span className="flex items-center justify-center w-14 h-14 rounded-full bg-white/10 ring-1 ring-white/10 backdrop-blur-sm shrink-0 overflow-hidden p-1.5">
-            <img src={logoSrc} alt="Pluto Associates" title="Pluto Associates" className="w-full h-full object-contain" />
+        <div className="pluto-brand flex items-center gap-3 p-6 border-b border-white/5">
+          <SmartLogo size="var(--logo-size)" alt="Pluto Associates" />
+          <span className="flex flex-col justify-center leading-tight">
+            <span className="font-serif text-white text-base font-bold">{site.name}</span>
+            <span className="text-[0.6rem] text-white/55 font-medium tracking-[0.14em] uppercase mt-0.5">{site.tagline}</span>
           </span>
-          <span className="font-serif text-white text-base font-bold">Pluto Associates</span>
         </div>
         <ul className="flex flex-col list-none m-0 p-4 pt-8 overflow-y-auto">
           <li className="px-4 pb-2">

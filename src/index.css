@@ -66,6 +66,71 @@ html {
   outline-offset: 0;
 }
 
+/* ------------------------------------------------------------------ */
+/* Smart Logo — circular brand badge                                   */
+/* The badge is a fixed-size circle; the image inside uses object-fit   */
+/* contain + auto padding so ANY uploaded logo fits perfectly.          */
+/* --logo-base drives every header/footer size (admin-adjustable).      */
+/* ------------------------------------------------------------------ */
+:root {
+  --logo-base: 80px;
+}
+.pluto-brand {
+  --logo-size: var(--logo-base);
+  --logo-size-sticky: calc(var(--logo-base) * 0.72);
+}
+.pluto-brand.is-scrolled {
+  --logo-size: var(--logo-size-sticky);
+}
+@media (max-width: 1023px) {
+  .pluto-brand { --logo-size-sticky: calc(var(--logo-base) * 0.86); }
+}
+@media (max-width: 639px) {
+  .pluto-brand { --logo-size-sticky: calc(var(--logo-base) * 0.92); }
+}
+
+.pluto-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  line-height: 1;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.pluto-logo-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  box-sizing: border-box;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.pluto-logo-fallback {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 0.4em;
+  color: #fff;
+  letter-spacing: 0.03em;
+  line-height: 1;
+}
+a:hover .pluto-logo {
+  transform: scale(1.05);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.38);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pluto-logo {
+    transition: none;
+  }
+  a:hover .pluto-logo {
+    transform: none;
+  }
+}
+
 /* Scrollbar styling for public pages */
 .public-scroll::-webkit-scrollbar {
   width: 6px;
