@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getPublishedFaqs } from '../knowledge/faqEngine';
 import { getPublishedServices } from '../services/store';
-import { getPracticeAreas } from '../utils/contentStore';
+import { getPracticeAreas, getLawyers, getSettings, getHomepage } from '../utils/contentStore';
 import { getPublishedArticles } from '../seo';
 import { answerFromKnowledgeBase } from '../knowledge/faqAssistant';
 
@@ -12,6 +12,7 @@ const QUICK_PROMPTS = [
   'How do I register a trademark?',
   'Can foreigners buy property in Nepal?',
   'How do I apply for bail?',
+  'Who is in your team?',
 ];
 
 function markdownish(text) {
@@ -41,12 +42,15 @@ export default function ChatAssistant() {
   const inputRef = useRef(null);
 
   const kb = useMemo(() => {
-    if (typeof window === 'undefined') return { faqs: [], services: [], areas: [], articles: [] };
+    if (typeof window === 'undefined') return { faqs: [], services: [], areas: [], articles: [], lawyers: [], settings: {}, homepage: {} };
     return {
       faqs: getPublishedFaqs(),
       services: getPublishedServices(),
       areas: getPracticeAreas(),
       articles: getPublishedArticles(),
+      lawyers: getLawyers(),
+      settings: getSettings(),
+      homepage: getHomepage(),
     };
   }, []);
 
@@ -127,6 +131,7 @@ export default function ChatAssistant() {
       areas: local.recommended.areas,
       services: local.recommended.services,
       articles: local.recommended.articles,
+      team: local.recommended.team,
       match: local.matched,
     };
 
@@ -163,6 +168,7 @@ export default function ChatAssistant() {
         areas: local.recommended.areas,
         services: local.recommended.services,
         articles: local.recommended.articles,
+        team: local.recommended.team,
         match: { hasAi: true, ...local.matched },
       };
       setMessages((prev) => [...prev.slice(0, -1), en]);
@@ -178,7 +184,7 @@ export default function ChatAssistant() {
 
   const hasRecommendations = useMemo(() => {
     const last = messages[messages.length - 1];
-    return last && (last.faqs?.length || last.areas?.length || last.services?.length || last.articles?.length);
+    return last && (last.faqs?.length || last.areas?.length || last.services?.length || last.articles?.length || last.team?.length);
   }, [messages]);
 
   return (
@@ -300,7 +306,25 @@ export default function ChatAssistant() {
                         {m.articles?.length > 0 && (
                           <Link to="/publications" className="text-xs bg-navy/5 text-navy border border-navy/15 px-3 py-1.5 rounded-full no-underline hover:bg-navy/10 transition-colors">📰 Insights ({m.articles.length})</Link>
                         )}
+                        {m.team?.length > 0 && (
+                          <Link to="/teams" className="text-xs bg-navy/5 text-navy border border-navy/15 px-3 py-1.5 rounded-full no-underline hover:bg-navy/10 transition-colors">👥 Team ({m.team.length})</Link>
+                        )}
                       </div>
+
+                      {m.team?.length > 0 && (
+                        <div className="mt-2 pl-1 flex flex-col gap-1.5">
+                          {m.team.slice(0, 3).map((t) => (
+                            <Link
+                              key={t.id}
+                              to="/teams"
+                              className="block text-xs text-text-body no-underline border-l-2 border-teal/50 bg-white px-3 py-2 rounded-r-lg hover:bg-teal/5 transition-colors"
+                            >
+                              <span className="block font-semibold text-navy">{t.name}</span>
+                              <span className="block text-text-light mt-0.5">{t.designation}{t.focus ? ` · ${t.focus}` : ''}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
 
                       {m.faqs?.length > 0 && (
                         <div className="mt-2 pl-1 flex flex-col gap-1">

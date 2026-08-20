@@ -106,6 +106,62 @@ function toArticleCard(a) {
   return { id: a.slug, title: a.title, href: `/publications/${a.slug}` };
 }
 
+function toTeamCard(t) {
+  return {
+    id: t.id,
+    name: t.name,
+    designation: t.designation || 'Legal Professional',
+    focus: t.focus || t.bio || '',
+    href: '/teams',
+  };
+}
+
+function cleanDashes(v) {
+  return String(v || '')
+    .replace(/\s+–\s+/g, ' to ')
+    .replace(/\s+—\s+/g, ', ');
+}
+
+function teamAnswer(q, team) {
+  const top = team[0];
+  const intro = `Our team includes ${team.map((t) => `${t.name}, ${t.designation}`).join('; ')}.`;
+  const focus = top.focus ? ` ${top.name} focuses on ${cleanDashes(top.focus)}.` : '';
+  return {
+    sources: ['Team'],
+    text: intro + focus,
+    intro: 'Our team:',
+  };
+}
+
+function contactAnswer(s) {
+  const bits = [
+    s.name ? `${s.name}${s.tagline ? ', ' + cleanDashes(s.tagline) : ''}` : '',
+    s.address ? cleanDashes(s.address) : '',
+    s.phone ? `Phone: ${s.phone}` : '',
+    s.email ? `Email: ${s.email}` : '',
+    s.whatsapp ? `WhatsApp: ${s.whatsapp}` : '',
+    s.hours ? `Office hours: ${cleanDashes(s.hours)}` : '',
+  ].filter(Boolean);
+  return {
+    sources: ['Contact'],
+    text: bits.join('. ') + '.',
+    intro: 'Contact details:',
+  };
+}
+
+function aboutAnswer(s, homepage) {
+  const headline = homepage && homepage.hero && homepage.hero.headline;
+  const body = [
+    headline ? cleanDashes(headline) : '',
+    s.footerAbout ? cleanDashes(s.footerAbout) : (s.tagline ? cleanDashes(s.tagline) : 'Full-service law firm based in Kathmandu, Nepal.'),
+  ].filter(Boolean).join(' ');
+  return {
+    sources: ['About'],
+    text: body,
+    intro: 'About Pluto Associates:',
+  };
+}
+
 /**
  * Answer a user question from the site knowledge base.
  * @param {string} question
@@ -113,9 +169,9 @@ function toArticleCard(a) {
  * @param {string} baseUrl — absolute or relative site root for FAQ deep links
  * @returns {{ answer, recommended, relatedKeywords, links, matched? }}
  */
-export function answerFromKnowledgeBase(question, kb, baseUrl = '') {
+export function answerFromKnowledgeBase(question, kb = {}, baseUrl = '') {
   const q = String(question || '').trim();
-  const bin = { faqs: [], services: [], areas: [], articles: [] };
+  const bin = { faqs: [], services: [], areas: [], articles: [], team: [] };
 
   const faqs = (kb.faqs || []).filter((f) => f.status === 'published');
   const bestFaqs = faqs
@@ -159,11 +215,29 @@ export function answerFromKnowledgeBase(question, kb, baseUrl = '') {
     .slice(0, 3)
     .map((r) => toArticleCard(r.a));
 
+  const lawyers = (kb.lawyers || []).filter(Boolean);
+  const teamScored = lawyers
+    .map((l) => ({ l, sc: score(q, `${l.name} ${l.designation || ''} ${l.focus || ''} ${l.bio || ''} pluto associates legal team lawyer lawyers advocate advocates attorney attorneys legal associate associates bar`) }))
+    .filter((r) => r.sc > 0.12)
+    .sort((a, b) => b.sc - a.sc);
+  bin.team = teamScored.slice(0, 4).map((r) => toTeamCard(r.l));
+
+  const settings = kb.settings || {};
+  const homepage = kb.homepage || {};
+  const lq = q.toLowerCase();
+  const teamIntent = /\b(lawyer|advocate|attorney|barrister|legal associate|associate|partner|solicitor|team member|our team|staff)\b/.test(lq) || (/\bwho (is|are)\b/.test(lq) && bin.team.length > 0);
+  const contactIntent = /\b(contact|phone|email|address|location|office|reach|call|whatsapp|hours|where are you)\b/.test(lq);
+  const aboutIntent =
+    (lq.includes('pluto') || lq.includes('your firm') || lq.includes('your company') ||
+     lq.includes('who are you') || lq.includes('what do you do')) &&
+    !/(register a company|company registration|divorce|trademark|visa|bail|property|incorporat|how much|cost|charge|fee)/.test(lq);
+
   const relatedKeywords = Array.from(new Set(
     (bin.faqs.length ? bin.faqs[0].keywords : [])
       .concat(bin.services.map((s) => s.name))
       .concat(bin.areas.map((a) => a.title))
-      .concat(bin.articles.map((a) => a.title)),
+      .concat(bin.articles.map((a) => a.title))
+      .concat(bin.team.map((t) => t.name)),
   )).filter(Boolean).slice(0, 8);
 
   // Pick the single best source. Compare like-for-like: how strongly the
@@ -175,9 +249,15 @@ export function answerFromKnowledgeBase(question, kb, baseUrl = '') {
     : null;
   const bestFaqStrong = bestFaqItem ? score(q, bestFaqItem.question || '') : 0;
   const bestArticleTitle = bin.articles[0] ? score(q, bin.articles[0].title || '') : 0;
+  const bestTeamScore = teamScored[0] ? teamScored[0].sc : 0;
+
+  const teamStrong = teamIntent && bin.team.length > 0 && bestTeamScore >= 0.12;
+  const contactStrong = contactIntent && (settings.phone || settings.email || settings.address);
+  const aboutStrong = aboutIntent && (settings.footerAbout || settings.tagline || homepage.hero);
+  const personIntent = /\bwho (is|are)\b|who 's|\bmeet\b|\bhire\b/i.test(lq);
 
   let answer;
-  if (bestFaqItem && bestFaqStrong >= 0.9 && bestFaqStrong >= bestArticleTitle) {
+  if (bestFaqItem && bestFaqStrong >= 0.9 && bestFaqStrong >= bestArticleTitle && !(personIntent && teamStrong)) {
     answer = {
       sources: ['FAQ'],
       text: bin.faqs[0].answer,
@@ -189,6 +269,12 @@ export function answerFromKnowledgeBase(question, kb, baseUrl = '') {
       text: `Our article "${bin.articles[0].title}" covers this in depth. Open it for the full walkthrough, timelines and requirements.`,
       intro: 'Recommended reading from Pluto Associates:',
     };
+  } else if (teamStrong) {
+    answer = teamAnswer(q, bin.team);
+  } else if (contactStrong) {
+    answer = contactAnswer(settings);
+  } else if (aboutStrong) {
+    answer = aboutAnswer(settings, homepage);
   } else if (bestFaqItem) {
     answer = {
       sources: ['FAQ'],
@@ -217,6 +303,7 @@ export function answerFromKnowledgeBase(question, kb, baseUrl = '') {
       services: bin.services,
       areas: bin.areas,
       articles: bin.articles,
+      team: bin.team.slice(0, 3),
     },
     relatedKeywords,
     links: aggregateLinks(bin),
@@ -225,6 +312,7 @@ export function answerFromKnowledgeBase(question, kb, baseUrl = '') {
       hasService: bin.services.length > 0,
       hasArea: bin.areas.length > 0,
       hasArticle: bin.articles.length > 0,
+      hasTeam: bin.team.length > 0,
     },
   };
 }
@@ -235,5 +323,6 @@ function aggregateLinks(bin) {
     practice: bin.areas.length ? { label: 'Practice Areas', href: '/practice-areas', count: bin.areas.length } : null,
     services: bin.services.length ? { label: 'Our Services', href: '/services', count: bin.services.length } : null,
     publications: bin.articles.length ? { label: 'Publications', href: '/publications', count: bin.articles.length } : null,
+    team: bin.team.length ? { label: 'Our Team', href: '/teams', count: bin.team.length } : null,
   };
 }
