@@ -12,7 +12,6 @@ const NAV_ITEMS = [
   { to: '/services', label: 'Our Services' },
   { to: '/teams', label: 'Our Teams' },
   { to: '/publications', label: 'Publications' },
-  { to: '/faq', label: 'FAQs' },
 ];
 
 export default function PublicNavbar() {

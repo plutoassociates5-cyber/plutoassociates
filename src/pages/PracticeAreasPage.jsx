@@ -72,6 +72,10 @@ export default function PracticeAreasPage() {
                     Read more
                     <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                   </span>
+                  <span className="mt-2 inline-flex items-center gap-2 text-xs text-text-light no-underline">
+                    <span>⚖</span>
+                    <span className="group-hover:text-navy transition-colors">Common questions answered →</span>
+                  </span>
                 </div>
               </Link>
             ))}

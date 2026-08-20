@@ -189,7 +189,7 @@ export default function PracticeAreaDetailPage() {
         </div>
       </section>
 
-      <section className="py-14 bg-white">
+      <section className="py-14 bg-white" id="faqs">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="font-serif text-2xl text-navy mb-2">FAQs — {area.title}</h2>
           <p className="text-text-body mb-7">Common questions our clients ask about this practice area.</p>
