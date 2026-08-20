@@ -38,20 +38,33 @@ export async function onRequestPost(context) {
 
     const results = searchKey ? await webSearch(question, searchKey, env.TAVILY_API_KEY ? 'tavily' : 'serper') : [];
 
-    const answer = openaiKey
-      ? await synthesize(question, results, faqs, openaiKey)
-      : { text: pickBestSnippet(results), sources: results.slice(0, 4).map((r) => ({ title: r.title, url: r.url })) };
+    let answer;
+    if (openaiKey) {
+      answer = await synthesize(question, results, faqs, openaiKey);
+    } else {
+      answer = {
+        text: resultsToText(results, question),
+        sources: results.slice(0, 6).map((r) => ({ title: r.title, url: r.url })),
+      };
+    }
 
     return json({
       ok: true,
       answer,
-      sources: (answer.sources || []).slice(0, 5),
-      searched: results.slice(0, 4).map((r) => ({ title: r.title, url: r.url })),
+      results: results.slice(0, 6).map((r) => ({ title: r.title, url: r.url, content: String(r.content || '').slice(0, 260) })),
+      searched: results.slice(0, 6).map((r) => ({ title: r.title, url: r.url })),
       question,
     });
   } catch (err) {
     return json({ ok: false, reason: 'error', message: String(err && err.message || err).slice(0, 300) }, 500);
   }
+}
+
+function resultsToText(results, question) {
+  if (!results.length) {
+    return `I could not find reliable live results for "${question}". Try rephrasing the question, or use the Search the web link below to open a search engine directly.`;
+  }
+  return `Here are the top live web results for "${question}". Use the links below to open a source.`;
 }
 
 function json(data, status = 200) {
@@ -70,7 +83,7 @@ async function webSearch(question, key, engine) {
         api_key: key,
         query: question,
         search_depth: 'basic',
-        max_results: 5,
+        max_results: 6,
         include_answer: false,
       }),
     });
@@ -87,10 +100,6 @@ async function webSearch(question, key, engine) {
   if (!res.ok) return [];
   const data = await res.json();
   return (data.organic || []).map((r) => ({ title: r.title, url: r.link, content: r.snippet }));
-}
-
-function pickBestSnippet(results) {
-  return results[0]?.content || "I found live search results, but couldn't extract a snippet. Ask me again or speak to our team for a tailored answer.";
 }
 
 async function synthesize(question, results, faqs, openaiKey) {

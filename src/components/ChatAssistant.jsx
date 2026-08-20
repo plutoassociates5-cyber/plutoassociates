@@ -53,7 +53,7 @@ export default function ChatAssistant() {
   const welcome = useMemo(() => ({
     id: 'welcome',
     role: 'assistant',
-    text: "Welcome to Pluto Associates' legal assistant. Ask me about Nepali law, our services or a specific matter. I'll answer from our knowledge base and search the web when needed.",
+    text: "Welcome to Pluto Associates' legal assistant. Ask me about Nepali law, our services or a specific matter. I'll answer from our knowledge base and fetch live web results for anything else.",
   }), []);
 
   useEffect(() => {
@@ -97,6 +97,7 @@ export default function ChatAssistant() {
       role: 'assistant',
       text: local.answer.text,
       intro: local.answer.intro,
+      query: q,
       sources: local.answer.sources,
       faqs: local.recommended.faqs,
       areas: local.recommended.areas,
@@ -131,8 +132,9 @@ export default function ChatAssistant() {
         id: 'ai-' + Date.now(),
         role: 'assistant',
         text: enriched.answer.text,
-        intro: 'Web & AI search result:',
-        sources: (enriched.sources || enriched.searched || []).filter(Boolean).slice(0, 4),
+        intro: 'Live web search result',
+        query: q,
+        results: (enriched.results || []).filter(Boolean).slice(0, 5),
         faqs: local.recommended.faqs,
         areas: local.recommended.areas,
         services: local.recommended.services,
@@ -229,16 +231,38 @@ export default function ChatAssistant() {
                         dangerouslySetInnerHTML={{ __html: markdownish(m.text) }}
                       />
 
-                      {m.match && m.match.hasAi && m.sources?.length > 0 && (
+                      {m.results?.length > 0 && (
                         <div className="mt-2 pl-1">
-                          <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-text-light mb-1">Sources</div>
-                          <ul className="list-none p-0 m-0 flex flex-col gap-1">
-                            {m.sources.map((s, i) => (
-                              <li key={i}>
-                                <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-xs text-teal no-underline hover:underline">{s.title || s.url}</a>
-                              </li>
+                          <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-text-light mb-1">Web results</div>
+                          <div className="flex flex-col gap-2">
+                            {m.results.map((r, i) => (
+                              <a
+                                key={i}
+                                href={r.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block bg-white border border-light-gray rounded-lg px-3 py-2 text-xs no-underline hover:border-teal hover:bg-teal/5 transition-colors"
+                              >
+                                <span className="block font-semibold text-navy">{r.title || r.url}</span>
+                                <span className="block text-[0.68rem] text-teal truncate">{r.url}</span>
+                                {r.content && <span className="block text-text-light mt-1 leading-snug">{String(r.content).slice(0, 200)}</span>}
+                              </a>
                             ))}
-                          </ul>
+                          </div>
+                        </div>
+                      )}
+
+                      {m.query && (
+                        <div className="mt-2 pl-1">
+                          <a
+                            href={`https://www.google.com/search?q=${encodeURIComponent(m.query)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs bg-teal/10 text-teal border border-teal/25 px-3 py-1.5 rounded-full no-underline hover:bg-teal/20 transition-colors"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M9.5 3a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM2 9.5a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0zm13.6 6.2l6.3 6.3-1.4 1.4-6.3-6.3a8 8 0 01-1.4 1.4z"/></svg>
+                            Search the web for this
+                          </a>
                         </div>
                       )}
 
