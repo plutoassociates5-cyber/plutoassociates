@@ -53,8 +53,23 @@ export default function ChatAssistant() {
   const welcome = useMemo(() => ({
     id: 'welcome',
     role: 'assistant',
-    text: "Welcome to Pluto Associates' legal assistant. Ask me about Nepali law, our services or a specific matter. I'll answer from our knowledge base and fetch live web results for anything else.",
+    text: "Hello! How may I help you? Ask me about Nepali law, our services or a specific matter. I'll answer from our knowledge base and fetch live web results for anything else.",
   }), []);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      let shown = false;
+      try { shown = sessionStorage.getItem('pa_chat_autopop') === '1'; } catch {}
+      if (shown) return;
+      setOpen(true);
+      try { sessionStorage.setItem('pa_chat_autopop', '1'); } catch {}
+    }, 1500);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+  }, [open]);
 
   useEffect(() => {
     if (!open || messages.length) return;
@@ -68,7 +83,16 @@ export default function ChatAssistant() {
   }, [open]);
 
   useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    const el = scrollRef.current;
+    if (!el) return;
+    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 140;
+    const last = messages[messages.length - 1];
+    const node = last ? document.getElementById('msg-' + last.id) : null;
+    if (nearBottom) {
+      el.scrollTop = el.scrollHeight;
+    } else if (node) {
+      node.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
   }, [messages, busy]);
 
   useEffect(() => {
@@ -147,10 +171,7 @@ export default function ChatAssistant() {
   }
 
   function toggle() {
-    setOpen((v) => {
-      document.body.style.overflow = v ? '' : 'hidden';
-      return !v;
-    });
+    setOpen((v) => !v);
   }
 
   useEffect(() => () => { document.body.style.overflow = ''; }, []);
@@ -216,7 +237,7 @@ export default function ChatAssistant() {
             </div>
 
             {messages.filter((m) => m.id !== 'welcome').map((m) => (
-              <div key={m.id} className="mb-4">
+              <div key={m.id} id={'msg-' + m.id} className="mb-4">
                 {m.role === 'user' ? (
                   <div className="flex justify-end">
                     <div className="bg-navy text-white rounded-2xl rounded-tr-md px-4 py-3 text-sm leading-relaxed max-w-[85%]">{m.text}</div>
