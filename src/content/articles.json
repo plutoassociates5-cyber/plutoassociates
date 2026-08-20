@@ -310,5 +310,80 @@
     "seoTitle": "Company Registration in Nepal: Costs, Documents & Timeline | Pluto Associates",
     "seoDesc": "Company registration in Nepal at the OCR under the Companies Act 2063: types, step-by-step process, documents, costs and timeline, plus what begins after incorporation.",
     "canonical": ""
+  },
+  {
+    "id": "seed-licensing-business-approvals-nepal-guide",
+    "title": "Obtaining Business Licences and Approvals in Nepal",
+    "slug": "obtaining-business-licences-and-approvals-in-nepal",
+    "content": "<p>Company registration is where a business in Nepal begins, but it is rarely where compliance ends. Most worthwhile activities carry their own second layer: an operating licence, a sector permit, or an approval that gives you the standing to actually do the work. Banks, landlords, buyers and regulators all look for these documents, and a missing one can stall payments, imports or a deal at the worst moment.</p>\n<h2>Which approvals apply to you</h2>\n<p>The answer depends on what you sell and where. A restaurant needs a hygiene permit and, if it serves alcohol, a liquor licence. A manufacturer needs industry registration and environmental clearances. An importer needs an import authorisation tied to its PAN and VAT accounts. The practical approach is to map your activity against the responsible ministries and departments first, so you apply to the right authority the first time instead of learning by refusal.</p>\n<p>Our licensing team takes that mapping off your plate. We prepare the applications, chase the conditions, and track renewals so your paperwork keeps pace with your business rather than lagging it.</p>",
+    "excerpt": "A practical look at the licences, sector permits and operating approvals most businesses in Nepal need after registration, and how to keep them from slipping.",
+    "category": "licensing",
+    "date": "2026-07-15",
+    "createdAt": "2026-07-15T06:00:00.000Z",
+    "modifiedAt": "2026-07-15T06:00:00.000Z",
+    "status": "published",
+    "tags": [
+      "Licensing",
+      "Business Approvals",
+      "Permits",
+      "Regulatory Compliance"
+    ],
+    "authorName": "Adv. Sudeep Nepal",
+    "featuredImage": "/images/company-registration-nepal.jpg",
+    "featuredImageAlt": "Business licences and approvals in Nepal",
+    "metaKeywords": "business licence Nepal, operating licence Nepal, sector permits Nepal, regulatory approvals Nepal",
+    "seoTitle": "Obtaining Business Licences and Approvals in Nepal | Pluto Associates",
+    "seoDesc": "Company registration is only the first step: the licences, sector permits and business approvals your operation needs in Nepal and how to keep them current.",
+    "canonical": ""
+  },
+  {
+    "id": "seed-real-estate-licensing-nepal-guide",
+    "title": "Real Estate Licensing and Project Approvals in Nepal",
+    "slug": "real-estate-licensing-and-project-approvals-in-nepal",
+    "content": "<p>Land in Nepal is rarely bought or developed on title alone. Behind every deliverable project sit land-use and zoning rules, building permits, developer registrations and, for larger or commercial projects, approvals at the municipal and sometimes central level. Missing one layer early tends to surface later as a hard stop when a certificate, a sale registration or a mortgage is on the line.</p>\n<h2>The approvals that matter most</h2>\n<p>For a developer or buyer working on commercial or residential property, the priority is to verify the land can lawfully be used for the intended purpose, secure the building permit before construction, and confirm the developer is registered and the project approved before units are advertised or sold. Buyers should also complete a title and boundary verification so they know exactly what they are acquiring.</p>\n<p>We walk the process from the first due-diligence check to the final permit, in English and Nepali, and we carry the correspondence with planning and land authorities so nothing gets lost in translation.</p>",
+    "excerpt": "The land-use, building and developer approvals that make or break a real estate project in Nepal, from due diligence to final permit.",
+    "category": "realestate",
+    "date": "2026-07-22",
+    "createdAt": "2026-07-22T06:00:00.000Z",
+    "modifiedAt": "2026-07-22T06:00:00.000Z",
+    "status": "published",
+    "tags": [
+      "Real Estate",
+      "Licensing",
+      "Building Permits",
+      "Land Use"
+    ],
+    "authorName": "Adv. Sudeep Nepal",
+    "featuredImage": "/images/property-ownership-nepal.jpg",
+    "featuredImageAlt": "Real estate licensing and project approvals in Nepal",
+    "metaKeywords": "real estate licences Nepal, building permit Nepal, land use approval Nepal, developer registration Nepal",
+    "seoTitle": "Real Estate Licensing and Project Approvals in Nepal | Pluto Associates",
+    "seoDesc": "Land-use rules, building permits and developer registrations in Nepal: the approvals a real estate project needs from due diligence to final permit.",
+    "canonical": ""
+  },
+  {
+    "id": "seed-business-approvals-nepal-guide",
+    "title": "Business Approvals Every Company in Nepal Should Track",
+    "slug": "business-approvals-every-company-in-nepal-should-track",
+    "content": "<p>Once a company is incorporated, its obligations multiply quietly. PAN and VAT registrations, provident fund and social security enrolment, municipal business registration, and any industry-specific permits start landing on different calendars, each with its own deadline and penalty clock.</p>\n<h2>Staying ahead of the calendar</h2>\n<p>The companies that run into trouble are rarely the ones with a single large problem. More often they are the ones where a renewal lapsed, a filing was missed by two days, or a permit expired while a contract was being signed. A compliance calendar that maps every approval to its due date changes the arithmetic.</p>\n<p>We build and maintain that calendar for our clients: registrations at the start, renewals in good time, and prompt engagement with an authority before a small gap becomes a fine, a suspension or a blocked transaction.</p>",
+    "excerpt": "The everyday registrations and renewals that keep a Nepali company compliant, and how a simple calendar prevents costly gaps.",
+    "category": "licensing",
+    "date": "2026-07-29",
+    "createdAt": "2026-07-29T06:00:00.000Z",
+    "modifiedAt": "2026-07-29T06:00:00.000Z",
+    "status": "published",
+    "tags": [
+      "Business Approvals",
+      "Compliance",
+      "Renewals",
+      "PAN VAT"
+    ],
+    "authorName": "Adv. Sudeep Nepal",
+    "featuredImage": "/images/pan-vat-tax-nepal.jpg",
+    "featuredImageAlt": "Business approvals and compliance in Nepal",
+    "metaKeywords": "business approvals Nepal, compliance calendar Nepal, renewals Nepal, PAN VAT registration Nepal",
+    "seoTitle": "Business Approvals Every Company in Nepal Should Track | Pluto Associates",
+    "seoDesc": "PAN, VAT, fund enrolments, municipal registration and renewals: the quiet approvals that keep a Nepali company compliant and penalty-free.",
+    "canonical": ""
   }
 ]

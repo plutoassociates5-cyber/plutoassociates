@@ -329,6 +329,32 @@ const PRACTICE_AREAS_SEED = [
     sectorsHeading: 'Who We Serve',
     sectors: 'We advise domestic and international companies, investors, professionals and individuals — from start-ups to established corporates — across all sectors.',
     why: 'We help you pay the correct amount of tax and no more. Precisely filing and a clear strategy on disputes means you keep more of what you earn. Territory lab results.'
+  },
+  {
+    id: 'licensing', img: paCorporate, icon: '📄', title: 'Licensing & Regulatory Approvals',
+    desc: 'We help businesses and investors secure the licences, permits and sector approvals they need to operate lawfully in Nepal, from real estate project approvals to everyday business, industry and operating permits.',
+    highlights: ['Operating licences & sector permits', 'Business approvals & registrations', 'Real estate project approvals', 'Renewals, compliance & representations'],
+    heading: 'Getting Business Licensing Right in Nepal',
+    intro: [
+      'Registering a company in Nepal is rarely the end of the compliance story. Most activities carry a second layer: operating licences, sector permits and approvals issued by a specific ministry, department or municipality, each with its own fee, conditions, renewal date and reporting duty. Our licensing practice sits right at that point. We map which approvals your activity genuinely triggers, prepare the applications, negotiate conditions with the authorities, and keep renewals from slipping so a lapse never becomes a stoppage.',
+      'Two areas come up again and again. Real estate: land-use verification, building permits, developer registrations and project level approvals before construction or sales can proceed. Business approvals: operating licences, industry permits, import and export authorisations, and the operational registrations that banks, insurers and counterparties routinely ask to see. Rather than handing you a checklist, we take ownership of the process from the first application to the final approval.'
+    ],
+    quote: 'An approval obtained at the right time, with the right conditions, is an asset. One that is missed quietly stalls a project for months.',
+    servicesHeading: 'Licensing & Approval Services',
+    services: [
+      'Licensing strategy and applicability mapping',
+      'Operating licence applications and renewals',
+      'Real estate project approvals and developer registration',
+      'Commercial land-use and building permits',
+      'Industry-specific permits: telecom, finance, food, pharma and more',
+      'Import and export licences and authorisations',
+      'Regulatory compliance filings, audits and representations',
+      'Operational registrations: PAN, VAT, provident fund, work permits'
+    ],
+    sectorsHeading: 'Who Needs Licensing Help',
+    sectors: 'Hospitality and food businesses, real estate developers, manufacturers and producers, importers and exporters, financial and fintech operators, telecom and digital companies, and any business stepping into a regulated sector for the first time.',
+    whyHeading: 'Why Choose Pluto Associates?',
+    why: 'Regulatory work rewards people who have done it before. We have worked across Nepal\u2019s approval processes with multiple ministries, departments and municipalities, and we know where delays typically hide. We keep applications moving and, when a permit is refused or burdened with conditions, we know the proper route to challenge it.'
   }
 ];
 const LAWYERS_SEED = [

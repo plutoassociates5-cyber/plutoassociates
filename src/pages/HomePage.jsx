@@ -149,6 +149,11 @@ export default function HomePage() {
               <h3 className="font-serif text-xl text-navy mb-3">Intellectual Property</h3>
               <p className="text-sm text-text-body leading-relaxed">Protect your innovations with trademark registration, patent filing, copyright enforcement, and IP litigation.</p>
             </Link>
+            <Link to="/practice-areas#licensing" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+              <div className="text-3xl mb-4">📄</div>
+              <h3 className="font-serif text-xl text-navy mb-3">Licensing</h3>
+              <p className="text-sm text-text-body leading-relaxed">Secure the licences and approvals your business needs, including real estate project approvals and business operating permits.</p>
+            </Link>
           </div>
         </div>
       </section>
