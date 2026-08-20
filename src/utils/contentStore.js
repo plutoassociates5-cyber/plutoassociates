@@ -355,6 +355,14 @@ const CATEGORIES_SEED = [
   { id: 'energy', name: 'Energy Law', slug: 'energy' },
   { id: 'ip', name: 'Intellectual Property', slug: 'ip' },
   { id: 'labor', name: 'Labor & Employment', slug: 'labor' },
+  { id: 'tax', name: 'Taxation', slug: 'tax' },
+  { id: 'litigation', name: 'Litigation', slug: 'litigation' },
+  { id: 'family', name: 'Family Law', slug: 'family' },
+  { id: 'ngo', name: 'NGO / INGO', slug: 'ngo' },
+  { id: 'nrn', name: 'NRN & International', slug: 'nrn' },
+  { id: 'property', name: 'Property & Real Estate', slug: 'property' },
+  { id: 'criminal', name: 'Criminal Law', slug: 'criminal' },
+  { id: 'general', name: 'General', slug: 'general' },
 ];
 
 const TAGS_SEED = [

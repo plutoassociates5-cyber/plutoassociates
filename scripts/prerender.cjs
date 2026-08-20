@@ -47,7 +47,10 @@ function esc(str) {
 /* 1. Map source asset names to Vite's hashed output paths             */
 /* ------------------------------------------------------------------ */
 function stripHash(name) {
-  return name.replace(/-[A-Za-z0-9]{8}$/, '');
+  // Vite asset hashes can contain letters, digits, underscores and dashes
+  // (e.g. "pa-banking-9Zs6W_oq" or "pa-corporate-DPrpr-Is"), so match the
+  // full 8-char hash alphabet to avoid leaving unhashed (404) asset paths.
+  return name.replace(/-[A-Za-z0-9_-]{8}$/, '');
 }
 
 function buildAssetMap() {
@@ -130,7 +133,7 @@ function assembleHtml(entry, route) {
     `    <meta property="og:image" content="${pageOgImage}" />`,
     '    <meta property="og:image:width" content="1200" />',
     '    <meta property="og:image:height" content="630" />',
-    '    <meta property="og:locale" content="en_US" />',
+    '    <meta property="og:locale" content="en_NP" />',
     '    <meta name="twitter:card" content="summary_large_image" />',
     `    <meta name="twitter:title" content="${esc(title)}" />`,
     `    <meta name="twitter:description" content="${esc(desc)}" />`,
@@ -167,6 +170,7 @@ function buildSitemap(entry, published) {
     { loc: '/publications', lastmod: today, freq: 'weekly', priority: '0.7' },
     { loc: '/contact', lastmod: today, freq: 'monthly', priority: '0.7' },
   ];
+  const staticCount = staticRoutes.length;
   const practiceAreas = entry.getPracticeAreas();
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -215,7 +219,7 @@ function buildSitemap(entry, published) {
     );
   }
   lines.push('</urlset>', '');
-  return lines.join('\n');
+  return { xml: lines.join('\n'), count: staticCount + practiceAreas.length + serviceRoutes.length + published.length };
 }
 
 (async () => {
@@ -331,8 +335,8 @@ function buildSitemap(entry, published) {
 
   // Dynamic sitemap (overwrites the static public/sitemap.xml copy) incl. article + area URLs
   const sitemap = buildSitemap(entry, published);
-  fs.writeFileSync(path.join(DIST, 'sitemap.xml'), sitemap, 'utf8');
-  console.log(`wrote dist/sitemap.xml (${6 + practiceAreas.length + published.length + services.length} URLs)`);
+  fs.writeFileSync(path.join(DIST, 'sitemap.xml'), sitemap.xml, 'utf8');
+  console.log(`wrote dist/sitemap.xml (${sitemap.count} URLs)`);
 
   console.log('Prerendering complete.');
 })().catch((err) => {

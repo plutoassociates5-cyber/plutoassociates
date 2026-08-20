@@ -9,6 +9,8 @@ const CATEGORY_LABELS = {
   general: 'General', fdi: 'FDI & Investment', corporate: 'Corporate Law',
   labor: 'Labor & Employment', energy: 'Energy Law', tax: 'Taxation',
   ip: 'Intellectual Property', litigation: 'Litigation',
+  family: 'Family Law', ngo: 'NGO / INGO', nrn: 'NRN & International',
+  property: 'Property & Real Estate', criminal: 'Criminal Law',
 };
 
 function getCategoryLabel(cat) {
