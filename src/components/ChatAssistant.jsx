@@ -38,6 +38,7 @@ export default function ChatAssistant() {
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [showGreeting, setShowGreeting] = useState(false);
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -57,17 +58,16 @@ export default function ChatAssistant() {
   const welcome = useMemo(() => ({
     id: 'welcome',
     role: 'assistant',
-    text: "Hello! How may I help you? Ask me about Nepali law, our services or a specific matter. I'll answer from our knowledge base and fetch live web results for anything else.",
+    text: "Namaste! How may I help you? Ask me about Nepali law, our services or a specific matter. I'll answer from our knowledge base and fetch live web results for anything else.",
   }), []);
 
   useEffect(() => {
     const t = setTimeout(() => {
-      let shown = false;
-      try { shown = sessionStorage.getItem('pa_chat_autopop') === '1'; } catch {}
-      if (shown) return;
-      setOpen(true);
-      try { sessionStorage.setItem('pa_chat_autopop', '1'); } catch {}
-    }, 1500);
+      let dismissed = false;
+      try { dismissed = sessionStorage.getItem('pa_chat_greeting') === '0'; } catch {}
+      if (dismissed) return;
+      setShowGreeting(true);
+    }, 1000);
     return () => clearTimeout(t);
   }, []);
 
@@ -176,7 +176,18 @@ export default function ChatAssistant() {
     setBusy(false);
   }
 
+  function dismissGreeting() {
+    setShowGreeting(false);
+    try { sessionStorage.setItem('pa_chat_greeting', '0'); } catch {}
+  }
+
+  function openChat() {
+    dismissGreeting();
+    setOpen(true);
+  }
+
   function toggle() {
+    if (!open) dismissGreeting();
     setOpen((v) => !v);
   }
 
@@ -202,6 +213,29 @@ export default function ChatAssistant() {
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M12 2a3 3 0 013 3v1H9V5a3 3 0 013-3zM6 7h12a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2zm3 11a1 1 0 100 2 1 1 0 000-2zm6 0a1 1 0 100 2 1 1 0 000-2zm-3.5-7L7 15h10l-4.5-4z"/></svg>
         )}
       </button>
+
+      {showGreeting && !open && (
+        <div className="fixed bottom-24 sm:bottom-28 left-20 sm:left-24 z-[9999]">
+          <div className="relative bg-white rounded-2xl shadow-xl border border-light-gray px-4 py-3 text-sm text-navy max-w-[220px]">
+            <button
+              type="button"
+              onClick={openChat}
+              aria-label="Open legal assistant"
+              className="absolute inset-0 cursor-pointer bg-transparent border-none"
+            />
+            <button
+              type="button"
+              onClick={dismissGreeting}
+              aria-label="Dismiss greeting"
+              className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-navy text-white text-[0.6rem] leading-none flex items-center justify-center cursor-pointer border-none z-10"
+            >
+              ✕
+            </button>
+            <p className="relative z-0">Namaste, How may I help you?</p>
+            <span className="absolute left-6 -bottom-[5px] w-3 h-3 bg-white border-b border-r border-light-gray rotate-45" aria-hidden="true" />
+          </div>
+        </div>
+      )}
 
       <div
         className={`fixed bottom-24 sm:bottom-28 left-4 sm:left-8 z-[9998] w-[calc(100vw-2rem)] max-w-[400px] transition-all duration-300 ease-out ${
