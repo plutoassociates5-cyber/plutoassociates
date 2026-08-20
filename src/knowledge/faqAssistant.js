@@ -181,31 +181,31 @@ export function answerFromKnowledgeBase(question, kb, baseUrl = '') {
     answer = {
       sources: ['FAQ'],
       text: bin.faqs[0].answer,
-      intro: `This is answered in our legal knowledge centre — ${bin.faqs[0].question}`,
+      intro: `This is answered in our legal knowledge centre: ${bin.faqs[0].question}`,
     };
   } else if (bin.articles[0] && bestArticleTitle >= 0.9 && bestArticleTitle > bestFaqStrong) {
     answer = {
       sources: ['Insight'],
       text: `Our article "${bin.articles[0].title}" covers this in depth. Open it for the full walkthrough, timelines and requirements.`,
-      intro: 'Recommended reading from Pluto Associates —',
+      intro: 'Recommended reading from Pluto Associates:',
     };
   } else if (bestFaqItem) {
     answer = {
       sources: ['FAQ'],
       text: bin.faqs[0].answer,
-      intro: `This is answered in our legal knowledge centre — ${bin.faqs[0].question}`,
+      intro: `This is answered in our legal knowledge centre: ${bin.faqs[0].question}`,
     };
   } else if (bin.services.length || bin.areas.length) {
     const targets = [bin.services[0]?.name, bin.areas[0]?.title].filter(Boolean);
     answer = {
       sources: ['Practice Area', 'Service'],
-      text: `Pluto Associates handles ${targets.join(' and ') || 'this matter'} for businesses, investors and individuals across Nepal. Our senior partners assess the specifics of your case and advise on the practical next steps — including documentation, timelines, costs and compliance.`,
+      text: `Pluto Associates handles ${targets.join(' and ') || 'this matter'} for businesses, investors and individuals across Nepal. Our senior partners assess the specifics of your case and advise on the practical next steps, including documentation, timelines, costs and compliance.`,
       intro: targets.length ? `This appears related to ${targets.join(' and ')}.` : '',
     };
   } else {
     answer = {
       sources: [],
-      text: "I couldn't find a specific match in our knowledge base for that. Pluto Associates provides focused legal advice on a wide range of matters — you can raise this with our team directly for a tailored answer.",
+      text: "I couldn't find a specific match in our knowledge base for that. Pluto Associates provides focused legal advice on a wide range of matters. You can raise this with our team directly for a tailored answer.",
       intro: '',
     };
   }

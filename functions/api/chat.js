@@ -98,7 +98,7 @@ async function synthesize(question, results, faqs, openaiKey) {
     .map((f, i) => `${i + 1}. Q: ${f.question}\n   A: ${String(f.answer || '').replace(/<[^>]*>/g, ' ').slice(0, 500)}`)
     .join('\n');
   const webCtx = results.length
-    ? results.map((r, i) => `[${i + 1}] ${r.title} — ${r.url}\n${String(r.content || '').slice(0, 700)}`).join('\n\n')
+    ? results.map((r, i) => `[${i + 1}] ${r.title} : ${r.url}\n${String(r.content || '').slice(0, 700)}`).join('\n\n')
     : '(no live web results available; answer from the firm knowledge base only)';
 
   const system = [
@@ -107,6 +107,7 @@ async function synthesize(question, results, faqs, openaiKey) {
     'Be concise, factual, and practical. Avoid legal advice disclaimers beyond a single short line where relevant.',
     'Always favour the firm\'s own FAQ answers when they cover the question.',
     'When you use a web source, cite it as [n] inline, where [n] is the number of the web result above.',
+    'Write in clear, professional prose. Do not use dashes, em dashes, hyphens or hyphenated bullets.',
     'End with the firm\'s practice-area recommendation only if clearly supported by the context.',
   ].join(' ');
 

@@ -53,7 +53,7 @@ export default function ChatAssistant() {
   const welcome = useMemo(() => ({
     id: 'welcome',
     role: 'assistant',
-    text: "Welcome to Pluto Associates' legal assistant. Ask me about Nepali law, our services or a specific matter, and I'll answer from our knowledge base — and search the web when needed.",
+    text: "Welcome to Pluto Associates' legal assistant. Ask me about Nepali law, our services or a specific matter. I'll answer from our knowledge base and search the web when needed.",
   }), []);
 
   useEffect(() => {
