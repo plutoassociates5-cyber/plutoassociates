@@ -91,7 +91,7 @@ export const ROUTES = {
   '/about': {
     title: 'About Us | Pluto Associates Nepal',
     description: clipDesc(
-      'Learn about Pluto Associates, a Kathmandu law firm founded in 2019 by Adv. Sudeep Nepal, delivering corporate, FDI, litigation and IP legal services across Nepal.'
+      'Learn about Pluto Associates, a Kathmandu law firm established in 2003 by Adv. Sudeep Nepal, delivering corporate, FDI, litigation and IP legal services across Nepal.'
     ),
     keywords: 'about Pluto Associates, law firm Kathmandu, legal consultants Nepal, Adv. Sudeep Nepal, law firm history Nepal',
     canonical: '/about',

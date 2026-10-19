@@ -410,7 +410,7 @@ const FAQS_SEED = FAQ_SEED;
 
 const HOMEPAGE_SEED = {
   hero: {
-    badge: 'Est. 2019 · Nepal Bar Association Registered',
+    badge: 'Est. 2003 · Nepal Bar Association Registered',
     headline: 'Where Legal Excellence Meets Client Trust',
     subheadline: "Pluto Associates delivers strategic, results-driven legal counsel across Nepal, combining deep regulatory insight with unwavering commitment to our clients' success.",
     ctaPrimary: 'Schedule a Consultation',
