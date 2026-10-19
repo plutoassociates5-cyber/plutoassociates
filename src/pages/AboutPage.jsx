@@ -81,27 +81,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-24">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 text-center justify-center reveal-anim">Recognition</div>
-          <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight mb-5 font-semibold text-center">Our Track Record</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-            <div className="bg-white p-8 lg:p-10 text-center shadow-sm reveal-anim">
-              <div className="font-serif text-4xl lg:text-5xl font-bold text-gold">30+</div>
-              <div className="text-sm text-text-light mt-3 leading-relaxed">Years of combined legal experience across our team</div>
-            </div>
-            <div className="bg-white p-8 lg:p-10 text-center shadow-sm reveal-anim">
-              <div className="font-serif text-4xl lg:text-5xl font-bold text-gold">95%</div>
-              <div className="text-sm text-text-light mt-3 leading-relaxed">Client satisfaction rate across all practice areas</div>
-            </div>
-            <div className="bg-white p-8 lg:p-10 text-center shadow-sm reveal-anim">
-              <div className="font-serif text-4xl lg:text-5xl font-bold text-gold">15+</div>
-              <div className="text-sm text-text-light mt-3 leading-relaxed">Specialized practice areas serviced by our team</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="py-16 lg:py-24 bg-off-white">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 text-center justify-center reveal-anim">Affiliations</div>

@@ -416,12 +416,7 @@ const HOMEPAGE_SEED = {
     ctaPrimary: 'Schedule a Consultation',
     ctaSecondary: 'Explore Our Services',
   },
-  stats: [
-    { label: 'Years Combined Experience', value: '30+' },
-    { label: 'Cases Successfully Resolved', value: '500+' },
-    { label: 'Practice Areas', value: '15+' },
-    { label: 'Client Satisfaction Rate', value: '95%' },
-  ],
+  stats: [],
   servicesSection: {
     visible: true,
     title: 'Our Services',

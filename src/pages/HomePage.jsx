@@ -89,16 +89,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-navy py-12">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {hp.stats.map((stat, i) => (
-              <div key={i} className="reveal-anim"><div className="font-serif text-4xl font-bold text-gold mb-1">{stat.value}</div><div className="text-xs text-white/60 uppercase tracking-[1.5px]">{stat.label}</div></div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="py-16 lg:py-24">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
