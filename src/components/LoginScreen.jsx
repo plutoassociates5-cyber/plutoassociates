@@ -6,10 +6,15 @@ export default function LoginScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+  const [busy, setBusy] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (login(username, password)) {
+    if (busy) return;
+    setBusy(true);
+    const ok = await login(username, password);
+    setBusy(false);
+    if (ok) {
       setError(false);
     } else {
       setError(true);
@@ -46,7 +51,7 @@ export default function LoginScreen() {
               className="w-full px-3.5 py-3 border border-mid-gray font-sans text-sm outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]"
             />
           </div>
-          <button type="submit" className="w-full py-3.5 bg-wp-blue text-white border-none font-sans text-sm font-semibold cursor-pointer hover:bg-[#005a87]">Log In</button>
+          <button type="submit" disabled={busy} className="w-full py-3.5 bg-wp-blue text-white border-none font-sans text-sm font-semibold cursor-pointer hover:bg-[#005a87] disabled:opacity-60 disabled:cursor-wait">{busy ? 'Checking…' : 'Log In'}</button>
         </form>
         <p className="text-center text-[0.7rem] text-text-light mt-4">Enter your admin credentials to access the content management system.</p>
       </div>

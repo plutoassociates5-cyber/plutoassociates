@@ -1,27 +1,66 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { getCreds } from '../utils/storage';
 
 const SESS_KEY = 'mlp_session';
 const AuthContext = createContext(null);
+
+/* Local-development credentials (only active when running `vite` dev server;
+   these VITE_ vars are stripped from production builds, unlike the old
+   hardcoded password which shipped to every visitor). */
+const DEV_USER = import.meta.env.VITE_DEV_ADMIN_USER;
+const DEV_PASS = import.meta.env.VITE_DEV_ADMIN_PASSWORD;
+
+function readSession() {
+  try {
+    const raw = sessionStorage.getItem(SESS_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (s && s.exp && s.exp > Date.now()) return s;
+    sessionStorage.removeItem(SESS_KEY);
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (sessionStorage.getItem(SESS_KEY) === '1') {
-      const c = getCreds();
-      setUser({ name: c.n || 'Admin', role: c.role || 'super' });
-    }
+    const s = readSession();
+    if (s) setUser(s.user);
   }, []);
 
-  const login = useCallback((username, password) => {
-    const c = getCreds();
-    if (username === c.u && password === c.p) {
-      sessionStorage.setItem(SESS_KEY, '1');
-      setUser({ name: c.n || 'Admin', role: c.role || 'super' });
-      return true;
+  const login = useCallback(async (username, password) => {
+    if (import.meta.env.DEV && DEV_USER && DEV_PASS) {
+      if (username === DEV_USER && password === DEV_PASS) {
+        const s = { user: { name: 'Admin (dev)', role: 'super' }, exp: Date.now() + 43200000, token: 'dev' };
+        sessionStorage.setItem(SESS_KEY, JSON.stringify(s));
+        setUser(s.user);
+        return true;
+      }
+      return false;
     }
-    return false;
+
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!res.ok) return false;
+      const data = await res.json();
+      if (!data || !data.ok) return false;
+      const s = {
+        user: data.user || { name: username, role: 'super' },
+        exp: data.exp || Date.now() + 43200000,
+        token: data.token,
+      };
+      sessionStorage.setItem(SESS_KEY, JSON.stringify(s));
+      setUser(s.user);
+      return true;
+    } catch {
+      return false;
+    }
   }, []);
 
   const logout = useCallback(() => {

@@ -1,31 +1,10 @@
 import { useState } from 'react';
-import { getCreds, saveCreds, getArticles, saveArticles } from '../utils/storage';
+import { getArticles, saveArticles } from '../utils/storage';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
 export default function Settings({ onNavigate }) {
   const { toast } = useToast();
-  const creds = getCreds();
-  const [user, setUser] = useState(creds.u);
-  const [name, setName] = useState(creds.n || '');
-  const [pass, setPass] = useState('');
-  const [passC, setPassC] = useState('');
-
-  const saveSettings = () => {
-    if (!user.trim()) {
-      toast('Username is required.', 'err');
-      return;
-    }
-    if (pass && pass !== passC) {
-      toast('Passwords do not match.', 'err');
-      return;
-    }
-    const c = { u: user.trim(), n: name.trim() || user.trim(), p: pass || creds.p };
-    saveCreds(c);
-    toast('✓ Settings saved!');
-    setPass('');
-    setPassC('');
-  };
 
   const exportData = () => {
     const data = { articles: getArticles(), exportedAt: new Date().toISOString(), site: 'Pluto Associates' };
@@ -73,39 +52,11 @@ export default function Settings({ onNavigate }) {
         <h2 className="text-base text-[#1d2327] mb-6 pb-3 border-b border-wp-border">⚙️ General Settings</h2>
 
         <div className="mb-8">
-          <h3 className="text-sm text-[#1d2327] font-semibold mb-4 flex items-center gap-1.5">🔐 Admin Credentials</h3>
-          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
-            <div className="text-xs font-semibold text-[#333] pt-1">
-              Username
-              <small className="block font-normal text-text-light mt-0.5 text-[0.68rem]">Used to log into admin</small>
-            </div>
-            <div className="">
-              <input type="text" value={user} onChange={(e) => setUser(e.target.value)} className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]" />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
-            <div className="text-xs font-semibold text-[#333] pt-1">
-              Display Name
-              <small className="block font-normal text-text-light mt-0.5 text-[0.68rem]">Shown in admin panel</small>
-            </div>
-            <div className="">
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]" />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
-            <div className="text-xs font-semibold text-[#333] pt-1">
-              New Password
-              <small className="block font-normal text-text-light mt-0.5 text-[0.68rem]">Leave blank to keep current</small>
-            </div>
-            <div className="">
-              <input type="password" placeholder="Enter new password..." value={pass} onChange={(e) => setPass(e.target.value)} className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]" />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-4 items-start py-3 border-b border-light-gray last:border-none">
-            <div className="text-xs font-semibold text-[#333] pt-1">Confirm Password</div>
-            <div className="">
-              <input type="password" placeholder="Confirm new password..." value={passC} onChange={(e) => setPassC(e.target.value)} className="w-full border border-wp-border px-2.5 py-2 font-sans text-xs outline-none focus:border-wp-blue focus:shadow-[0_0_0_1px_#0073aa]" />
-            </div>
+          <h3 className="text-sm text-[#1d2327] font-semibold mb-4 flex items-center gap-1.5">🔐 Admin Access</h3>
+          <div className="bg-off-white border border-light-gray p-4 text-xs leading-relaxed text-text-body">
+            <p className="mb-2">Login credentials are no longer stored in the website code. They are managed securely as environment variables in the Cloudflare Pages dashboard.</p>
+            <p className="mb-2">To change the admin username or password, update <code className="bg-white px-1 border border-light-gray">ADMIN_USER</code>, <code className="bg-white px-1 border border-light-gray">ADMIN_PASSWORD</code> and <code className="bg-white px-1 border border-light-gray">ADMIN_SECRET</code> under <strong>Cloudflare Dashboard → Pages → plutoassociates → Settings → Environment variables</strong>, then redeploy.</p>
+            <p>Anyone with the new password can log in to this panel.</p>
           </div>
         </div>
 

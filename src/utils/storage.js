@@ -73,10 +73,11 @@ export function getSeedArticles() {
 }
 
 export function getCreds() {
+  const empty = { u: '', p: '', n: 'Admin', role: 'super' };
   try {
-    return JSON.parse(localStorage.getItem(CRED_KEY)) || { u: 'pluto', p: 'pluto@2025', n: 'Admin', role: 'super' };
+    return JSON.parse(localStorage.getItem(CRED_KEY)) || empty;
   } catch {
-    return { u: 'pluto', p: 'pluto@2025', n: 'Admin', role: 'super' };
+    return empty;
   }
 }
 

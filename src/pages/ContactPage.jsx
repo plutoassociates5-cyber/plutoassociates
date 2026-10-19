@@ -28,15 +28,26 @@ export default function ContactPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Consultation Request - ${form.area} - ${form.fname} ${form.lname}`);
-    const body = encodeURIComponent(
-      `Name: ${form.fname} ${form.lname}\nEmail: ${form.email}\nPhone: ${form.phone}\nArea: ${form.area}\n\nMessage:\n${form.message}`
-    );
+    const text =
+      `Consultation Request – ${form.area}\n` +
+      `Name: ${form.fname} ${form.lname}\n` +
+      `Email: ${form.email}\n` +
+      `Phone: ${form.phone}\n\n` +
+      `${form.message}`;
     addMessage({ id: uid('msg'), name: `${form.fname} ${form.lname}`, email: form.email, phone: form.phone, area: form.area, subject: `Consultation Request - ${form.area}`, message: form.message, status: 'new', date: new Date().toISOString() });
-    window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
+    if (window.gtag) window.gtag('event', 'whatsapp_click', { source: 'contact_form', area: form.area });
+    const waUrl = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
+    const win = window.open(waUrl, '_blank', 'noopener');
+    if (!win) window.location.href = waUrl;
     setSent(true);
-    toast('Opening your email client to send the consultation request to ' + site.email + '.');
+    toast('Opening WhatsApp to send your request to Pluto Associates. We reply within 24 hours.');
   };
+
+  const mailtoHref = `mailto:${site.email}?subject=${encodeURIComponent(
+    `Consultation Request - ${form.area} - ${form.fname} ${form.lname}`
+  )}&body=${encodeURIComponent(
+    `Name: ${form.fname} ${form.lname}\nEmail: ${form.email}\nPhone: ${form.phone}\nArea: ${form.area}\n\nMessage:\n${form.message}`
+  )}`;
 
   const update = (field, value) => setForm((prev) => ({ ...prev, [field]: value }));
 
@@ -86,9 +97,8 @@ export default function ContactPage() {
               <h2 className="font-serif text-2xl text-navy mb-4">Request a Consultation</h2>
               <div className="bg-off-white p-4 rounded-md mb-6 text-[0.85rem] leading-relaxed">
                 <strong>How consultations work:</strong><br />
-                Fill out the form below and hit <strong>Send Message</strong> — your email app opens with the message ready to send to <strong>{site.email}</strong>.
-                Our team will reply within 24 hours.
-                You can also email us directly or call <strong>{site.phone}</strong>.
+                Fill out the form below and hit <strong>Send Message</strong> — WhatsApp opens with your details ready to send to our team.
+                We reply within 24 hours. You can also email us directly or call <strong>{site.phone}</strong>.
               </div>
               <p className="text-sm text-text-body mb-6">Fill out the form and our team will get back to you within 24 hours.</p>
               <form onSubmit={handleSubmit}>
@@ -135,6 +145,13 @@ export default function ContactPage() {
                   {sent ? '✓ Message Ready!' : 'Send Message →'}
                 </button>
               </form>
+              {sent && (
+                <div className="mt-4 bg-off-white p-4 rounded-md text-[0.85rem] leading-relaxed">
+                  <strong>WhatsApp didn't open?</strong> Send the same details by{' '}
+                  <a href={mailtoHref} className="text-gold hover:underline">email</a> or call{' '}
+                  <a href={`tel:${site.phone}`} className="text-gold hover:underline">{site.phone}</a>.
+                </div>
+              )}
             </div>
 
             <div className="reveal-anim">

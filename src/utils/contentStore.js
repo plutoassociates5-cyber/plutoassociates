@@ -476,8 +476,8 @@ const BRAND_FOOTER_SEED = {
 };
 
 const BRAND_OFFICE_SEED = {
-  officeName: '', street: '', city: '', province: '', postalCode: '',
-  country: 'Nepal', mapsLink: '', latitude: 27.7172, longitude: 85.324,
+  officeName: 'Pluto Associates', street: 'Babarmahal', city: 'Kathmandu', province: 'Bagmati', postalCode: '44600',
+  country: 'Nepal', mapsLink: '', latitude: 27.6933, longitude: 85.3275,
   hours: '', holidayHours: '', officeImages: [],
 };
 
@@ -503,7 +503,7 @@ const SITE_SETTINGS_SEED = {
   name: 'Pluto Associates',
   tagline: 'Advocates & Legal Consultants',
   logo,
-  address: 'Kathmandu, Nepal',
+  address: 'Babarmahal, Kathmandu 44600, Nepal',
   phone: '+977-9802356987',
   whatsapp: '9779802356987',
   email: 'info@plutoassociates.com',
