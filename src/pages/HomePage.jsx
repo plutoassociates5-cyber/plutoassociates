@@ -31,19 +31,19 @@ const FEATURES = [
   { icon: '🌐', title: 'Local Insight, Global Standards', desc: 'Deep command of Nepali law and institutions, matched with the sophistication expected of an international firm.' },
   { icon: '⚡', title: 'Responsive & Accessible', desc: 'Direct access to your counsel. When the matter is urgent, your lawyer is a phone call away.' },
   { icon: '🔒', title: 'Confidential & Trusted', desc: 'Absolute discretion on every engagement, so you can share freely and act with confidence.' },
-  { icon: '🗂️', title: 'Full-Service Firm', desc: 'Corporate, litigation, tax, energy, IP and more — comprehensive counsel under one roof.' },
+  { icon: '🗂️', title: 'Full-Service Firm', desc: 'Corporate, litigation, tax, energy, IP and more, comprehensive counsel under one roof.' },
 ];
 
 const TESTIMONIALS = [
   { quote: 'Pluto Associates guided our investment into Nepal from start to finish. Their clarity on FDI compliance and approvals made an otherwise complex process seamless.', name: 'Gautam R.', role: 'Managing Director, Kathmandu' },
-  { quote: 'Their litigation team is relentless and precise. We finally resolved a dispute that had stalled our business for years — and they kept us informed at every step.', name: 'Priya S.', role: 'Founder, Manufacturing Sector' },
+  { quote: 'Their litigation team is relentless and precise. We finally resolved a dispute that had stalled our business for years, and they kept us informed at every step.', name: 'Priya S.', role: 'Founder, Manufacturing Sector' },
   { quote: 'From incorporation to contract drafting, their corporate practice handled everything with remarkable efficiency. A trusted partner in every sense.', name: 'Adv. Deepak M.', role: 'Corporate Client, Nepal' },
 ];
 
 const PROCESS = [
   { step: '01', title: 'Initial Consultation', desc: 'We listen carefully to understand your situation, objectives, and constraints in a confidential first meeting.' },
-  { step: '02', title: 'Strategy & Plan', desc: 'Your counsel develops a clear, tailored legal strategy — with timeline, options, and transparent fee guidance.' },
-  { step: '03', title: 'Execution & Advocacy', desc: 'We act decisively — drafting, negotiating, and representing you before courts, tribunals, and regulators.' },
+  { step: '02', title: 'Strategy & Plan', desc: 'Your counsel develops a clear, tailored legal strategy, with timeline, options, and transparent fee guidance.' },
+  { step: '03', title: 'Execution & Advocacy', desc: 'We act decisively, drafting, negotiating, and representing you before courts, tribunals, and regulators.' },
   { step: '04', title: 'Resolution & Review', desc: 'We see matters through to completion and remain on hand for follow-up, compliance, and future guidance.' },
 ];
 
@@ -99,7 +99,7 @@ export default function HomePage() {
               <div className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4">About Our Firm</div>
               <h2 className="font-serif text-[clamp(1.6rem,3vw,2.2rem)] text-navy leading-tight mb-6">Trusted Legal Advisors Committed to Your Success</h2>
               <p className="mb-5 text-text-body leading-relaxed">Pluto Associates is a premier law firm in Kathmandu, Nepal, recognized for our depth of expertise across corporate law, foreign investment, litigation, and regulatory compliance. Our team brings together decades of experience, academic rigor, and a client-first approach to deliver outcomes that matter.</p>
-              <p className="mb-5 text-text-body leading-relaxed">From multinational corporations navigating Nepal's FDI landscape to startups seeking incorporation and individuals requiring family law counsel — we provide bespoke legal solutions tailored to each client's unique needs.</p>
+              <p className="mb-5 text-text-body leading-relaxed">From multinational corporations navigating Nepal's FDI landscape to startups seeking incorporation and individuals requiring family law counsel, we provide bespoke legal solutions tailored to each client's unique needs.</p>
               <Link to="/about" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-gold hover:text-navy no-underline self-start">Learn More About Us →</Link>
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function HomePage() {
           <div className="text-center max-w-3xl mx-auto mb-12">
             <span className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 inline-block reveal-anim">Why Choose Pluto Associates</span>
             <h2 className="font-serif text-[clamp(2rem,4vw,2.6rem)] text-navy leading-tight mb-4 font-semibold reveal-anim">A Firm Built Around You</h2>
-            <p className="text-base text-text-light leading-relaxed reveal-anim">Everything you expect from a premier law firm — expertise, responsiveness, and results — delivered with genuine care.</p>
+            <p className="text-base text-text-light leading-relaxed reveal-anim">Everything you expect from a premier law firm, expertise, responsiveness, and results, delivered with genuine care.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {FEATURES.map((f, i) => (

@@ -103,12 +103,12 @@ function makeCollection(key, seed = []) {
 const PRACTICE_AREAS_SEED = [
   {
     id: 'fdi', img: paFdi, icon: '🌐', title: 'Foreign Direct Investment (FDI)',
-    desc: 'Specialised guidance for foreign investors entering Nepal — from sector eligibility and FITTA compliance to joint ventures and structuring. We walk you through approvals with the Department of Industry and Investment Board Nepal so your entry is transparent, compliant, and ready for the market.',
+    desc: 'Specialised guidance for foreign investors entering Nepal, from sector eligibility and FITTA compliance to joint ventures and structuring. We walk you through approvals with the Department of Industry and Investment Board Nepal so your entry is transparent, compliant, and ready for the market.',
     highlights: ['Sector eligibility & entry strategy', 'FITTA & regulatory approvals', 'Joint ventures & investment structuring', 'Investment Board Nepal liaison'],
     heading: 'Comprehensive FDI Advisory for Nepal',
     intro: [
       'Nepal has become an increasingly attractive destination for foreign investors, particularly following the enactment of the Foreign Investment and Technology Transfer Act (FITTA) 2019. The Act has streamlined FDI procedures and opened new sectors to foreign participation, creating significant opportunities for international businesses.',
-      'At Pluto Associates, our FDI practice provides comprehensive, end-to-end advisory services that guide investors through every stage of the investment lifecycle. From initial feasibility assessment and sector eligibility analysis to Department of Industry (DOI) approval, company registration with the Office of Company Registrar (OCR), PAN/VAT registration, and sector-specific licensing — we handle the entire regulatory process.'
+      'At Pluto Associates, our FDI practice provides comprehensive, end-to-end advisory services that guide investors through every stage of the investment lifecycle. From initial feasibility assessment and sector eligibility analysis to Department of Industry (DOI) approval, company registration with the Office of Company Registrar (OCR), PAN/VAT registration, and sector-specific licensing, we handle the entire regulatory process.'
     ],
     quote: 'The minimum foreign investment threshold in Nepal is NPR 20 million (approximately USD 150,000). Our team helps investors structure their investment optimally.',
     servicesHeading: 'Our FDI Services',
@@ -116,7 +116,7 @@ const PRACTICE_AREAS_SEED = [
       'FDI feasibility assessment and sector-specific eligibility analysis',
       'Department of Industry (DOI) approval and registration',
       'Company incorporation with the Office of Company Registrar (OCR)',
-      'Investment structuring — equity, debt, JV, or branch office options',
+      'Investment structuring: equity, debt, JV, or branch office options',
       'FITTA compliance and technology transfer agreement drafting',
       'Repatriation of profits, dividends, and capital advisory',
       'Post-investment compliance monitoring and annual filings',
@@ -133,7 +133,7 @@ const PRACTICE_AREAS_SEED = [
     highlights: ['Company registration & formation', 'Corporate governance & compliance', 'Mergers, acquisitions & due diligence', 'Contract drafting & negotiation'],
     heading: 'Corporate & Commercial Advisory for Business',
     intro: [
-      'Every business, from a single-founder start-up to an established group, relies on a sound corporate foundation. We support that foundation end-to-end — incorporating entities, structuring shareholdings and boards, and keeping every filing precise and timely under the Companies Act.',
+      'Every business, from a single-founder start-up to an established group, relies on a sound corporate foundation. We support that foundation end-to-end, incorporating entities, structuring shareholdings and boards, and keeping every filing precise and timely under the Companies Act.',
       'Our commercial practice also supports the everyday legal work of doing business: negotiating and drafting supply, service, distribution and joint-venture arrangements, as well as the governance that binds a company together.'
     ],
     quote: 'We make corporate compliance routine rather than an afterthought, with annual filings, board resolutions and records kept continuously audit-ready.',
@@ -149,13 +149,13 @@ const PRACTICE_AREAS_SEED = [
       'Corporate restructuring and shareholding advisory'
     ],
     sectorsHeading: 'Who We Serve',
-    sectors: 'We advise local and international companies across manufacturing, technology, trading and services — including start-ups, private and public companies, family businesses, and established groups at expansion.',
+    sectors: 'We advise local and international companies across manufacturing, technology, trading and services, including start-ups, private and public companies, family businesses, and established groups at expansion.',
     whyHeading: 'Why Choose Pluto Associates?',
-    why: 'We pair commercial sense with clear drafting. We structure companies compliantly and negotiate terms that truly protect yours — from incorporation to exit, we stay with you through every stage.'
+    why: 'We pair commercial sense with clear drafting. We structure companies compliantly and negotiate terms that truly protect yours, from incorporation to exit, we stay with you through every stage.'
   },
   {
     id: 'energy', img: paEnergy, icon: '⚡', title: 'Energy, Infrastructure & Project Finance',
-    desc: 'Strategic legal advisory for energy and infrastructure — from hydropower to solar. We negotiate power purchase agreements, secure approvals, and structure project financing to keep projects on track.',
+    desc: 'Strategic legal advisory for energy and infrastructure, from hydropower to solar. We negotiate power purchase agreements, secure approvals, and structure project financing to keep projects on track.',
     highlights: ['Power purchase agreements (PPAs)', 'Regulatory approvals & licensing', 'Project finance & structuring', 'Infrastructure dispute resolution'],
     heading: 'Legal Advisory across the Energy Sector',
     intro: [
@@ -177,7 +177,7 @@ const PRACTICE_AREAS_SEED = [
     sectorsHeading: 'Sectors We Cover',
     sectors: 'Hydropower and small-hydro, solar PV and storage, transmission and distribution, and the ancillary infrastructure such as access roads and power evacuation works that bring energy to market.',
     whyHeading: 'Why Choose Pluto Associates?',
-    why: 'Years of involvement in hydro and renewable financing means we speak the language of the regulator, the lender and the developer. We keep your project moving — and bankable.'
+    why: 'Years of involvement in hydro and renewable financing means we speak the language of the regulator, the lender and the developer. We keep your project moving and bankable.'
   },
   {
     id: 'banking', img: paBanking, icon: '🏦', title: 'Banking & Finance',
@@ -202,7 +202,7 @@ const PRACTICE_AREAS_SEED = [
     ],
     sectorsHeading: 'Sectors We Cover',
     sectors: 'We advise commercial banks, development finance institutions, microfinance providers, non-bank financial institutions and borrowers across consumer, retail, corporate, SME and project finance.',
-    why: 'We approach every matter the way a bank does — quickly and precisely — while always guarding the position of the lender or the borrower. When money is at play, we protect value and clarity.'
+    why: 'We approach every matter the way a bank does, quickly and precisely, while always guarding the position of the lender or the borrower. When money is at play, we protect value and clarity.'
   },
   {
     id: 'litigation', img: paLitigation, icon: '⚖️', title: 'Litigation & Dispute Resolution',
@@ -210,10 +210,10 @@ const PRACTICE_AREAS_SEED = [
     highlights: ['Civil & commercial litigation', 'Arbitration & mediation', 'Appellate representation', 'Strategic dispute resolution'],
     heading: 'Representation across the Courts of Nepal',
     intro: [
-      'Dispute resolution calls for representation that is strategic, thorough and persuasive. Our team appears before every level of the Nepali judiciary — district courts, appellate courts, the Supreme Court and specialist tribunals.',
+      'Dispute resolution calls for representation that is strategic, thorough and persuasive. Our team appears before every level of the Nepali judiciary, district courts, appellate courts, the Supreme Court and specialist tribunals.',
       'We begin with realism: what outcome is achievable, on what timeline and in what cost. That discipline then informs detailed, effective advocacy at every hearing and in every submission.'
     ],
-    quote: 'The best time to understand a dispute is before it starts — but we are equally at our best when the case is at its hardest.',
+    quote: 'The best time to understand a dispute is before it starts, but we are equally at our best when the case is at its hardest.',
     servicesHeading: 'Our Dispute Resolution Services',
     services: [
       'Civil and commercial litigation',
@@ -237,7 +237,7 @@ const PRACTICE_AREAS_SEED = [
     heading: 'Protecting the Ideas That Drive Value',
     intro: [
       'Brands, patents, designs and original works are among a business\u2019s hardest-won assets. We help you obtain rights to them, register them correctly, defend them against misuse, and licence the value they create.',
-      'Our IP team guides you through registration and renewals in Nepal and internationally, and supports the agreements — licensing, confidentiality and employment — that keep your rights inside your business.'
+      'Our IP team guides you through registration and renewals in Nepal and internationally, and supports the agreements, licensing, confidentiality and employment, that keep your rights inside your business.'
     ],
     quote: 'An IP right that is not protected is simply an idea. We help you turn it into property.',
     servicesHeading: 'Our Intellectual Property Services',
@@ -252,12 +252,12 @@ const PRACTICE_AREAS_SEED = [
       'IP litigation and ADR'
     ],
     sectorsHeading: 'What We Protect',
-    sectors: 'We advise brands and rights across technology, media, publishing, consumer goods, pharmaceuticals and the creative industries — the businesses whose worth sits largely in their intellectual property.',
+    sectors: 'We advise brands and rights across technology, media, publishing, consumer goods, pharmaceuticals and the creative industries, the businesses whose worth sits largely in their intellectual property.',
     why: 'We focus on making IP enforceable, transferable and valuable. From the search report at the start to litigation at the end, we manage the full life of your rights.'
   },
   {
     id: 'labor', img: paLabor, icon: '👥', title: 'Labor & Employment Law',
-    desc: 'Practical employment advice spanning contracts, workplace compliance, disputes, collective bargaining, and HR policy — keeping your workforce and your business aligned.',
+    desc: 'Practical employment advice spanning contracts, workplace compliance, disputes, collective bargaining, and HR policy, keeping your workforce and your business aligned.',
     highlights: ['Employment contracts & policies', 'Labour compliance', 'Collective bargaining', 'Work redundancy & dispute resolution'],
     heading: 'Labor & Employment Advisory',
     intro: [
@@ -277,12 +277,12 @@ const PRACTICE_AREAS_SEED = [
       'Employment and industrial disputes'
     ],
     sectorsHeading: 'Who We Serve',
-    sectors: 'We advise employers of all sizes — from start to fully-operating companies — and a wide range of sectors where a fair and compliant workforce is essential to the business.',
+    sectors: 'We advise employers of all sizes, from start to fully-operating companies, and a wide range of sectors where a fair and compliant workforce is essential to the business.',
     why: 'Our employment team gives practical, timely advice that keeps you compliant without slowing your business. When a dispute arrives, we resolve it fairly and protectively.'
   },
   {
     id: 'realestate', img: paRealestate, icon: '🏠', title: 'Real Estate & Property',
-    desc: 'Property due diligence, title verification, land acquisition, lease arrangements, and property dispute resolution — so you transact with certainty and minimum risk.',
+    desc: 'Property due diligence, title verification, land acquisition, lease arrangements, and property dispute resolution, so you transact with certainty and minimum risk.',
     highlights: ['Title & due diligence', 'Land acquisition & transfers', 'Lease & property agreements', 'Real-estate dispute resolution'],
     heading: 'Property and Real Estate Advisory',
     intro: [
@@ -302,7 +302,7 @@ const PRACTICE_AREAS_SEED = [
       'Property litigation and mediation'
     ],
     sectorsHeading: 'Who We Serve',
-    sectors: 'We advise developers, investors, businesses and home buyers — on land purchase, commercial property, leasing, and property related to projects and funding.',
+    sectors: 'We advise developers, investors, businesses and home buyers, on land purchase, commercial property, leasing, and property related to projects and funding.',
     why: 'We combine meticulous title and due diligence with trustworthy documentation and practical closing. When the deal is important, we make it certain and secure.'
   },
   {
@@ -312,7 +312,7 @@ const PRACTICE_AREAS_SEED = [
     heading: 'Taxation Advisory & Compliance',
     intro: [
       'Compliance begins with planning. Our tax team supports companies and individuals with advance tax planning, structuring transactions correctly, and ongoing compliance with the Income Tax Act and the VAT regime in Nepal.',
-      'We prepare, file and defend tax positions — VAT registration and returns, withholding — and support the international documentation that cross-border and large corporate structures require.'
+      'We prepare, file and defend tax positions: VAT registration and returns, withholding, and support the international documentation that cross-border and large corporate structures require.'
     ],
     quote: 'Good tax planning starts on day one. We help you pay the correct amount of tax and no more.',
     servicesHeading: 'Our Taxation Services',
@@ -327,7 +327,7 @@ const PRACTICE_AREAS_SEED = [
       'Tax dispute and assessment strategy'
     ],
     sectorsHeading: 'Who We Serve',
-    sectors: 'We advise domestic and international companies, investors, professionals and individuals — from start-ups to established corporates — across all sectors.',
+    sectors: 'We advise domestic and international companies, investors, professionals and individuals, from start-ups to established corporates, across all sectors.',
     why: 'We help you pay the correct amount of tax and no more. Precisely filing and a clear strategy on disputes means you keep more of what you earn. Territory lab results.'
   },
   {
@@ -412,7 +412,7 @@ const HOMEPAGE_SEED = {
   hero: {
     badge: 'Est. 2019 · Nepal Bar Association Registered',
     headline: 'Where Legal Excellence Meets Client Trust',
-    subheadline: "Pluto Associates delivers strategic, results-driven legal counsel across Nepal — combining deep regulatory insight with unwavering commitment to our clients' success.",
+    subheadline: "Pluto Associates delivers strategic, results-driven legal counsel across Nepal, combining deep regulatory insight with unwavering commitment to our clients' success.",
     ctaPrimary: 'Schedule a Consultation',
     ctaSecondary: 'Explore Our Services',
   },
@@ -420,7 +420,7 @@ const HOMEPAGE_SEED = {
   servicesSection: {
     visible: true,
     title: 'Our Services',
-    subtitle: 'A full suite of legal services across nine practice groups — one trusted team for every matter.',
+    subtitle: 'A full suite of legal services across nine practice groups, one trusted team for every matter.',
     ctaLabel: 'View All Services',
   },
 };

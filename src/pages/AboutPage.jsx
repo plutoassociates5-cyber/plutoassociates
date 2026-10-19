@@ -42,7 +42,7 @@ export default function AboutPage() {
               <div className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4">Our Story</div>
               <h2 className="font-serif text-[clamp(1.6rem,3vw,2.2rem)] text-navy leading-tight mb-6">Building a Legacy of Legal Excellence Since 2019</h2>
               <p className="mb-5 text-text-body leading-relaxed">Founded by Adv. Sudeep Nepal, Pluto Associates was established with a singular vision: to create a law firm that combines international legal standards with deep local expertise. What began as a boutique practice has grown into one of Nepal's most respected legal advisory firms.</p>
-              <p className="mb-5 text-text-body leading-relaxed">Our journey is defined by the trust our clients place in us — from Fortune 500 companies entering the Nepali market to local businesses seeking strategic legal counsel. Every case we handle is approached with the same dedication, thoroughness, and pursuit of excellence.</p>
+              <p className="mb-5 text-text-body leading-relaxed">Our journey is defined by the trust our clients place in us, from Fortune 500 companies entering the Nepali market to local businesses seeking strategic legal counsel. Every case we handle is approached with the same dedication, thoroughness, and pursuit of excellence.</p>
               <p className="mb-5 text-text-body leading-relaxed">Today, our team of experienced advocates and legal consultants covers over 15 <Link to="/practice-areas" className="text-navy underline underline-offset-2 hover:text-gold">practice areas</Link>, serving clients across Nepal and internationally.</p>
             </div>
           </div>
