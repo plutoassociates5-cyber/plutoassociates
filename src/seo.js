@@ -356,6 +356,13 @@ function legalServiceLd() {
       },
     ],
     areaServed: { '@type': 'Country', name: 'Nepal' },
+    foundingDate: '2003',
+    slogan: 'Practical Legal Advice. A Commitment to Your Interests.',
+    sameAs: [
+      'https://www.facebook.com/p/Pluto-Associates-61585738830173/',
+      'https://www.instagram.com/plutoassociates/',
+      'https://www.linkedin.com/company/pluto-associates',
+    ],
     knowsAbout: [
       'Corporate Law',
       'Foreign Direct Investment',
@@ -392,6 +399,14 @@ function websiteLd() {
     description: I.description,
     inLanguage: 'en',
     publisher: { '@type': 'Organization', name: I.legalName, url: I.url },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${I.url}/publications?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
   };
 }
 
@@ -425,10 +440,41 @@ const webPageLd = (name, path, description) => {
 };
 
 const PERSONAS = [
-  { name: 'Adv. Sudeep Nepal', jobTitle: 'Founder & Senior Partner', email: 'sudeep@plutoassociates.com' },
-  { name: 'Nikesh Nepal', jobTitle: 'Legal Associate', email: '' },
-  { name: 'Sujan Subedi', jobTitle: 'Legal Associate', email: 'sujan@plutoassociates.com' },
-  { name: 'Neehal Pokharel', jobTitle: 'Legal Associate', email: '' },
+  {
+    name: 'Adv. Sudeep Nepal',
+    jobTitle: 'Founder & Senior Partner',
+    email: 'sudeep@plutoassociates.com',
+    description:
+      'Founder and Senior Partner at Pluto Associates, a Kathmandu law firm established in 2003. Advises foreign investors and Nepali businesses on corporate law, foreign direct investment, energy and hydropower licensing, and commercial litigation.',
+    knowsAbout: [
+      'Corporate Law',
+      'Foreign Direct Investment',
+      'Energy & Infrastructure',
+      'Hydropower Licensing',
+      'Commercial Litigation',
+    ],
+  },
+  {
+    name: 'Nikesh Nepal',
+    jobTitle: 'Legal Associate',
+    email: '',
+    description: 'Legal Associate at Pluto Associates, advising on corporate compliance and commercial matters.',
+    knowsAbout: ['Corporate Law', 'Commercial Contracts', 'Compliance'],
+  },
+  {
+    name: 'Sujan Subedi',
+    jobTitle: 'Legal Associate',
+    email: 'sujan@plutoassociates.com',
+    description: 'Legal Associate at Pluto Associates, advising on corporate and regulatory matters.',
+    knowsAbout: ['Corporate Law', 'Regulatory Compliance', 'Foreign Investment'],
+  },
+  {
+    name: 'Neehal Pokharel',
+    jobTitle: 'Legal Associate',
+    email: '',
+    description: 'Legal Associate at Pluto Associates, advising on litigation and dispute resolution.',
+    knowsAbout: ['Litigation', 'Dispute Resolution', 'Civil Procedure'],
+  },
 ];
 
 const PRACTICE_SERVICES = [
@@ -479,6 +525,37 @@ export function buildJsonLd(path) {
           isPartOf: { '@type': 'WebSite', name: I.orgName, url: I.url },
         },
         breadcrumbLd([{ name: 'Home', path: '/' }]),
+        {
+          '@type': 'Person',
+          name: 'Adv. Sudeep Nepal',
+          jobTitle: 'Founder & Senior Partner',
+          worksFor: { '@type': 'LegalService', name: I.legalName, url: I.url },
+          email: 'mailto:sudeep@plutoassociates.com',
+          description:
+            'Founder and Senior Partner at Pluto Associates. Advises foreign investors and Nepali businesses on corporate law, foreign direct investment, energy licensing and commercial litigation.',
+          knowsAbout: [
+            'Corporate Law',
+            'Foreign Direct Investment',
+            'Energy & Infrastructure',
+            'Commercial Litigation',
+          ],
+          url: `${I.url}/teams`,
+          sameAs: [`${I.url}/teams`],
+        },
+        {
+          '@type': 'ContactPage',
+          name: 'Contact Pluto Associates',
+          url: `${I.url}/contact`,
+          inLanguage: 'en',
+          telephone: I.telephone,
+          email: I.email,
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: I.address.streetAddress,
+            addressLocality: I.address.addressLocality,
+            addressCountry: I.address.addressCountry,
+          },
+        },
       ],
     };
   }
@@ -504,6 +581,10 @@ export function buildJsonLd(path) {
           jobTitle: p.jobTitle,
           worksFor: { '@type': 'LegalService', name: I.legalName, url: I.url },
           ...(p.email ? { email: `mailto:${p.email}` } : {}),
+          ...(p.description ? { description: p.description } : {}),
+          ...(p.knowsAbout ? { knowsAbout: p.knowsAbout } : {}),
+          url: `${I.url}/teams`,
+          sameAs: [`${I.url}/teams`],
         })),
       ],
     };
@@ -514,6 +595,10 @@ export function buildJsonLd(path) {
     return {
       '@context': 'https://schema.org',
       '@graph': [
+        breadcrumbLd([
+          { name: 'Home', path: '/' },
+          { name: 'FAQ', path: '/faq' },
+        ]),
         webPageLd('FAQs', '/faq', ROUTES['/faq'].description),
         {
           '@type': 'FAQPage',

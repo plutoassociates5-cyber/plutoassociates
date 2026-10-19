@@ -4,20 +4,10 @@ import PublicNavbar from '../components/PublicNavbar';
 import PublicFooter from '../components/PublicFooter';
 import { WhatsAppPopup } from '../components/PublicUtils';
 import hero1 from '../assets/hero-1.jpeg';
-import { getSettings } from '../utils/contentStore';
 import {
-  getPublishedFaqs, searchFaqs, relatedFaqs, groupByCategory, faqSchema,
+  getPublishedFaqs, searchFaqs, relatedFaqs, groupByCategory,
 } from '../knowledge/faqEngine';
 import { getAllFaqCategories, getFaqCategory } from '../knowledge/faqCategories';
-
-function FaqSchema({ list }) {
-  const site = getSettings();
-  const webUrl = typeof window !== 'undefined' ? window.location.origin : '';
-  const schema = JSON.stringify(faqSchema(list, site, webUrl));
-  return (
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schema }} />
-  );
-}
 
 export default function FaqPage() {
   const [query, setQuery] = useState('');
@@ -108,7 +98,6 @@ export default function FaqPage() {
   return (
     <div>
       <PublicNavbar />
-      <FaqSchema list={all} />
 
       <section className="relative flex items-center justify-center text-center bg-cover bg-center py-24 min-h-[340px]" style={{ backgroundImage: `url(${hero1})` }}>
         <div className="absolute inset-0 bg-gradient-to-br from-navy/88 to-navy/65" />
