@@ -118,8 +118,8 @@ function toTeamCard(t) {
 
 function cleanDashes(v) {
   return String(v || '')
-    .replace(/\s+–\s+/g, ' to ')
-    .replace(/\s+—\s+/g, ', ');
+    .replace(/\s+, \s+/g, ' to ')
+    .replace(/\s+, \s+/g, ', ');
 }
 
 function teamAnswer(q, team) {
@@ -165,8 +165,8 @@ function aboutAnswer(s, homepage) {
 /**
  * Answer a user question from the site knowledge base.
  * @param {string} question
- * @param {object} kb — { faqs, services, areas, articles } (raw, non-normalized)
- * @param {string} baseUrl — absolute or relative site root for FAQ deep links
+ * @param {object} kb ,  { faqs, services, areas, articles } (raw, non-normalized)
+ * @param {string} baseUrl ,  absolute or relative site root for FAQ deep links
  * @returns {{ answer, recommended, relatedKeywords, links, matched? }}
  */
 export function answerFromKnowledgeBase(question, kb = {}, baseUrl = '') {

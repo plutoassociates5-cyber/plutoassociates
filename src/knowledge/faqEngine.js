@@ -69,7 +69,7 @@ function makeDescription(q, a, ra) {
   const lead = stripHtml(q).trim();
   const body = stripHtml(a).trim();
   const head = body.length > 140 ? `${body.slice(0, 140).trim()}…` : body;
-  const prefix = lead ? `${lead} ${ra.name ? `(${ra.name})` : ''} — ` : '';
+  const prefix = lead ? `${lead} ${ra.name ? `(${ra.name})` : ''} ,  ` : '';
   return (prefix + head).slice(0, 160);
 }
 

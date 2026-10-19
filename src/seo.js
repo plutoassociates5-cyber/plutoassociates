@@ -159,7 +159,7 @@ export const ROUTES = {
     robots: 'index, follow',
   },
   '/404': {
-    title: 'Page Not Found — Pluto Associates',
+    title: 'Page Not Found ,  Pluto Associates',
     description: 'The page you are looking for could not be found. Explore Pluto Associates legal services in Nepal.',
     keywords: '',
     canonical: null,
@@ -169,7 +169,7 @@ export const ROUTES = {
 };
 
 const ADMIN_ROUTE = {
-  title: 'Admin — Pluto Associates',
+  title: 'Admin ,  Pluto Associates',
   description: '',
   keywords: '',
   canonical: null,
@@ -459,7 +459,7 @@ function practiceAreasLd() {
 
 /**
  * Build the JSON-LD @graph for a given route path.
- * @param {string} path — route pathname
+ * @param {string} path ,  route pathname
  * @returns {Object} schema.org @graph
  */
 export function buildJsonLd(path) {
@@ -672,7 +672,7 @@ export function buildJsonLd(path) {
         hasOfferCatalog: service.pricing
           ? {
               '@type': 'OfferCatalog',
-              name: `${service.name} — Engagement`,
+              name: `${service.name} ,  Engagement`,
               itemListElement: [{ '@type': 'Offer', itemOffered: { '@type': 'Service', name: service.name }, description: service.pricing }],
             }
           : undefined,
@@ -778,7 +778,7 @@ function applyRoute(route) {
 }
 
 /**
- * <RouteSEO /> — apply per-route metadata + JSON-LD whenever the URL changes.
+ * <RouteSEO /> ,  apply per-route metadata + JSON-LD whenever the URL changes.
  */
 export default function RouteSEO() {
   const { pathname } = useLocation();
