@@ -19,7 +19,10 @@ function getCategoryLabel(cat) {
 }
 
 export default function PublicationsPage() {
-  const [articles, setArticles] = useState([]);
+  // Initialize synchronously so the prerendered static HTML includes the
+  // article list (useEffect never runs during react-dom/server rendering,
+  // which left crawlers with the empty "No Publications Yet" state).
+  const [articles, setArticles] = useState(() => getPublishedArticles());
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
