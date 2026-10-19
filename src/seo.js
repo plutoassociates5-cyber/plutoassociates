@@ -18,7 +18,7 @@ export const SITE = {
   legalName: 'Pluto Associates',
   url: 'https://plutoassociates.com',
   description:
-    'Pluto Associates — Advocates and Legal Consultants. Expert legal solutions in Corporate Law, FDI, Litigation, IP, and more across Nepal.',
+    'Pluto Associates | Advocates and Legal Consultants. Expert legal solutions in Corporate Law, FDI, Litigation, IP, and more across Nepal.',
   ogImage: 'https://plutoassociates.com/og-image.png',
   logo: 'https://plutoassociates.com/apple-touch-icon.png',
   telephone: '+977-9802356987',
@@ -81,7 +81,7 @@ const DEFAULT_DESC = identity().description;
 
 export const ROUTES = {
   '/': {
-    title: 'Pluto Associates — Advocates and Legal Consultants | Nepal',
+    title: 'Pluto Associates | Advocates and Legal Consultants | Nepal',
     description: DEFAULT_DESC,
     keywords: 'law firm Nepal, advocates Nepal, legal consultants Kathmandu, corporate lawyer Nepal, FDI Nepal legal, litigation lawyer Nepal, intellectual property Nepal',
     canonical: '/',

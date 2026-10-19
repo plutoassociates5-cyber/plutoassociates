@@ -74,7 +74,7 @@ export default function PublicNavbar() {
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-[var(--brand-sticky-h,66px)] lg:h-[var(--brand-sticky-h,72px)]' : 'h-[var(--brand-mobile-h,78px)] lg:h-[var(--brand-header-h,96px)]'}`}>
             <Link to="/" className={`pluto-brand flex items-center no-underline gap-3 sm:gap-4 transition-all duration-300 ${scrolled ? 'is-scrolled' : ''}`}>
-              <SmartLogo size="var(--logo-size)" alt="Pluto Associates — Advocates and Legal Consultants" eager />
+              <SmartLogo size="var(--logo-size)" alt="Pluto Associates | Advocates and Legal Consultants" eager />
               <span className="flex flex-col justify-center leading-tight min-w-0">
                 <span className={`font-serif text-white font-bold truncate transition-all duration-300 ${scrolled ? 'text-lg' : 'text-xl lg:text-2xl'}`}>{site.name}</span>
                 <span className="hidden sm:block text-[0.62rem] lg:text-[0.68rem] text-white/55 font-medium tracking-[0.14em] uppercase mt-0.5">{site.tagline}</span>
