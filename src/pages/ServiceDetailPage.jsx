@@ -8,13 +8,6 @@ import { getServiceBySlug, getPublishedServices, getServiceGroups } from '../ser
 import { getPublishedArticles } from '../seo';
 import { getGroupById } from '../services/taxonomy';
 
-const GROUP_LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-
-function groupLetter(id) {
-  const idx = getServiceGroups().findIndex((g) => g.id === id);
-  return idx >= 0 ? GROUP_LABELS[idx] : '';
-}
-
 export default function ServiceDetailPage() {
   const { slug } = useParams();
   const service = getServiceBySlug(slug);
@@ -73,9 +66,6 @@ export default function ServiceDetailPage() {
           <div className="flex items-center gap-3 mb-4">
             <span className="inline-flex items-center gap-2 text-[0.7rem] font-semibold tracking-[2px] uppercase text-gold px-3 py-1 border border-gold/30 rounded-full bg-gold/5">
               {group?.icon} {group?.name}
-            </span>
-            <span className="inline-flex items-center text-[0.7rem] font-semibold tracking-[2px] uppercase text-white/50 px-3 py-1 border border-white/15 rounded-full bg-white/5">
-              Group {groupLetter(service.group)}
             </span>
           </div>
           <h1 className="font-serif text-[clamp(2rem,4.5vw,3.2rem)] text-white font-bold mb-3">{service.name}</h1>

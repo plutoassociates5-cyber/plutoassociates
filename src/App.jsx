@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import RouteSEO from './seo';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
@@ -15,17 +15,10 @@ import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ScrollToTop from './components/PublicHooks';
 import SiteFavicon from './components/SiteFavicon';
-import ChatAssistant from './components/ChatAssistant';
 import { ToastProvider } from './context/ToastContext';
 import { BrandProvider } from './context/BrandContext';
 
 const AdminApp = lazy(() => import('./AdminApp'));
-
-function PublicWidgets() {
-  const { pathname } = useLocation();
-  if (pathname.startsWith('/admin')) return null;
-  return <ChatAssistant />;
-}
 
 export default function App() {
   return (
@@ -58,7 +51,6 @@ export default function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
-        <PublicWidgets />
       </BrandProvider>
     </ToastProvider>
   );
