@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getSettings } from '../utils/contentStore';
 import SmartLogo from './SmartLogo';
-import SearchOverlay from './SearchOverlay';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Home' },
@@ -16,7 +15,6 @@ const NAV_ITEMS = [
 export default function PublicNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
   const site = getSettings();
 
@@ -37,21 +35,6 @@ export default function PublicNavbar() {
       document.documentElement.style.setProperty('--logo-size-sticky', sticky + 'px');
     }
   }, [site.brand, site.logoConfig]);
-
-  useEffect(() => {
-    const onKey = (e) => {
-      const target = e.target;
-      const typing = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
-      if (e.key === '/' && !typing) {
-        e.preventDefault();
-        setSearchOpen(true);
-      } else if (e.key === 'Escape') {
-        setSearchOpen(false);
-      }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -85,14 +68,6 @@ export default function PublicNavbar() {
             </ul>
 
             <div className="hidden lg:flex items-center gap-3">
-              <button
-                onClick={() => setSearchOpen(true)}
-                aria-label="Search site"
-                title="Search ( / )"
-                className="flex items-center justify-center w-10 h-10 bg-white/10 ring-1 ring-white/15 rounded-full text-white cursor-pointer border-none hover:bg-gold hover:text-navy transition-colors duration-300"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              </button>
               <Link
                 to="/contact"
                 className="inline-flex items-center px-5 py-2.5 bg-gold text-navy text-sm font-semibold no-underline transition-all duration-300 hover:bg-navy hover:text-gold border-2 border-gold"
@@ -130,16 +105,6 @@ export default function PublicNavbar() {
           </span>
         </div>
         <ul className="flex flex-col list-none m-0 p-4 pt-8 overflow-y-auto">
-          <li className="px-4 pb-2">
-            <button
-              onClick={() => { setMobileOpen(false); setSearchOpen(true); }}
-              className="w-full flex items-center gap-3 py-2.5 px-4 text-sm no-underline bg-white/5 ring-1 ring-white/10 rounded-lg text-text-light cursor-pointer hover:text-gold transition-colors border-none"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <span>Search the site…</span>
-              <span className="ml-auto text-[0.6rem] text-text-light bg-white/10 px-1.5 py-0.5 rounded">/</span>
-            </button>
-          </li>
           {NAV_ITEMS.map((item) => (
             <li key={item.to}>
               <Link
@@ -166,8 +131,6 @@ export default function PublicNavbar() {
           <a href="mailto:info@plutoassociates.com" className="text-text-light text-sm no-underline hover:text-gold transition-colors">✉️ info@plutoassociates.com</a>
         </div>
       </div>
-
-      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }
