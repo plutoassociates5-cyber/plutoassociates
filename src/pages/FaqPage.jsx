@@ -115,7 +115,7 @@ export default function FaqPage() {
         <div className="relative z-10 pt-[60px] px-4 max-w-3xl">
           <span className="inline-flex items-center gap-2 text-[0.72rem] font-semibold tracking-[3px] uppercase text-gold mb-4 px-4 py-1.5 border border-gold/30 rounded-full bg-gold/5">Legal Knowledge Centre</span>
           <h1 className="font-serif text-[clamp(2.2rem,5vw,3.5rem)] text-white font-bold mb-4">Answers on Nepali law, plain and simple</h1>
-          <p className="text-white/75 max-w-2xl mx-auto mb-7">Search hundreds of answers drafted for real questions — from company registration to property and disputes.</p>
+          <p className="text-white/75 max-w-2xl mx-auto mb-7">Search hundreds of answers drafted for real questions: from company registration to property and disputes.</p>
           <div className="relative max-w-xl mx-auto">
             <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search e.g. register a company, trademark, terminate employee…"
               aria-label="Search FAQs"
