@@ -27,11 +27,11 @@ export default function PublicFooter() {
           <div>
             <h4 className="font-serif text-white text-lg mb-6 font-semibold">Practice Areas</h4>
             <ul className="list-none p-0 m-0 flex flex-col gap-3">
-              <li><Link to="/practice-areas#fdi" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">FDI & Investment</Link></li>
-              <li><Link to="/practice-areas#corporate" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Corporate Law</Link></li>
-              <li><Link to="/practice-areas#energy" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Energy Law</Link></li>
-              <li><Link to="/practice-areas#litigation" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Litigation</Link></li>
-              <li><Link to="/practice-areas#ip" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Intellectual Property</Link></li>
+              <li><Link to="/practice-areas/fdi" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">FDI & Investment</Link></li>
+              <li><Link to="/practice-areas/corporate" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Corporate Law</Link></li>
+              <li><Link to="/practice-areas/energy" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Energy Law</Link></li>
+              <li><Link to="/practice-areas/litigation" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Litigation</Link></li>
+              <li><Link to="/practice-areas/ip" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Intellectual Property</Link></li>
             </ul>
           </div>
 

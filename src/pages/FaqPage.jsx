@@ -118,6 +118,7 @@ export default function FaqPage() {
           <p className="text-white/75 max-w-2xl mx-auto mb-7">Search hundreds of answers drafted for real questions — from company registration to property and disputes.</p>
           <div className="relative max-w-xl mx-auto">
             <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search e.g. register a company, trademark, terminate employee…"
+              aria-label="Search FAQs"
               className="w-full rounded-full border border-white/20 bg-white/10 backdrop-blur px-5 py-3.5 pr-28 text-white placeholder:text-white/60 outline-none focus:border-gold text-sm" />
           </div>
         </div>
@@ -137,10 +138,10 @@ export default function FaqPage() {
 
           {grouped.map(({ category, items }) => (
             <div key={category.id} className="mb-10">
-              <h3 className="font-serif text-xl text-navy mb-5 flex items-center gap-2.5">
+              <h2 className="font-serif text-xl text-navy mb-5 flex items-center gap-2.5">
                 <span className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-lg shrink-0">{category.icon}</span>
                 <span>{category.name}</span>
-              </h3>
+              </h2>
               <Accordion list={items} />
             </div>
           ))}

@@ -89,63 +89,70 @@ export const ROUTES = {
     robots: 'index, follow',
   },
   '/about': {
-    title: 'About Us — Pluto Associates | Advocates & Legal Consultants Nepal',
-    description:
-      'Learn about Pluto Associates, a trusted Kathmandu law firm founded in 2019 by Adv. Sudeep Nepal, delivering corporate, FDI, litigation and IP legal services across Nepal.',
+    title: 'About Us | Pluto Associates Nepal',
+    description: clipDesc(
+      'Learn about Pluto Associates, a Kathmandu law firm founded in 2019 by Adv. Sudeep Nepal, delivering corporate, FDI, litigation and IP legal services across Nepal.'
+    ),
     keywords: 'about Pluto Associates, law firm Kathmandu, legal consultants Nepal, Adv. Sudeep Nepal, law firm history Nepal',
     canonical: '/about',
     ogType: 'website',
     robots: 'index, follow',
   },
   '/practice-areas': {
-    title: 'Practice Areas — Pluto Associates | Corporate, FDI, Energy, Litigation & IP',
-    description:
-      'Explore Pluto Associates\' practice areas: FDI & investment, corporate & commercial law, energy & project finance, banking, litigation, intellectual property, labor, real estate and taxation in Nepal.',
+    title: 'Practice Areas | Pluto Associates Nepal',
+    description: clipDesc(
+      "Explore Pluto Associates' practice areas: FDI and investment, corporate and commercial law, energy and project finance, banking, litigation, intellectual property, labor, real estate and taxation in Nepal."
+    ),
     keywords: 'practice areas law firm Nepal, FDI Nepal, corporate law Nepal, energy law Nepal, banking law Nepal, litigation Nepal, intellectual property Nepal, tax law Nepal',
     canonical: '/practice-areas',
     ogType: 'website',
     robots: 'index, follow',
   },
   '/teams': {
-    title: 'Our Team — Pluto Associates | Advocates & Legal Consultants Nepal',
-    description:
-      'Meet the legal team at Pluto Associates: Adv. Sudeep Nepal (Founder & Senior Partner) and our associates specialising in corporate law, litigation, compliance and more.',
+    title: 'Our Team | Pluto Associates Nepal',
+    description: clipDesc(
+      'Meet the legal team at Pluto Associates: Adv. Sudeep Nepal (Founder and Senior Partner) and our associates specialising in corporate law, litigation, compliance and more.'
+    ),
     keywords: 'advocates Nepal, lawyers Kathmandu, legal team Nepal, Adv. Sudeep Nepal, law firm team',
     canonical: '/teams',
     ogType: 'website',
     robots: 'index, follow',
   },
   '/publications': {
-    title: 'Publications — Legal Insights | Pluto Associates Nepal',
-    description:
-      'Read legal updates, articles and insights from Pluto Associates on Nepal\'s evolving corporate, FDI, litigation and regulatory landscape.',
+    title: 'Publications | Legal Insights | Pluto Associates',
+    description: clipDesc(
+      "Read legal updates, articles and insights from Pluto Associates on Nepal's evolving corporate, FDI, litigation and regulatory landscape."
+    ),
     keywords: 'legal articles Nepal, law blog Nepal, corporate law insights Nepal, FDI analysis Nepal, legal updates Nepal',
     canonical: '/publications',
     ogType: 'website',
     robots: 'index, follow',
   },
   '/contact': {
-    title: 'Contact Us — Pluto Associates | Advocates & Legal Consultants Nepal',
-    description:
-      'Contact Pluto Associates in Kathmandu, Nepal. Call +977-9802356987, email info@plutoassociates.com or request a legal consultation within 24 hours.',
+    title: 'Contact Us | Pluto Associates Nepal',
+    description: clipDesc(
+      'Contact Pluto Associates in Kathmandu, Nepal. Call +977-9802356987, email info@plutoassociates.com or request a legal consultation within 24 hours.'
+    ),
     keywords: 'contact law firm Nepal, lawyer consultation Kathmandu, law firm phone Nepal, legal advice Nepal contact',
     canonical: '/contact',
     ogType: 'website',
     robots: 'index, follow',
   },
   '/faq': {
-    title: 'FAQs — Pluto Associates | Advocates & Legal Consultants Nepal',
-    description:
-      'Frequently asked questions about Pluto Associates\' services: FDI, corporate law, energy, litigation, intellectual property and legal consultations in Nepal.',
+    title: 'Frequently Asked Questions | Pluto Associates',
+    description: clipDesc(
+      "Frequently asked questions about Pluto Associates' services: FDI, corporate law, energy, litigation, intellectual property and legal consultations in Nepal."
+    ),
     keywords: 'law firm FAQ Nepal, legal questions Nepal, Pluto Associates FAQs, legal consultation questions, corporate law FAQ Nepal',
     canonical: '/faq',
     ogType: 'website',
     robots: 'index, follow',
   },
   '/services': {
-    title: 'Our Services — Pluto Associates | Corporate, Family, IP, Disputes & More',
-    description:
-      'Explore Pluto Associates\' full range of legal services across nine practice groups: corporate & business, commercial & civil, family, employment, intellectual property & technology, disputes, criminal law, NGO/INGO and international clients in Nepal.',
+    title: 'Legal Services | Pluto Associates Nepal',
+    description: clipDesc(
+      "Explore Pluto Associates' legal services across nine practice groups: corporate and business, commercial and civil, family, employment, intellectual property and technology, disputes, criminal law, NGO/INGO and international clients in Nepal."
+    ),
     keywords: 'legal services Nepal, corporate law Nepal, family law Nepal, employment law Nepal, intellectual property Nepal, dispute resolution Nepal, NGO compliance Nepal, law firm Kathmandu',
     canonical: '/services',
     ogType: 'website',
@@ -195,12 +202,22 @@ function plainText(html) {
   return String(html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+/** Cap a meta description at ~155 characters, ending on a word boundary. */
+function clipDesc(value, max = 155) {
+  const t = String(value || '').trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max);
+  const sp = cut.lastIndexOf(' ');
+  const base = sp > max * 0.6 ? cut.slice(0, sp) : cut;
+  return base.replace(/[,;:.!\-\s]+$/, '') + '...';
+}
+
 function articleMeta(article) {
   const I = identity();
   const plain = plainText(article.content);
   return {
     title: article.seoTitle || `${article.title} | Pluto Associates Nepal`,
-    description: article.seoDesc || article.excerpt || plain.substring(0, 155),
+    description: clipDesc(article.seoDesc || article.excerpt || plain.substring(0, 155)),
     keywords: article.metaKeywords || '',
     canonical: article.canonical || `/publications/${article.slug}`,
     ogType: 'article',
@@ -256,8 +273,8 @@ function decorateRoute(route) {
   } else {
     title = String(title).replace(/Pluto Associates/g, I.name);
   }
-  let description = route.description || I.description;
-  if (I.metaDescription && route === ROUTES['/']) description = I.metaDescription;
+  let description = clipDesc(route.description || I.description);
+  if (I.metaDescription && route === ROUTES['/']) description = clipDesc(I.metaDescription);
   const ogImage = route.ogImage && !route.ogImage.startsWith('http') ? `${I.url}${route.ogImage}` : route.ogImage || I.ogImage;
   return {
     ...route,
@@ -272,7 +289,7 @@ function decorateRoute(route) {
 
 function practiceAreaMeta(area) {
   const I = identity();
-  const desc = area.desc || area.heading || area.title;
+  const desc = clipDesc(area.desc || area.heading || area.title);
   return {
     title: `${area.heading || area.title} | Pluto Associates Nepal`,
     description: desc,
@@ -289,7 +306,7 @@ function serviceMeta(service) {
   const I = identity();
   return {
     title: service.seoTitle || `${service.name} | Pluto Associates Nepal`,
-    description: service.seoDescription || service.shortDescription || plainText(service.content).substring(0, 155),
+    description: clipDesc(service.seoDescription || service.shortDescription || plainText(service.content).substring(0, 155)),
     keywords: service.keywords || `${service.name}, legal services Nepal, Pluto Associates law firm Kathmandu`,
     canonical: `/services/${service.slug}`,
     ogType: 'website',
@@ -415,15 +432,15 @@ const PERSONAS = [
 ];
 
 const PRACTICE_SERVICES = [
-  { name: 'Foreign Direct Investment (FDI)', urlPath: '/practice-areas#fdi' },
-  { name: 'Corporate & Commercial Law', urlPath: '/practice-areas#corporate' },
-  { name: 'Energy, Infrastructure & Project Finance', urlPath: '/practice-areas#energy' },
-  { name: 'Banking & Finance', urlPath: '/practice-areas#banking' },
-  { name: 'Litigation & Dispute Resolution', urlPath: '/practice-areas#litigation' },
-  { name: 'Intellectual Property', urlPath: '/practice-areas#ip' },
-  { name: 'Labor & Employment Law', urlPath: '/practice-areas#labor' },
-  { name: 'Real Estate & Property', urlPath: '/practice-areas#realestate' },
-  { name: 'Taxation', urlPath: '/practice-areas#tax' },
+  { name: 'Foreign Direct Investment (FDI)', urlPath: '/practice-areas/fdi' },
+  { name: 'Corporate & Commercial Law', urlPath: '/practice-areas/corporate' },
+  { name: 'Energy, Infrastructure & Project Finance', urlPath: '/practice-areas/energy' },
+  { name: 'Banking & Finance', urlPath: '/practice-areas/banking' },
+  { name: 'Litigation & Dispute Resolution', urlPath: '/practice-areas/litigation' },
+  { name: 'Intellectual Property', urlPath: '/practice-areas/ip' },
+  { name: 'Labor & Employment Law', urlPath: '/practice-areas/labor' },
+  { name: 'Real Estate & Property', urlPath: '/practice-areas/realestate' },
+  { name: 'Taxation', urlPath: '/practice-areas/tax' },
 ];
 
 function practiceAreasLd() {
@@ -562,7 +579,7 @@ export function buildJsonLd(path) {
     const article = findArticleBySlug(decodeURIComponent(articleMatch[1]));
     if (!article) return null;
     const plain = plainText(article.content);
-    const desc = article.seoDesc || article.excerpt || plain.substring(0, 155);
+    const desc = clipDesc(article.seoDesc || article.excerpt || plain.substring(0, 155));
     const datePublished = article.date || (article.createdAt ? article.createdAt.split('T')[0] : undefined);
     const dateModified = article.modifiedAt || article.date || datePublished;
     const articleUrl = `${I.url}/publications/${article.slug}`;
@@ -624,7 +641,7 @@ export function buildJsonLd(path) {
     const service = getServiceBySlug(decodeURIComponent(serviceMatch[1]));
     if (!service) return null;
     const svcUrl = `${I.url}/services/${service.slug}`;
-    const desc = service.seoDescription || service.shortDescription || plainText(service.content).substring(0, 155);
+    const desc = clipDesc(service.seoDescription || service.shortDescription || plainText(service.content).substring(0, 155));
     const image = service.featuredImage ? `${I.url}${service.featuredImage}` : I.ogImage;
     const graph = [
       breadcrumbLd([
