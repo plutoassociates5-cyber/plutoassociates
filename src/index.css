@@ -244,3 +244,33 @@ a:hover .pluto-logo {
   font-style: italic;
   color: var(--color-navy);
 }
+.article-content h4 {
+  font-family: var(--font-serif);
+  font-size: 1.08rem;
+  color: var(--color-navy);
+  margin: 1.6rem 0 0.6rem;
+  line-height: 1.35;
+}
+.article-content hr {
+  border: 0;
+  border-top: 1px solid var(--color-light-gray);
+  margin: 2.2rem 0;
+}
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.6rem 0;
+  font-size: 0.95rem;
+}
+.article-content th,
+.article-content td {
+  border: 1px solid var(--color-light-gray);
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+.article-content thead th {
+  background: var(--color-off-white);
+  color: var(--color-navy);
+  font-weight: 600;
+}
