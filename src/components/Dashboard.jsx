@@ -1,15 +1,11 @@
 import { useState, useMemo } from 'react';
-import { getArticles, saveArticles, deleteArticle } from '../utils/storage';
+import { getArticles } from '../utils/storage';
 import { getLawyers, getPracticeAreas, getCategories, getTags, getFaqs, getMessages, getMedia } from '../utils/contentStore';
-import { useToast } from '../context/ToastContext';
-import Modal from './Modal';
 
-export default function Dashboard({ onEdit, onNavigate }) {
-  const { toast } = useToast();
-  const [articles, setArticles] = useState(getArticles);
+export default function Dashboard({ onNavigate }) {
+  const [articles] = useState(getArticles);
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
-  const [delTarget, setDelTarget] = useState(null);
 
   const filtered = useMemo(() => {
     let list = filter === 'all' ? articles : articles.filter((a) => a.status === filter);
@@ -47,32 +43,10 @@ export default function Dashboard({ onEdit, onNavigate }) {
     };
   }, [articles]);
 
-  const handleDelete = () => {
-    if (!delTarget) return;
-    deleteArticle(delTarget);
-    setArticles(getArticles());
-    toast('Article moved to trash.');
-    setDelTarget(null);
-  };
-
-  const handleQuickPublish = (id) => {
-    const updated = articles.map((a) => (a.id === id ? { ...a, status: 'published', modifiedAt: new Date().toISOString() } : a));
-    saveArticles(updated);
-    setArticles(getArticles());
-    toast('Article published!');
-  };
-
-  const handleQuickDraft = (id) => {
-    const updated = articles.map((a) => (a.id === id ? { ...a, status: 'draft', modifiedAt: new Date().toISOString() } : a));
-    saveArticles(updated);
-    setArticles(getArticles());
-    toast('Saved as draft.', 'info');
-  };
-
   const formatDate = (d) => (d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '—');
 
   const quickActions = [
-    { label: 'Write Article', pg: 'new', icon: '✍️' },
+    { label: 'Blog (WordPress)', pg: 'blog', icon: '✍️' },
     { label: 'Add Lawyer', pg: 'lawyers', icon: '👤' },
     { label: 'Add Practice Area', pg: 'practice-areas', icon: '🌍' },
     { label: 'Upload Image', pg: 'media', icon: '🖼️' },
@@ -81,33 +55,38 @@ export default function Dashboard({ onEdit, onNavigate }) {
   ];
 
   const cards = [
-    { label: 'Total Publications', value: stats.total, icon: '📄' },
-    { label: 'Published', value: stats.published, icon: '✅' },
-    { label: 'Drafts', value: stats.drafts, icon: '📝' },
-    { label: 'Contact Inbox', value: stats.messages, icon: '📥' },
-    { label: 'Unread', value: stats.unread, icon: '🔔' },
-    { label: 'Practice Areas', value: stats.practiceAreas, icon: '🌍' },
-    { label: 'Lawyers', value: stats.lawyers, icon: '👥' },
-    { label: 'Categories', value: stats.categories, icon: '📁' },
-    { label: 'Tags', value: stats.tags, icon: '🏷️' },
-    { label: 'FAQs', value: stats.faqs, icon: '❓' },
-    { label: 'Media Assets', value: stats.media, icon: '🖼️' },
+    { label: 'Total Publications', value: stats.total, icon: '📄', pg: 'blog' },
+    { label: 'Published', value: stats.published, icon: '✅', pg: 'blog' },
+    { label: 'Drafts', value: stats.drafts, icon: '📝', pg: 'blog' },
+    { label: 'Contact Inbox', value: stats.messages, icon: '📥', pg: 'messages' },
+    { label: 'Unread', value: stats.unread, icon: '🔔', pg: 'messages' },
+    { label: 'Practice Areas', value: stats.practiceAreas, icon: '🌍', pg: 'practice-areas' },
+    { label: 'Lawyers', value: stats.lawyers, icon: '👥', pg: 'lawyers' },
+    { label: 'Categories', value: stats.categories, icon: '📁', pg: 'categories' },
+    { label: 'Tags', value: stats.tags, icon: '🏷️', pg: 'tags' },
+    { label: 'FAQs', value: stats.faqs, icon: '❓', pg: 'faqs' },
+    { label: 'Media Assets', value: stats.media, icon: '🖼️', pg: 'media' },
   ];
 
   return (
     <>
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
         <h1 className="text-xl lg:text-2xl text-[#1d2327] font-normal font-sans">Dashboard</h1>
-        <button className="bg-wp-blue text-white border-none px-3.5 py-1.5 text-xs font-semibold cursor-pointer font-sans hover:bg-[#005a87]" onClick={() => onNavigate('new')}>+ Add New Article</button>
+        <button className="bg-wp-blue text-white border-none px-3.5 py-1.5 text-xs font-semibold cursor-pointer font-sans hover:bg-[#005a87]" onClick={() => onNavigate('blog')}>Write in WordPress →</button>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mb-6">
         {cards.map((c) => (
-          <div key={c.label} className="bg-white p-4 pl-5 border-l-4 border-l-wp-blue shadow-[0_1px_3px_rgba(0,0,0,0.08)] cursor-pointer hover:shadow-md transition-shadow" onClick={() => onNavigate(c.label === 'Practice Areas' ? 'practice-areas' : c.label === 'Lawyers' ? 'lawyers' : c.label === 'Categories' ? 'categories' : c.label === 'Tags' ? 'tags' : c.label === 'FAQs' ? 'faqs' : c.label === 'Media Assets' ? 'media' : c.label === 'Contact Inbox' ? 'messages' : 'all')}>
+          <div key={c.label} className="bg-white p-4 pl-5 border-l-4 border-l-wp-blue shadow-[0_1px_3px_rgba(0,0,0,0.08)] cursor-pointer hover:shadow-md transition-shadow" onClick={() => onNavigate(c.pg)}>
             <div className="text-[0.62rem] text-text-light uppercase tracking-[1px] font-semibold block mb-1">{c.label}</div>
             <div className="text-2xl lg:text-3xl font-bold text-[#1d2327] leading-none">{c.value}</div>
           </div>
         ))}
+      </div>
+
+      <div className="bg-white border-l-4 border-l-wp-blue shadow-[0_1px_3px_rgba(0,0,0,0.08)] px-4 py-3 mb-6 text-xs text-text-body">
+        Blog posts are written in <strong>WordPress</strong> and sync to the website automatically.{' '}
+        <a className="text-wp-blue cursor-pointer font-semibold" onClick={() => onNavigate('blog')}>How it works →</a>
       </div>
 
       <h2 className="text-sm font-semibold text-[#1d2327] mb-3 mt-2">⚡ Quick Actions</h2>
@@ -140,15 +119,9 @@ export default function Dashboard({ onEdit, onNavigate }) {
             </thead>
             <tbody>
               {recent.map((a) => (
-                <tr key={a.id} className="group border-b border-light-gray">
+                <tr key={a.id} className="border-b border-light-gray">
                   <td className="px-4 py-3">
-                    <span className="font-semibold text-[#1d2327] cursor-pointer text-sm hover:text-wp-blue" onClick={() => onEdit(a.id)}>{a.title || '(no title)'}</span>
-                    <div className="hidden text-[0.72rem] mt-1 group-hover:block">
-                      <a onClick={() => onEdit(a.id)} className="cursor-pointer">Edit</a> |{' '}
-                      <a onClick={() => handleQuickDraft(a.id)} className="cursor-pointer">Draft</a> |{' '}
-                      <a onClick={() => handleQuickPublish(a.id)} className="cursor-pointer">Publish</a> |{' '}
-                      <a className="text-accent-red cursor-pointer" onClick={() => setDelTarget(a.id)}>Trash</a>
-                    </div>
+                    <span className="font-semibold text-[#1d2327] text-sm">{a.title || '(no title)'}</span>
                   </td>
                   <td className="px-4 py-3">
                     <span className={`inline-block px-2 py-0.5 text-[0.65rem] font-bold rounded ${a.status === 'published' ? 'bg-green-50 text-accent-green' : 'bg-blue-50 text-blue-600'}`}>{a.status || 'draft'}</span>
@@ -176,14 +149,6 @@ export default function Dashboard({ onEdit, onNavigate }) {
           {contacts.length === 0 && <div className="px-4 py-10 text-center text-text-light text-xs">No contact requests yet.</div>}
         </div>
       </div>
-
-      <Modal
-        show={!!delTarget}
-        title="Move to Trash?"
-        message="This article will be permanently deleted and cannot be recovered."
-        onConfirm={handleDelete}
-        onCancel={() => setDelTarget(null)}
-      />
     </>
   );
 }

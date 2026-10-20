@@ -9,8 +9,7 @@ export default function Sidebar({ page, onNavigate, user, onLogout }) {
     {
       label: 'Content',
       items: [
-        { pg: 'all', icon: '\uD83D\uDCC4', text: 'Articles' },
-        { pg: 'new', icon: '\u270F\uFE0F', text: 'New Article' },
+        { pg: 'blog', icon: '\uD83D\uDCD6', text: 'Blog (WordPress)' },
         { pg: 'practice-areas', icon: '\uD83C\uDF0D', text: 'Practice Areas' },
         { pg: 'services', icon: '\uD83D\uDCDB', text: 'Services' },
         { pg: 'lawyers', icon: '\uD83D\uDC64', text: 'Lawyers' },

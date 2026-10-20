@@ -5,8 +5,7 @@ import LoginScreen from './components/LoginScreen';
 import Sidebar from './components/Sidebar';
 import AdminBar from './components/AdminBar';
 import Dashboard from './components/Dashboard';
-import ArticlesList from './components/ArticlesList';
-import ArticleEditor from './components/ArticleEditor';
+import BlogNotice from './components/BlogNotice';
 import Settings from './components/Settings';
 import PracticeAreasManager from './components/admin/PracticeAreasManager';
 import LawyersManager from './components/admin/LawyersManager';
@@ -36,13 +35,12 @@ function AdminLayout() {
   const renderPage = () => {
     switch (page) {
       case 'dash':
-        return <Dashboard onEdit={(id) => openPage('edit', id)} onNavigate={openPage} />;
+        return <Dashboard onNavigate={openPage} />;
+      case 'blog':
       case 'all':
-        return <ArticlesList onEdit={(id) => openPage('edit', id)} onNavigate={openPage} />;
       case 'new':
-        return <ArticleEditor editId={null} onNavigate={openPage} />;
       case 'edit':
-        return <ArticleEditor editId={editId} onNavigate={openPage} />;
+        return <BlogNotice />;
       case 'practice-areas':
         return <PracticeAreasManager />;
       case 'lawyers':
@@ -74,7 +72,7 @@ function AdminLayout() {
       case 'settings':
         return <Settings onNavigate={openPage} />;
       default:
-        return <Dashboard onEdit={(id) => openPage('edit', id)} onNavigate={openPage} />;
+        return <Dashboard onNavigate={openPage} />;
     }
   };
 

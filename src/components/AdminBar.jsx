@@ -4,7 +4,7 @@ export default function AdminBar({ onNavigate }) {
       <span className="text-[0.72rem] text-gold font-semibold cursor-pointer transition-colors duration-150 hover:text-white" onClick={() => window.open('/')}>
         🏛 Pluto Associates
       </span>
-      <span className="text-[0.72rem] text-white/60 cursor-pointer transition-colors duration-150 hover:text-white" onClick={() => onNavigate('new')}>+ New Article</span>
+      <span className="text-[0.72rem] text-white/60 cursor-pointer transition-colors duration-150 hover:text-white" onClick={() => window.open('/publications', '_blank')}>View Publications</span>
     </div>
   );
 }
