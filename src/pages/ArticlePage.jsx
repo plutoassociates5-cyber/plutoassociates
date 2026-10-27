@@ -92,7 +92,11 @@ export default function ArticlePage() {
             <div className="text-sm">
               <div className="text-white/90 font-medium">{article.authorName}</div>
               <div className="text-white/50 text-xs">
-                {formatDate(article.date)} · {readingTime(article.content)} min read
+                {formatDate(article.date)}
+                {article.modifiedAt && formatDate(article.modifiedAt) !== formatDate(article.date)
+                  ? ` · Updated ${formatDate(article.modifiedAt)}`
+                  : ''}
+                {' · '}{readingTime(article.content)} min read
               </div>
             </div>
           </div>
@@ -106,7 +110,11 @@ export default function ArticlePage() {
               src={article.featuredImage}
               alt={article.featuredImageAlt || article.title}
               className="w-full h-[260px] lg:h-[420px] object-cover mb-10"
-              loading="lazy"
+              width="1200"
+              height="630"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
             />
           )}
 

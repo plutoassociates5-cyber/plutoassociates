@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/sync-wp.cjs && vite build && node scripts/prerender.cjs",
+    "build": "vite build && node scripts/prerender.cjs",
+    "build:wp": "node scripts/sync-wp.cjs --write && vite build && node scripts/prerender.cjs",
     "preview": "vite preview",
     "deploy": "npm run build",
     "wp:import": "node scripts/wp-import.cjs",
     "wp:sync": "node scripts/sync-wp.cjs",
+    "wp:sync:write": "node scripts/sync-wp.cjs --write",
     "wp:selftest": "node scripts/wp-selftest.cjs"
   },
   "dependencies": {

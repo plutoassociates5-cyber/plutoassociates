@@ -212,17 +212,50 @@ function clipDesc(value, max = 155) {
   return base.replace(/[,;:.!\-\s]+$/, '') + '...';
 }
 
+const CATEGORY_LABELS = {
+  fdi: 'Foreign Investment',
+  corporate: 'Corporate Law',
+  licensing: 'Licensing & Approvals',
+  energy: 'Energy & Infrastructure',
+  ip: 'Intellectual Property',
+  labor: 'Employment Law',
+  family: 'Family Law',
+  ngo: 'NGO & Non-Profit',
+  nrn: 'NRN Investment',
+  property: 'Property Law',
+  realestate: 'Real Estate',
+  tax: 'Taxation',
+  criminal: 'Criminal Law',
+};
+
+function articleSection(article) {
+  return CATEGORY_LABELS[article.category] || 'Legal Insights';
+}
+
+function isoDate(value, fallback) {
+  if (!value) return fallback;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? fallback : date.toISOString();
+}
+
 function articleMeta(article) {
   const I = identity();
   const plain = plainText(article.content);
+  const publishedTime = isoDate(article.createdAt || article.date);
+  const modifiedTime = isoDate(article.modifiedAt, publishedTime);
   return {
     title: article.seoTitle || `${article.title} | Pluto Associates Nepal`,
     description: clipDesc(article.seoDesc || article.excerpt || plain.substring(0, 155)),
     keywords: article.metaKeywords || '',
     canonical: article.canonical || `/publications/${article.slug}`,
     ogType: 'article',
-    robots: 'index, follow',
+    robots: 'index, follow, max-image-preview:large',
     ogImage: article.featuredImage ? `${I.url}${article.featuredImage}` : I.ogImage,
+    ogImageAlt: article.featuredImageAlt || article.title,
+    articleSection: articleSection(article),
+    articleTags: Array.isArray(article.tags) ? article.tags : [],
+    publishedTime,
+    modifiedTime,
     article,
   };
 }
@@ -281,7 +314,7 @@ function decorateRoute(route) {
     title,
     description,
     ogImage,
-    robots: I.robots || route.robots,
+    robots: route.robots || I.robots,
     twitterCard: I.twitterCard,
     baseUrl: I.url,
   };
@@ -665,38 +698,63 @@ export function buildJsonLd(path) {
     if (!article) return null;
     const plain = plainText(article.content);
     const desc = clipDesc(article.seoDesc || article.excerpt || plain.substring(0, 155));
-    const datePublished = article.date || (article.createdAt ? article.createdAt.split('T')[0] : undefined);
-    const dateModified = article.modifiedAt || article.date || datePublished;
+    const datePublished = isoDate(article.createdAt || article.date);
+    const dateModified = isoDate(article.modifiedAt, datePublished);
     const articleUrl = `${I.url}/publications/${article.slug}`;
+    const imageAlt = article.featuredImageAlt || article.title;
     const image = article.featuredImage ? `${I.url}${article.featuredImage}` : I.ogImage;
-    return {
-      '@context': 'https://schema.org',
-      '@graph': [
-        breadcrumbLd([
-          { name: 'Home', path: '/' },
-          { name: 'Publications', path: '/publications' },
-          { name: article.title, path: `/publications/${article.slug}` },
-        ]),
-        {
-          '@type': 'Article',
-          headline: article.title,
-          description: desc,
-          image,
-          author: { '@type': 'Person', name: article.authorName || I.legalName },
-          publisher: {
-            '@type': 'Organization',
-            name: I.legalName,
-            url: I.url,
-            logo: { '@type': 'ImageObject', url: I.logo },
-          },
-          mainEntityOfPage: articleUrl,
-          datePublished,
-          dateModified,
-          inLanguage: 'en',
-          isPartOf: { '@type': 'WebPage', name: 'Publications', url: `${I.url}/publications` },
+    const wordCount = plain ? plain.split(/\s+/).filter(Boolean).length : 0;
+    const tags = Array.isArray(article.tags) ? article.tags : [];
+    const graph = [
+      breadcrumbLd([
+        { name: 'Home', path: '/' },
+        { name: 'Publications', path: '/publications' },
+        { name: article.title, path: `/publications/${article.slug}` },
+      ]),
+      {
+        '@type': 'Article',
+        headline: article.title,
+        description: desc,
+        image: {
+          '@type': 'ImageObject',
+          url: image,
+          caption: imageAlt,
         },
-      ],
-    };
+        author: {
+          '@type': 'Person',
+          name: article.authorName || I.legalName,
+          url: `${I.url}/teams`,
+          worksFor: { '@type': 'Organization', name: I.legalName, url: I.url },
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: I.legalName,
+          url: I.url,
+          logo: { '@type': 'ImageObject', url: I.logo },
+        },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+        datePublished,
+        dateModified,
+        inLanguage: 'en',
+        articleSection: articleSection(article),
+        keywords: tags.join(', '),
+        wordCount,
+        about: tags.map((tag) => ({ '@type': 'Thing', name: tag })),
+        isPartOf: { '@type': 'WebPage', name: 'Publications', url: `${I.url}/publications` },
+      },
+    ];
+    const faqs = (article.faqs || []).filter((f) => f && f.q && f.a);
+    if (faqs.length) {
+      graph.push({
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
+      });
+    }
+    return { '@context': 'https://schema.org', '@graph': graph };
   }
 
   if (path === '/services') {
@@ -825,6 +883,17 @@ function upsertLink(rel, href) {
   el.setAttribute('href', href);
 }
 
+function upsertMetaList(attr, key, values) {
+  document.head.querySelectorAll(`meta[${attr}="${key}"]`).forEach((el) => el.remove());
+  for (const value of values || []) {
+    if (!value) continue;
+    const el = document.createElement('meta');
+    el.setAttribute(attr, key);
+    el.setAttribute('content', value);
+    document.head.appendChild(el);
+  }
+}
+
 function upsertJsonLd(jsonLd) {
   document.head.querySelectorAll('script[data-seo-jsonld]').forEach((s) => s.remove());
   if (!jsonLd) return;
@@ -855,10 +924,18 @@ function applyRoute(route) {
   upsertMeta('property', 'og:url', canonical || I.url);
   upsertMeta('property', 'og:type', route.ogType || 'website');
   upsertMeta('property', 'og:image', ogImage);
+  upsertMeta('property', 'og:image:alt', route.ogImageAlt || route.title);
+
+  const isArticle = route.ogType === 'article';
+  upsertMeta('property', 'article:published_time', isArticle ? route.publishedTime : '');
+  upsertMeta('property', 'article:modified_time', isArticle ? route.modifiedTime : '');
+  upsertMeta('property', 'article:section', isArticle ? route.articleSection : '');
+  upsertMetaList('property', 'article:tag', isArticle ? route.articleTags : []);
 
   upsertMeta('name', 'twitter:title', route.title);
   upsertMeta('name', 'twitter:description', route.description || I.description);
   upsertMeta('name', 'twitter:image', ogImage);
+  upsertMeta('name', 'twitter:image:alt', route.ogImageAlt || route.title);
   upsertMeta('name', 'twitter:card', route.twitterCard || I.twitterCard);
 }
 

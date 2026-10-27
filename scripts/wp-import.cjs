@@ -6,19 +6,26 @@
  *   npm run wp:import -- --yes   # actually create/update posts in WordPress
  *   npm run wp:import -- --yes --slug=divorce-in-nepal-process-cost-and-timeline
  *
+ * TRANSPORT: XML-RPC (/xmlrpc.php) — the free WordPress.com plan does not
+ * expose the REST API.
+ *
  * Environment: WP_URL, WP_USER, WP_APP_PASSWORD (see .env.example).
  *
  * For each article it:
- *   1. Ensures the WP category (slug = the site's category id) and tags exist
- *   2. Uploads the featured image to the WP media library (once)
- *   3. Creates or updates the post, wrapping content in a Custom HTML block
- *      with the pluto-meta comment so SEO fields, author and original id
- *      survive the round trip back through sync-wp.cjs
+ *   1. Uploads the featured image to the WP media library (once per image)
+ *   2. Creates or updates the post, wrapping content in a Custom HTML block,
+ *      and stores the featured-image URL, category, tags and SEO extras inside
+ *      an invisible pluto-meta comment so they round-trip through sync-wp.cjs.
+ *
+ * NOTE: WordPress.com's XML-RPC ignores the `terms` argument on
+ * wp.newPost/wp.editPost, so categories and tags are NOT assigned in WP's own
+ * taxonomy here — they live in the meta comment and drive the site's own
+ * category pages exactly as before.
  */
 const fs = require('fs');
 const path = require('path');
 const {
-  getWpConfig, api, apiAll, sleep, attachPlutoMeta, categoryLabel, basenameFromUrl,
+  getWpConfig, withBlogId, wpCall, sleep, attachPlutoMeta, basenameFromUrl,
 } = require('./wp-lib.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -46,53 +53,34 @@ const MIME = {
   '.webp': 'image/webp', '.gif': 'image/gif', '.avif': 'image/avif',
 };
 
-async function uploadMedia(config, file) {
+/* ------------------------------------------------------------------ */
+/* Media                                                               */
+/* ------------------------------------------------------------------ */
+
+async function uploadMedia(config, file, cache) {
+  const size = fs.statSync(file).size;
+  if (size > 6 * 1024 * 1024) {
+    throw new Error(`file is ${(size / 1024 / 1024).toFixed(1)} MB (WordPress.com free limit is 6 MB)`);
+  }
   const buffer = fs.readFileSync(file);
   const name = path.basename(file);
-  const type = MIME[path.extname(file).toLowerCase()] || 'application/octet-stream';
-  const form = new FormData();
-  form.append('file', new Blob([buffer], { type }), name);
-  const media = await api(config, '/media', { method: 'POST', formData: form });
-  return media.id;
+  if (cache.has(name)) return cache.get(name);
+  const data = {
+    name,
+    type: MIME[path.extname(file).toLowerCase()] || 'application/octet-stream',
+    bits: { __base64: buffer.toString('base64') },
+    overwrite: true,
+  };
+  const res = await wpCall(config, 'wp.uploadFile', [data], 180000);
+  const link = res && res.link;
+  cache.set(name, link);
+  await sleep(400);
+  return link;
 }
 
-async function ensureCategories(config, articles) {
-  const existing = await apiAll(config, '/categories?hide_empty=0');
-  const bySlug = new Map(existing.map((c) => [c.slug, c.id]));
-  const ids = {};
-  for (const c of existing) ids[c.id] = c.slug;
-
-  const needed = [...new Set(articles.map((a) => a.category || 'general'))];
-  for (const slug of needed) {
-    if (bySlug.has(slug)) continue;
-    const created = await api(config, '/categories', {
-      method: 'POST',
-      json: { name: categoryLabel(slug), slug },
-    });
-    bySlug.set(slug, created.id);
-    ids[created.id] = created.slug;
-    console.log(`  created category "${categoryLabel(slug)}" (${slug})`);
-    await sleep(250);
-  }
-  return { bySlug, ids };
-}
-
-async function ensureTags(config, articles) {
-  const existing = await apiAll(config, '/tags?hide_empty=0');
-  const byName = new Map(existing.map((t) => [t.name.toLowerCase(), t.id]));
-  const ids = {};
-  for (const t of existing) ids[t.id] = t.name;
-
-  const needed = [...new Set(articles.flatMap((a) => a.tags || []))];
-  for (const name of needed) {
-    if (!name || byName.has(name.toLowerCase())) continue;
-    const created = await api(config, '/tags', { method: 'POST', json: { name } });
-    byName.set(name.toLowerCase(), created.id);
-    ids[created.id] = created.name;
-    await sleep(250);
-  }
-  return { byName, ids };
-}
+/* ------------------------------------------------------------------ */
+/* Main                                                                */
+/* ------------------------------------------------------------------ */
 
 async function main() {
   const args = process.argv.slice(2);
@@ -115,30 +103,34 @@ async function main() {
     }
   }
 
-  console.log(`WordPress: ${config.site}`);
-  console.log(`Articles:  ${articles.length}${wanted ? ' (filtered)' : ''}`);
-  console.log(yes ? 'Mode:      PUSH (creating/updating)' : 'Mode:      DRY RUN (add --yes to push)\n');
+  await withBlogId(config);
+  console.log(`WordPress:  ${config.site} (blog ${config.blogId})`);
+  console.log(`Articles:   ${articles.length}${wanted ? ' (filtered)' : ''}`);
+  console.log(`Mode:       ${yes ? 'PUSH (creating/updating)' : 'DRY RUN (add --yes to push)'}\n`);
 
-  const { bySlug: catBySlug } = await ensureCategories(config, articles);
-  const { byName: tagByName } = await ensureTags(config, articles);
+  const mediaCache = new Map();
 
-  const summary = { created: 0, updated: 0, skipped: 0, media: 0, mediaMissing: 0 };
+  // Pre-map existing posts by slug so we update rather than duplicate.
+  const existing = await wpCall(config, 'wp.getPosts', [{ number: 500, post_type: 'post' }]);
+  const idBySlug = new Map(existing.map((p) => [p.post_name, p.post_id]));
+
+  const summary = { created: 0, updated: 0, failed: 0, media: 0, mediaMissing: 0 };
 
   for (const article of articles) {
     const label = article.slug;
 
-    // Featured image -> media library
-    let featuredMedia = 0;
+    // --- featured image -> media library (once per unique filename) ---
+    let featuredUrl = '';
     const imageFile = findLocalImage(article.featuredImage);
     if (imageFile) {
       if (yes) {
         try {
-          featuredMedia = await uploadMedia(config, imageFile);
+          featuredUrl = await uploadMedia(config, imageFile, mediaCache);
           summary.media += 1;
-          console.log(`  uploaded media ${path.basename(imageFile)} -> #${featuredMedia}`);
-          await sleep(300);
+          console.log(`  media    ${path.basename(imageFile)} -> ${featuredUrl}`);
         } catch (err) {
           console.warn(`  ! media upload failed for ${label}: ${err.message}`);
+          featuredUrl = article.featuredImage || '';
         }
       } else {
         summary.media += 1;
@@ -148,52 +140,65 @@ async function main() {
       console.warn(`  ! local image not found for ${label}: ${article.featuredImage}`);
     }
 
-    // Meta comment: whole article except the (large) content body
+    // --- content: meta comment carries category, tags and SEO fields ---
+    // WordPress.com's XML-RPC ignores the `terms` argument on newPost/editPost,
+    // so we do not attempt to assign taxonomy here. Category and tags travel in
+    // the pluto-meta comment and are read back by sync-wp.cjs.
     const meta = { ...article };
     delete meta.content;
+    if (featuredUrl || article.featuredImage) {
+      meta.featuredImage = featuredUrl || article.featuredImage;
+    }
     const contentHtml = attachPlutoMeta(article.content || '', meta);
-    const payload = {
-      title: article.title,
-      slug: article.slug,
-      content: `<!-- wp:html -->\n${contentHtml}\n<!-- /wp:html -->`,
-      excerpt: article.excerpt || '',
-      status: article.status === 'published' ? 'publish' : 'draft',
-      categories: [catBySlug.get(article.category || 'general')].filter(Boolean),
-      tags: (article.tags || []).map((t) => tagByName.get(String(t).toLowerCase())).filter(Boolean),
-    };
-    if (featuredMedia) payload.featured_media = featuredMedia;
 
+    const customFields = [
+      { key: 'pluto_featured_image', value: featuredUrl || article.featuredImage || '' },
+      { key: 'pluto_featured_image_alt', value: article.featuredImageAlt || article.title || '' },
+      { key: 'pluto_seo_title', value: article.seoTitle || '' },
+      { key: 'pluto_seo_desc', value: article.seoDesc || '' },
+      { key: 'pluto_meta_keywords', value: article.metaKeywords || '' },
+      { key: 'pluto_author_name', value: article.authorName || '' },
+      { key: 'pluto_author_initials', value: article.authorInitials || '' },
+    ];
+
+    const content = {
+      post_title: article.title || '',
+      post_content: `<!-- wp:html -->\n${contentHtml}\n<!-- /wp:html -->`,
+      post_excerpt: article.excerpt || '',
+      post_status: article.status === 'published' ? 'publish' : 'draft',
+      post_name: article.slug,
+      custom_fields: customFields,
+    };
+    if (article.date) content.post_date_gmt = `${article.date}T00:00:00`;
+
+    const existingId = idBySlug.get(article.slug);
     try {
-      const existing = await api(config, `/posts?slug=${encodeURIComponent(article.slug)}&_fields=id`);
-      if (existing.length) {
-        if (yes) {
-          await api(config, `/posts/${existing[0].id}`, { method: 'POST', json: payload });
-          summary.updated += 1;
-          console.log(`  updated  ${label}`);
-          await sleep(300);
-        } else {
-          summary.updated += 1;
-        }
-      } else {
-        if (yes) {
-          await api(config, '/posts', { method: 'POST', json: payload });
-          summary.created += 1;
-          console.log(`  created  ${label}`);
-          await sleep(300);
-        } else {
-          summary.created += 1;
-        }
+      if (!yes) {
+        if (existingId) summary.updated += 1;
+        else summary.created += 1;
+        continue;
       }
+      if (existingId) {
+        await wpCall(config, 'wp.editPost', [Number(existingId), content]);
+        summary.updated += 1;
+        console.log(`  updated  ${label}`);
+      } else {
+        const newId = await wpCall(config, 'wp.newPost', [content]);
+        idBySlug.set(article.slug, newId);
+        summary.created += 1;
+        console.log(`  created  ${label} (#${newId})`);
+      }
+      await sleep(500);
     } catch (err) {
-      summary.skipped += 1;
+      summary.failed += 1;
       console.error(`  ! failed ${label}: ${err.message}`);
     }
   }
 
-  console.log(`\nDone: ${summary.created} to create, ${summary.updated} to update, ${summary.skipped} failed, ${summary.media} image(s).`);
+  console.log(`\nDone: ${summary.created} to create, ${summary.updated} to update, ${summary.failed} failed, ${summary.media} image(s) uploadable${summary.mediaMissing ? `, ${summary.mediaMissing} image(s) missing locally` : ''}.`);
   if (!yes) {
     console.log('This was a DRY RUN. Re-run with --yes to push to WordPress.');
-    console.log('After pushing, run `npm run wp:sync` to pull everything back and verify the round trip.');
+    console.log('After pushing, verify with `npm run wp:sync`, then use `npm run wp:sync:write` only if WordPress should replace local articles.json.');
   }
 }
 

@@ -108,10 +108,27 @@ async function bundleSsr() {
 /* 3. Assemble a full HTML document per route                          */
 /* ------------------------------------------------------------------ */
 function assembleHtml(entry, route) {
-  const { title, description, keywords, robots, canonical, ogType, jsonLd, preloadImage, ogImage } = route;
+  const {
+    title,
+    description,
+    keywords,
+    robots,
+    canonical,
+    ogType,
+    jsonLd,
+    preloadImage,
+    ogImage,
+    ogImageAlt,
+    articleSection,
+    articleTags,
+    publishedTime,
+    modifiedTime,
+  } = route;
   const pageUrl = canonical ? `${entry.SITE.url}${canonical}` : entry.SITE.url;
   const desc = description || entry.SITE.description;
   const pageOgImage = ogImage || entry.SITE.ogImage;
+  const imageAlt = ogImageAlt || title;
+  const isArticle = ogType === 'article';
 
   const parts = [
     '<!DOCTYPE html>',
@@ -132,13 +149,21 @@ function assembleHtml(entry, route) {
     `    <meta property="og:description" content="${esc(desc)}" />`,
     `    <meta property="og:url" content="${pageUrl}" />`,
     `    <meta property="og:image" content="${pageOgImage}" />`,
+    `    <meta property="og:image:alt" content="${esc(imageAlt)}" />`,
     '    <meta property="og:image:width" content="1200" />',
     '    <meta property="og:image:height" content="630" />',
     '    <meta property="og:locale" content="en_NP" />',
+    isArticle && publishedTime ? `    <meta property="article:published_time" content="${publishedTime}" />` : '',
+    isArticle && modifiedTime ? `    <meta property="article:modified_time" content="${modifiedTime}" />` : '',
+    isArticle && articleSection ? `    <meta property="article:section" content="${esc(articleSection)}" />` : '',
+    ...(isArticle && Array.isArray(articleTags)
+      ? articleTags.map((tag) => `    <meta property="article:tag" content="${esc(tag)}" />`)
+      : []),
     '    <meta name="twitter:card" content="summary_large_image" />',
     `    <meta name="twitter:title" content="${esc(title)}" />`,
     `    <meta name="twitter:description" content="${esc(desc)}" />`,
     `    <meta name="twitter:image" content="${pageOgImage}" />`,
+    `    <meta name="twitter:image:alt" content="${esc(imageAlt)}" />`,
     '    ' + FONT_LINKS,
     preloadImage ? `    <link rel="preload" as="image" href="${preloadImage}" />` : '',
     '    ' + JS_ENABLE,

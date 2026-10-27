@@ -1,19 +1,28 @@
 /**
- * Pull blog posts from WordPress and regenerate src/content/articles.json.
+ * Pull blog posts from WordPress into src/content/articles.json.
  *
- * WordPress is the editorial source of truth for everything under
- * /publications. Runs at the start of every build (`npm run build`), so a
- * Cloudflare Pages deploy always ships the latest published posts.
+ * src/content/articles.json is the source of truth for /publications.
+ * `npm run build` does NOT call this script. Run `npm run wp:sync` for a
+ * dry run, or `npm run wp:sync:write` to deliberately replace the local
+ * article file with WordPress content.
+ *
+ * TRANSPORT: XML-RPC (/xmlrpc.php). The site's free WordPress.com plan does
+ * not expose the REST API, so posts are read with wp.getPosts. Featured-image
+ * URLs are read from the `pluto_featured_image` custom field (written by
+ * wp-import.cjs / settable on any post), falling back to the previous
+ * article's image so a URL never breaks.
  *
  * Environment (repo .env locally, Cloudflare Pages env vars in production):
- *   WP_URL            e.g. https://yourname.wordpress.com
+ *   WP_URL            e.g. https://name.wordpress.com
  *   WP_USER           WordPress username
  *   WP_APP_PASSWORD   Application password (Spaces are fine.)
  *
  * Safety:
+ *   - Dry run unless --write is passed (or WP_SYNC_WRITE=1); a build cannot
+ *     overwrite articles.json by accident
  *   - Unconfigured (no WP env vars) -> exits 0, keeps committed articles.json
- *   - WP unreachable -> exits 0 with a loud warning (stale content beats a
- *     broken deploy; the next scheduled build picks up the change)
+ *   - WP unreachable -> exits 0 with a loud warning and leaves articles.json
+ *     untouched
  *   - WP returns zero posts -> exits 1 (never wipe the site's content);
  *     set WP_SYNC_ALLOW_EMPTY=1 to override deliberately
  *   - articles.json is only rewritten when something actually changed
@@ -21,17 +30,14 @@
 const fs = require('fs');
 const path = require('path');
 const {
-  getWpConfig, api, apiAll, mapPostToArticle, basenameFromUrl,
+  getWpConfig, withBlogId, wpCall, sleep,
+  normalizeRpcPost, mapPostToArticle, basenameFromUrl,
 } = require('./wp-lib.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
 const ARTICLES_FILE = path.join(ROOT, 'src', 'content', 'articles.json');
 const IMAGES_DIR = path.join(ROOT, 'public', 'images');
-
-const POST_FIELDS = [
-  'id', 'slug', 'title', 'content', 'excerpt', 'categories', 'tags',
-  'status', 'date', 'date_gmt', 'modified', 'modified_gmt', 'featured_media',
-].join(',');
+const WRITE = process.argv.includes('--write') || process.env.WP_SYNC_WRITE === '1';
 
 function readLocalArticles() {
   try {
@@ -42,11 +48,10 @@ function readLocalArticles() {
 }
 
 /** Ensure a featured-image file exists locally; download it from WP if not. */
-async function ensureLocalImage(config, media, articleSlug) {
-  const sourceUrl = media && media.source_url;
+async function ensureLocalImage(sourceUrl, articleSlug) {
   if (!sourceUrl) return;
   const base = basenameFromUrl(sourceUrl);
-  if (!base) return;
+  if (!base || !/\.(jpe?g|png|webp|gif|avif)$/i.test(base)) return;
   const target = path.join(IMAGES_DIR, base);
   if (fs.existsSync(target)) return;
   try {
@@ -68,49 +73,33 @@ async function sync() {
     return 0;
   }
 
-  let posts;
+  let rawPosts;
   try {
-    posts = await apiAll(
-      config,
-      `/posts?status=any&context=edit&order=desc&orderby=date&_fields=${POST_FIELDS}`
-    );
+    await withBlogId(config);
+    rawPosts = await wpCall(config, 'wp.getPosts', [{ number: 500, post_type: 'post' }]);
   } catch (err) {
     console.warn(`[sync-wp] WARNING: WordPress unreachable (${err.message}) — keeping committed articles.json.`);
     return 0;
   }
 
-  if (!posts.length) {
+  if (!rawPosts.length) {
     if (process.env.WP_SYNC_ALLOW_EMPTY === '1') {
-      console.warn('[sync-wp] WARNING: WordPress returned zero posts and WP_SYNC_ALLOW_EMPTY=1 — writing empty article list.');
+      console.warn(`[sync-wp] WARNING: WordPress returned zero posts and WP_SYNC_ALLOW_EMPTY=1 — ${WRITE ? 'writing' : 'would write'} empty article list.`);
     } else {
       console.error('[sync-wp] ERROR: WordPress returned zero posts. Run `npm run wp:import -- --yes` first, or set WP_SYNC_ALLOW_EMPTY=1 if an empty blog is intended.');
       process.exit(1);
     }
   }
 
-  const [cats, tags] = await Promise.all([
-    apiAll(config, '/categories?hide_empty=0'),
-    apiAll(config, '/tags?hide_empty=0'),
-  ]);
-  const catMap = Object.fromEntries(cats.map((c) => [c.id, c.slug]));
-  const tagMap = Object.fromEntries(tags.map((t) => [t.id, t.name]));
-
-  const mediaIds = [...new Set(posts.map((p) => p.featured_media).filter(Boolean))];
-  const mediaMap = {};
-  for (let i = 0; i < mediaIds.length; i += 50) {
-    const chunk = mediaIds.slice(i, i + 50);
-    const media = await api(config, `/media?include=${chunk.join(',')}&per_page=100&_fields=id,source_url,alt_text`);
-    for (const m of media) mediaMap[m.id] = m;
-  }
-
   const previous = readLocalArticles();
   const prevBySlug = new Map(previous.map((a) => [a.slug, a]));
 
   const articles = [];
-  for (const post of posts) {
-    const article = mapPostToArticle(post, { mediaMap, catMap, tagMap }, prevBySlug.get(post.slug));
+  for (const raw of rawPosts) {
+    const post = normalizeRpcPost(raw);
+    const article = mapPostToArticle(post, {}, prevBySlug.get(post.slug));
     articles.push(article);
-    await ensureLocalImage(config, mediaMap[post.featured_media], article.slug);
+    if (WRITE) await ensureLocalImage(post.featuredImageUrl, article.slug);
   }
 
   articles.sort((a, b) => {
@@ -124,6 +113,12 @@ async function sync() {
 
   if (next === current) {
     console.log(`[sync-wp] ${articles.length} posts from WordPress (${publishedCount} published) — articles.json already up to date.`);
+    return articles.length;
+  }
+
+  if (!WRITE) {
+    console.log(`[sync-wp] DRY RUN: articles.json would change — ${articles.length} posts from WordPress (${publishedCount} published).`);
+    console.log('[sync-wp] Re-run with `npm run wp:sync:write` to replace src/content/articles.json.');
     return articles.length;
   }
 

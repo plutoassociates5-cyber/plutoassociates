@@ -1,52 +1,49 @@
-# WordPress blog backend — setup guide
+# WordPress blog backend — optional drafting workflow
 
-Your site keeps its design and its `/publications` URLs on Cloudflare Pages.
-WordPress becomes the **editorial backend for blog posts only**: you write in
-WordPress, and every site build pulls the latest posts into `articles.json`
-automatically. Total cost: **Rs. 0 / $0 forever** (free WordPress.com plan —
-visitors never see the WordPress site, so its free-plan branding is irrelevant).
+`src/content/articles.json` is the **source of truth** for everything under
+`/publications`. The site builds from that file, and `npm run build` never
+contacts WordPress. WordPress is an optional drafting backend for the team.
 
 ```
-WordPress.com (free)  --REST API-->  sync-wp.cjs  -->  articles.json  -->  Cloudflare Pages
-   you write posts                     runs at every build               serves plutoassociates.com
+src/content/articles.json  -->  vite build  -->  prerender  -->  Cloudflare Pages
+        source of truth
+
+WordPress (optional)  --explicit sync-->  src/content/articles.json
 ```
 
----
+## Why the build no longer syncs
 
-## Step 1 — Create the free WordPress site (5 minutes)
+The live WordPress.com account cannot currently edit posts over XML-RPC
+(`401 — not allowed to edit posts in this post type`). An automatic pull at
+build time would therefore overwrite local SEO/content fixes with stale
+WordPress data. Builds are now deterministic: what is committed in
+`articles.json` is what ships.
 
-1. Go to **https://wordpress.com/start** and create a free account.
-2. When it asks what to build, choose **Start with a basic website** / blog.
-3. Pick any subdomain, e.g. `plutoassociatesblog.wordpress.com`.
-4. **Decline every paid plan offer** — keep clicking "Continue with free",
-   "Skip", "No thanks". The free plan is all we need.
-5. Pick any theme (the default one is fine). Nobody will see this site.
+## Commands
 
-## Step 2 — Hide the WordPress site from Google (1 minute)
+| Command | What it does |
+|---|---|
+| `npm run build` | Build and prerender from `articles.json` only. No WordPress access. |
+| `npm run build:wp` | Pull WordPress, overwrite `articles.json`, then build. Use only when WordPress should be authoritative. |
+| `npm run wp:sync` | Dry run: report whether WordPress would change `articles.json`. Downloads nothing and writes nothing. |
+| `npm run wp:sync:write` | Replace `articles.json` with WordPress content. |
+| `npm run wp:import` | Dry run: show what would be pushed to WordPress. |
+| `npm run wp:import -- --yes` | Push `articles.json` to WordPress. |
+| `npm run wp:import -- --yes --slug=<slug>` | Push one article, or a comma-separated list of slugs. |
+| `npm run wp:selftest` | Offline check of the sync pipeline. |
 
-1. Go to **https://yourname.wordpress.com/wp-admin**
-2. **Settings → General** → find **"Search engine visibility"**
-   ("Discourage search engines from indexing this site").
-3. Tick it and save. This avoids duplicate-content SEO issues, since every
-   article also lives on plutoassociates.com.
+## Initial WordPress setup (already done)
 
-## Step 3 — Create an application password (3 minutes)
+If the WordPress site ever needs to be recreated:
 
-The sync needs a special password (not your login password).
-
-1. In wp-admin: **Users → Profile** (or **My Home → Settings → Security**),
-   find **Two-Step Authentication** and turn it on (free — use an
-   authenticator app or SMS). Application passwords require this.
-2. Then find **Application Passwords**, name it `Pluto site sync`, click
-   **Create**.
-3. Copy the generated password immediately (it looks like
-   `xxxx xxxx xxxx xxxx xxxx xxxx` — the spaces are fine). It is shown only once.
-
-## Step 4 — Push the 32 existing articles into WordPress (one time)
-
-On your computer, in the `repo` folder:
-
-1. Copy `.env.example` to `.env` and fill in:
+1. Create a free site at **https://wordpress.com/start** and decline all paid
+   plans.
+2. In **Settings → General**, enable **Discourage search engines from indexing
+   this site** so the duplicate WordPress pages do not compete with
+   plutoassociates.com.
+3. Enable two-step authentication, then create an application password under
+   **Users → Profile → Application Passwords**.
+4. Put the credentials in `.env` (never commit it):
 
    ```
    WP_URL=https://yourname.wordpress.com
@@ -54,95 +51,64 @@ On your computer, in the `repo` folder:
    WP_APP_PASSWORD=xxxx xxxx xxxx xxxx xxxx xxxx
    ```
 
-2. Dry run first (changes nothing, prints what it would do):
+Application passwords and XML-RPC require an account role that can edit posts.
+A contributor-style account may authenticate but still return
+`401 — not allowed to edit posts in this post type`.
 
-   ```
-   npm run wp:import
-   ```
+## Pushing local edits to WordPress
 
-3. When the summary looks right, push for real:
+Only needed if WordPress should receive a copy. This changes the live
+WordPress backend, so confirm the target slugs first.
 
-   ```
-   npm run wp:import -- --yes
-   ```
+```
+npm run wp:import -- --slug=<slug>
+npm run wp:import -- --yes --slug=<slug>
+```
 
-   It creates the categories (fdi, corporate, family…), uploads the featured
-   images, and creates all 32 posts. Takes a few minutes.
+Without `--slug`, the command targets all articles in `articles.json`. The
+import creates/updates posts and uploads featured images. WordPress.com's
+XML-RPC ignores taxonomy arguments, so category/tag/SEO fields ride in the
+invisible `pluto-meta` comment at the end of the post body.
 
-4. Pull everything back to verify the round trip:
+## Pulling WordPress edits into the site
 
-   ```
-   npm run wp:sync
-   ```
+```
+npm run wp:sync          # dry run first
+npm run wp:sync:write    # only if the reported change is wanted
+npm run build
+```
 
-   `git diff src/content/articles.json` should be near-empty (minor date or
-   formatting normalisation is normal).
+`wp:sync:write` replaces the whole local file. Review the dry-run output and
+the resulting `git diff` before committing.
 
-## Step 5 — Connect Cloudflare Pages (5 minutes)
+## Cloudflare Pages
 
-1. Open the Cloudflare Pages project for plutoassociates.com →
-   **Settings → Environment variables**.
-2. Add all three variables for **Production** (and Preview if you use it):
-   `WP_URL`, `WP_USER`, `WP_APP_PASSWORD` — same values as your `.env`.
-3. From now on, every build pulls fresh posts automatically. If WordPress is
-   ever unreachable, the build keeps the last committed content instead of
-   failing — the site can never go down because of WordPress.
+- Build command: `npm run build`
+- Output directory: `dist`
+- `WP_URL`, `WP_USER`, and `WP_APP_PASSWORD` are **not required** for normal
+  builds.
+- Do not set the build command to `npm run build:wp` unless WordPress is meant
+  to overwrite committed article content on every deploy.
 
-## Step 6 — Auto-publish: new posts go live automatically (5 minutes, free)
+## Editing imported posts in WordPress
 
-WordPress.com free plans cannot run plugins, so we trigger builds with a free
-cron service instead:
-
-1. Cloudflare Pages → **Settings → Builds & deployments → Build hooks** →
-   **Create build hook**. Name it "WordPress publish". Copy the URL it gives
-   you.
-2. Go to **https://cron-job.org**, create a free account.
-3. **Create cron job** → URL = your build hook URL, method **POST**, schedule
-   (e.g. every 6 hours at minute 0).
-4. Done. When you publish a post in WordPress, the site updates within the
-   next scheduled ping (or immediately — see the manual trigger below).
-
-**Manual instant publish:** open your build-hook URL in the browser (or run
-`curl -X POST <build-hook-url>`). The rebuild takes about a minute and the new
-post is live.
-
-## Step 7 — Everyday use
-
-- Write posts at **wordpress.com → Posts → Add new**, exactly like any blog:
-  title, content, excerpt, **featured image**, category, tags. Hit Publish.
-- Your post appears on **plutoassociates.com/publications/your-slug** after
-  the next build — same design, same URLs, with SEO metadata and FAQ schema
-  handled by the site.
-- New categories you create in WordPress work automatically; the site shows
-  the category name as-is.
-- One caution when editing an *imported* post: the body is a single
-  **Custom HTML** block, and its last line is an invisible comment that stores
-  SEO fields and the original article id. **Do not delete that last comment
-  line** when editing. Posts you create fresh in WordPress don't need it.
-
-## Useful commands
-
-| Command | What it does |
-|---|---|
-| `npm run wp:import` | Dry run: show what would be pushed to WordPress |
-| `npm run wp:import -- --yes` | Push articles.json → WordPress |
-| `npm run wp:sync` | Pull WordPress → articles.json |
-| `npm run build` | Sync, then full production build |
-| `npm run wp:selftest` | Offline check of the sync pipeline |
-
-## Moving house later
-
-If you ever outgrow the free plan, everything exports from WordPress.com to
-any self-hosted WordPress for free (Tools → Export). Only `WP_URL` changes —
-the pipeline stays identical.
+An imported post body is a single **Custom HTML** block. Its last line is an
+invisible `pluto-meta` comment containing the article id, SEO fields, FAQs,
+image metadata and taxonomy. Do not delete that line when editing. Posts
+created fresh in WordPress do not need it.
 
 ## Troubleshooting
 
-- **`401 invalid_credentials`** — the application password was copied wrong
-  (or 2FA was turned off after creating it). Create a new one in wp-admin.
-- **`WP returned zero posts` during build** — the import never ran, or the
-  env vars point at the wrong site. Run `npm run wp:import -- --yes` once.
-- **Post published but site not updated** — trigger the build hook manually
-  (Step 6), then check the Pages build log for sync output.
+- **`401 invalid_credentials`** — the application password was copied wrong or
+  two-step authentication was disabled after it was created. Create a new
+  application password.
+- **`401 not allowed to edit posts in this post type`** — the WordPress user
+  lacks permission to create/edit posts. Use an account with the appropriate
+  role, or keep editing `articles.json` and deploy the React site directly.
+- **WordPress returns zero posts** — check `WP_URL` and confirm the site has
+  posts. `WP_SYNC_ALLOW_EMPTY=1` overrides the safety stop deliberately.
 - **Featured image missing on a post** — set it again in the WordPress editor
-  (Media → Set featured image) and rebuild.
+  and re-import, or set `featuredImage` in `articles.json` directly.
+- **Post published in WordPress but site unchanged** — expected. Normal builds
+  do not pull WordPress. Run `npm run wp:sync` and, if the diff is correct,
+  `npm run wp:sync:write`, then commit and deploy.
