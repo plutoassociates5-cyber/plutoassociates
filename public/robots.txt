@@ -1,10 +1,23 @@
-# robots.txt — Pluto Associates (plutoassociates.com)
+# robots.txt for Pluto Associates (plutoassociates.com)
 # Allow all public content; block the admin area from indexing.
 
 User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /admin/*
+
+# AI/search discovery bots (explicitly allowed)
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
 
 # Primary and backup sitemaps
 Sitemap: https://plutoassociates.com/sitemap.xml

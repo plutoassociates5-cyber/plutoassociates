@@ -1,0 +1,23 @@
+# llms-full.txt for Pluto Associates
+# https://plutoassociates.com
+
+## Entity
+Pluto Associates, Advocates & Legal Consultants (est. 2003), Kathmandu, Nepal. Provides full-service legal advice with emphasis on corporate, foreign investment, regulatory, and dispute matters.
+
+## Detailed Services
+Corporate & Business: company incorporation, joint ventures, M&A, corporate governance, contracts, compliance.
+FDI: investment approvals, sectoral clearances, project structuring, repatriation.
+Energy: hydropower, PPAs, licensing, BOOT/IPP.
+Litigation: civil/commercial/criminal, ADR/arbitration.
+IP: trademarks/patents/copyright, enforcement.
+Tax/Labor/Real Estate/NGO/Family/International clients.
+
+## Resources
+Publications: https://plutoassociates.com/publications (legal updates, guides)
+FAQ: https://plutoassociates.com/faq
+
+## Structured Data
+Schema.org (LegalService/LocalBusiness, Organization, WebSite, Article, Service, FAQ) is present on pages.
+
+## Contact
++977-9802356987 | info@plutoassociates.com | Babarmahal, Kathmandu 44600, Nepal
