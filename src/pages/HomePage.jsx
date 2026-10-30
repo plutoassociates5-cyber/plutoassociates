@@ -6,6 +6,7 @@ import { WhatsAppPopup } from '../components/PublicUtils';
 import { HeroSlideshow } from '../components/PublicHooks';
 import { getHomepage } from '../utils/contentStore';
 import { getPublishedArticles } from '../seo';
+import { getGuides } from '../content/propertyGuides';
 import { getServiceGroups } from '../services/store';
 import hero1 from '../assets/hero-1.jpeg';
 import hero2 from '../assets/hero-2.jpeg';
@@ -50,9 +51,18 @@ const PROCESS = [
 export default function HomePage() {
   const hp = getHomepage();
   const servicesGroups = getServiceGroups();
-  const latest = getPublishedArticles()
+  const guides = getGuides();
+  const allArticles = getPublishedArticles()
     .slice()
-    .sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0))
+    .sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
+  const priorityCategories = ['property', 'realestate', 'fdi', 'nrn', 'corporate'];
+  const priorityRank = (a) => {
+    const i = priorityCategories.indexOf(a.category);
+    return i === -1 ? 99 : i;
+  };
+  const latest = allArticles
+    .slice()
+    .sort((a, b) => priorityRank(a) - priorityRank(b) || new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0))
     .slice(0, 3);
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -102,6 +112,29 @@ export default function HomePage() {
               <p className="mb-5 text-text-body leading-relaxed">From multinational corporations navigating Nepal's FDI landscape to startups seeking incorporation and individuals requiring family law counsel, we provide bespoke legal solutions tailored to each client's unique needs.</p>
               <Link to="/about/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-gold hover:text-navy no-underline self-start">Learn More About Us →</Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 lg:py-24 bg-white">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+            <div>
+              <span className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 inline-block reveal-anim">Start Here</span>
+              <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight font-semibold reveal-anim">Foreign Investment & Property Guides</h2>
+              <p className="text-base text-text-light max-w-[640px] leading-relaxed mt-3 reveal-anim">Direct answers to the questions foreign investors and property buyers ask us most often.</p>
+            </div>
+            <Link to="/guides/" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all self-start md:self-auto reveal-anim">View All Guides →</Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {guides.map((g) => (
+              <Link key={g.slug} to={`/guides/${g.slug}/`} className="group bg-white border border-light-gray p-7 lg:p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-gold no-underline block reveal-anim">
+                <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-3">{g.category}</div>
+                <h3 className="font-serif text-xl text-navy mb-3 leading-snug group-hover:text-gold transition-colors">{g.h1}</h3>
+                <p className="text-sm text-text-body leading-relaxed">{g.description}</p>
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-gold mt-5 group-hover:gap-3 transition-all">Read the guide <span>→</span></span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -204,7 +237,7 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
             <div>
               <span className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 inline-block reveal-anim">From Our Team</span>
-              <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight font-semibold reveal-anim">Legal Updates & Insights</h2>
+              <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight font-semibold reveal-anim">Foreign Investment & Property Insights</h2>
             </div>
             <Link to="/publications/" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all self-start md:self-auto reveal-anim">View All Publications →</Link>
           </div>

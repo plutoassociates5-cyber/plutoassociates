@@ -8,6 +8,8 @@ import PracticeAreaDetailPage from './pages/PracticeAreaDetailPage';
 import TeamsPage from './pages/TeamsPage';
 import PublicationsPage from './pages/PublicationsPage';
 import ArticlePage from './pages/ArticlePage';
+import GuidesPage from './pages/GuidesPage';
+import GuidePage from './pages/GuidePage';
 import FaqPage from './pages/FaqPage';
 import ServicesPage from './pages/ServicesPage';
 import ServiceDetailPage from './pages/ServiceDetailPage';
@@ -39,6 +41,8 @@ export default function App() {
             <Route path="/services/:slug" element={<ServiceDetailPage />} />
             <Route path="/publications" element={<PublicationsPage />} />
             <Route path="/publications/:slug" element={<ArticlePage />} />
+            <Route path="/guides" element={<GuidesPage />} />
+            <Route path="/guides/:slug" element={<GuidePage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route
               path="/admin/*"

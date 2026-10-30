@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { getArticles, getSeedArticles } from './utils/storage';
 import { getPracticeAreas, getFaqs, getSettings } from './utils/contentStore';
 import { getServiceBySlug, getServiceGroups } from './services/store.js';
+import { getGuides, getGuideBySlug } from './content/propertyGuides';
 
 /**
  * Central SEO configuration for Pluto Associates (Vite + React SPA).
@@ -125,6 +126,16 @@ export const ROUTES = {
     ),
     keywords: 'legal articles Nepal, law blog Nepal, corporate law insights Nepal, FDI analysis Nepal, legal updates Nepal',
     canonical: '/publications',
+    ogType: 'website',
+    robots: 'index, follow',
+  },
+  '/guides': {
+    title: 'Guides for Foreign Investors in Nepal | Pluto Associates',
+    description: clipDesc(
+      'Practical legal guides for foreign investors and property buyers in Nepal: can foreigners buy property, can Indians buy property, and the routes, documents and approvals that apply.'
+    ),
+    keywords: 'foreign investor guides Nepal, buy property Nepal foreigner, property law Nepal, FDI guide Nepal, legal guide Nepal',
+    canonical: '/guides',
     ogType: 'website',
     robots: 'index, follow',
   },
@@ -288,6 +299,11 @@ function resolveRawRoute(p) {
     const service = m ? getServiceBySlug(decodeURIComponent(m[1])) : undefined;
     return service ? serviceMeta(service) : ROUTES['/404'];
   }
+  if (p.startsWith('/guides/')) {
+    const m = p.match(/^\/guides\/([^/]+)\/?$/);
+    const guide = m ? getGuideBySlug(decodeURIComponent(m[1])) : undefined;
+    return guide ? guideMeta(guide) : ROUTES['/404'];
+  }
   return ROUTES[p] || ROUTES['/404'];
 }
 
@@ -346,6 +362,25 @@ function serviceMeta(service) {
     robots: 'index, follow',
     ogImage: service.ogImage || (service.featuredImage ? `${I.url}${service.featuredImage}` : I.ogImage),
     service,
+  };
+}
+
+function guideMeta(guide) {
+  const I = identity();
+  return {
+    title: guide.title,
+    description: clipDesc(guide.description),
+    keywords: guide.keywords || '',
+    canonical: `/guides/${guide.slug}`,
+    ogType: 'article',
+    robots: 'index, follow, max-image-preview:large',
+    ogImage: guide.heroImage ? `${I.url}${guide.heroImage}` : I.ogImage,
+    ogImageAlt: guide.heroImageAlt || guide.h1,
+    articleSection: guide.category,
+    articleTags: Array.isArray(guide.tags) ? guide.tags : [],
+    publishedTime: isoDate(guide.publishedAt || guide.lastUpdated),
+    modifiedTime: isoDate(guide.lastUpdated, isoDate(guide.publishedAt || guide.lastUpdated)),
+    guide,
   };
 }
 
@@ -836,6 +871,79 @@ export function buildJsonLd(path) {
       graph.push({
         '@type': 'FAQPage',
         mainEntity: faqs.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
+      });
+    }
+    return { '@context': 'https://schema.org', '@graph': graph };
+  }
+
+  if (path === '/guides') {
+    const guides = getGuides();
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        breadcrumbLd([
+          { name: 'Home', path: '/' },
+          { name: 'Guides', path: '/guides/' },
+        ]),
+        webPageLd('Guides for Foreign Investors', '/guides/', ROUTES['/guides'].description),
+        {
+          '@type': 'ItemList',
+          name: 'Guides for Foreign Investors in Nepal',
+          itemListElement: guides.map((g, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: g.h1,
+            url: `${I.url}/guides/${g.slug}/`,
+          })),
+        },
+      ],
+    };
+  }
+
+  const guideMatch = path.match(/^\/guides\/([^/]+)\/?$/);
+  if (guideMatch) {
+    const guide = getGuideBySlug(decodeURIComponent(guideMatch[1]));
+    if (!guide) return null;
+    const guideUrl = `${I.url}/guides/${guide.slug}/`;
+    const image = guide.heroImage ? `${I.url}${guide.heroImage}` : I.ogImage;
+    const datePublished = isoDate(guide.publishedAt || guide.lastUpdated);
+    const dateModified = isoDate(guide.lastUpdated, datePublished);
+    const graph = [
+      breadcrumbLd([
+        { name: 'Home', path: '/' },
+        { name: 'Guides', path: '/guides/' },
+        { name: guide.h1, path: `/guides/${guide.slug}/` },
+      ]),
+      webPageLd(guide.h1, `/guides/${guide.slug}/`, guide.description),
+      {
+        '@type': 'Article',
+        headline: guide.h1,
+        description: guide.description,
+        image: { '@type': 'ImageObject', url: image, caption: guide.heroImageAlt || guide.h1 },
+        author: { '@type': 'Organization', name: I.legalName, url: I.url },
+        publisher: {
+          '@type': 'Organization',
+          name: I.legalName,
+          url: I.url,
+          logo: { '@type': 'ImageObject', url: I.logo },
+        },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': guideUrl },
+        datePublished,
+        dateModified,
+        inLanguage: 'en',
+        articleSection: guide.category,
+        keywords: (guide.tags || []).join(', '),
+        isPartOf: { '@type': 'WebPage', name: 'Guides', url: `${I.url}/guides/` },
+      },
+    ];
+    if (guide.faqs && guide.faqs.length) {
+      graph.push({
+        '@type': 'FAQPage',
+        mainEntity: guide.faqs.map((f) => ({
           '@type': 'Question',
           name: f.q,
           acceptedAnswer: { '@type': 'Answer', text: f.a },

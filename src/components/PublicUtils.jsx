@@ -71,6 +71,14 @@ export function WhatsAppPopup() {
           </div>
         </div>
       </a>
+
+      <a
+        href="tel:+9779802356987"
+        className="sm:hidden fixed bottom-6 left-4 z-[9999] w-14 h-14 bg-gold text-navy rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-all duration-300"
+        aria-label="Call Pluto Associates"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.85 21 3 13.15 3 3.5a1 1 0 0 1 1-1H7.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.24 1.02l-2.21 2.2Z"/></svg>
+      </a>
     </>
   );
 }

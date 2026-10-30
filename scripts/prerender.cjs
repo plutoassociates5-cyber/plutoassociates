@@ -208,10 +208,12 @@ function buildSitemap(entry, published) {
     { loc: '/teams', lastmod: today, freq: 'monthly', priority: '0.8' },
     { loc: '/faq', lastmod: today, freq: 'weekly', priority: '0.7' },
     { loc: '/publications', lastmod: today, freq: 'weekly', priority: '0.7' },
+    { loc: '/guides', lastmod: today, freq: 'monthly', priority: '0.9' },
     { loc: '/contact', lastmod: today, freq: 'monthly', priority: '0.7' },
   ];
   const staticCount = staticRoutes.length;
   const practiceAreas = entry.getPracticeAreas();
+  const guideRoutes = entry.getGuides();
   const lines = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
@@ -258,8 +260,19 @@ function buildSitemap(entry, published) {
       '  </url>'
     );
   }
+  for (const g of guideRoutes) {
+    const lastmod = (g.lastUpdated || g.publishedAt || today).substring(0, 10);
+    lines.push(
+      '  <url>',
+      `    <loc>${canonicalUrl(entry.SITE.url, `/guides/${g.slug}`)}</loc>`,
+      `    <lastmod>${lastmod}</lastmod>`,
+      '    <changefreq>monthly</changefreq>',
+      '    <priority>0.8</priority>',
+      '  </url>'
+    );
+  }
   lines.push('</urlset>', '');
-  return { xml: lines.join('\n'), count: staticCount + practiceAreas.length + serviceRoutes.length + published.length };
+  return { xml: lines.join('\n'), count: staticCount + practiceAreas.length + serviceRoutes.length + published.length + guideRoutes.length };
 }
 
 (async () => {
@@ -279,6 +292,7 @@ function buildSitemap(entry, published) {
     { path: '/teams', dir: path.join(DIST, 'teams') },
     { path: '/faq', dir: path.join(DIST, 'faq') },
     { path: '/publications', dir: path.join(DIST, 'publications') },
+    { path: '/guides', dir: path.join(DIST, 'guides') },
     { path: '/contact', dir: path.join(DIST, 'contact') },
   ];
 
@@ -366,6 +380,24 @@ function buildSitemap(entry, published) {
       body: entry.renderApp(routePath),
       jsonLd: entry.buildJsonLd(routePath),
       preloadImage: svc.featuredImage,
+    });
+    fs.mkdirSync(dir, { recursive: true });
+    const outFile = path.join(dir, 'index.html');
+    fs.writeFileSync(outFile, html, 'utf8');
+    console.log(`prerendered ${routePath} -> ${path.relative(ROOT, outFile)} (${Math.round(html.length / 1024)} KB)`);
+  }
+
+  // Guides -> /guides/<slug> (evergreen, query-targeted landing pages)
+  const guides = entry.getGuides();
+  for (const guide of guides) {
+    const routePath = `/guides/${guide.slug}`;
+    const dir = path.join(DIST, 'guides', guide.slug);
+    const meta = entry.resolveRouteMeta(routePath);
+    const html = assembleHtml(entry, {
+      ...meta,
+      body: entry.renderApp(routePath),
+      jsonLd: entry.buildJsonLd(routePath),
+      preloadImage: guide.heroImage,
     });
     fs.mkdirSync(dir, { recursive: true });
     const outFile = path.join(dir, 'index.html');

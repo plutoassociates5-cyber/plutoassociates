@@ -13,8 +13,9 @@ IP: trademarks/patents/copyright, enforcement.
 Tax/Labor/Real Estate/NGO/Family/International clients.
 
 ## Resources
-Publications: https://plutoassociates.com/publications (legal updates, guides)
-FAQ: https://plutoassociates.com/faq
+Guides: https://plutoassociates.com/guides/ (foreign investment and property guides)
+Publications: https://plutoassociates.com/publications/ (legal updates, guides)
+FAQ: https://plutoassociates.com/faq/
 
 ## Structured Data
 Schema.org (LegalService/LocalBusiness, Organization, WebSite, Article, Service, FAQ) is present on pages.

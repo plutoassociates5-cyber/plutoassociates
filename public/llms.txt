@@ -25,13 +25,18 @@
 
 ## Key Pages
 - Home: https://plutoassociates.com/
-- About: https://plutoassociates.com/about
-- Practice Areas: https://plutoassociates.com/practice-areas
-- Services: https://plutoassociates.com/services
-- Team: https://plutoassociates.com/teams
-- Publications (Legal Insights): https://plutoassociates.com/publications
-- FAQ: https://plutoassociates.com/faq
-- Contact: https://plutoassociates.com/contact
+- About: https://plutoassociates.com/about/
+- Practice Areas: https://plutoassociates.com/practice-areas/
+- Services: https://plutoassociates.com/services/
+- Team: https://plutoassociates.com/teams/
+- Guides: https://plutoassociates.com/guides/
+- Publications (Legal Insights): https://plutoassociates.com/publications/
+- FAQ: https://plutoassociates.com/faq/
+- Contact: https://plutoassociates.com/contact/
+
+## Guides
+- Can Foreigners Buy Property in Nepal?: https://plutoassociates.com/guides/can-foreigners-buy-property-in-nepal/
+- Can Indians Buy Property in Nepal?: https://plutoassociates.com/guides/can-indians-buy-property-in-nepal/
 
 ## Contact
 - Phone: +977-9802356987

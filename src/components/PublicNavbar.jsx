@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { to: '/', label: 'Home' },
   { to: '/about/', label: 'About Us' },
   { to: '/practice-areas/', label: 'Practice Areas' },
+  { to: '/guides/', label: 'Guides' },
   { to: '/services/', label: 'Our Services' },
   { to: '/teams/', label: 'Our Teams' },
   { to: '/publications/', label: 'Publications' },

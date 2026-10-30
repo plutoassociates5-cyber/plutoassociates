@@ -7,6 +7,7 @@ import { getPracticeAreas } from '../utils/contentStore';
 import { getPublishedFaqs } from '../knowledge/faqEngine';
 import { getAllFaqCategories } from '../knowledge/faqCategories';
 import { getPublishedArticles } from '../seo';
+import { getGuides } from '../content/propertyGuides';
 
 function formatDate(d) {
   if (!d) return '';
@@ -28,6 +29,7 @@ export default function PracticeAreaDetailPage() {
   const related = getPublishedArticles()
     .filter((a) => a.status === 'published' && a.category === area?.id)
     .slice(0, 3);
+  const areaGuides = getGuides().filter((g) => g.practiceAreas.includes(slug));
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -188,6 +190,24 @@ export default function PracticeAreaDetailPage() {
           <Link to="/publications/" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all mt-6">View All Publications →</Link>
         </div>
       </section>
+
+      {areaGuides.length > 0 && (
+        <section className="py-14 border-t border-gray bg-white">
+          <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="font-serif text-2xl text-navy mb-2">In-Depth Guides</h2>
+            <p className="text-text-body mb-7">Detailed, plain-language answers to the questions clients ask most often in this area.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {areaGuides.map((g) => (
+                <Link key={g.slug} to={`/guides/${g.slug}/`} className="group bg-off-white border border-gray p-6 no-underline block hover:shadow-md transition-shadow">
+                  <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-2">{g.category}</div>
+                  <h3 className="font-serif text-navy text-lg leading-snug mb-2 group-hover:text-gold">{g.h1}</h3>
+                  <p className="text-sm text-text-body leading-relaxed">{g.description}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="py-14 bg-white" id="faqs">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">

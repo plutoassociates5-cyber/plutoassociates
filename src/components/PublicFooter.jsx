@@ -40,6 +40,7 @@ export default function PublicFooter() {
             <ul className="list-none p-0 m-0 flex flex-col gap-3">
               <li><Link to="/about/" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">About Us</Link></li>
               <li><Link to="/teams/" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Our Team</Link></li>
+              <li><Link to="/guides/" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Guides</Link></li>
               <li><Link to="/publications/" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Publications</Link></li>
               <li><Link to="/faq/" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">FAQs</Link></li>
               <li><Link to="/contact/" className="text-text-light text-sm no-underline transition-colors duration-300 hover:text-gold">Contact</Link></li>

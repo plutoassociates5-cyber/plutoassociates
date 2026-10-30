@@ -4,6 +4,7 @@ import App from '../src/App';
 import { ROUTES, SITE, buildJsonLd, getPublishedArticles, resolveRouteMeta } from '../src/seo';
 import { getPracticeAreas } from '../src/utils/contentStore';
 import { getPublishedServices } from '../src/services/store.js';
+import { getGuides } from '../src/content/propertyGuides';
 
 /**
  * SSR entry used by scripts/prerender.cjs to statically generate HTML for
@@ -17,4 +18,4 @@ export function renderApp(path) {
   );
 }
 
-export { ROUTES, SITE, buildJsonLd, getPublishedArticles, resolveRouteMeta, getPracticeAreas, getPublishedServices };
+export { ROUTES, SITE, buildJsonLd, getPublishedArticles, resolveRouteMeta, getPracticeAreas, getPublishedServices, getGuides };
