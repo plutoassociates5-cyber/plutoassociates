@@ -44,6 +44,20 @@ function esc(str) {
     .replace(/"/g, '&quot;');
 }
 
+/**
+ * Cloudflare Pages serves each prerendered `dist/<route>/index.html` at the
+ * trailing-slash URL (`/about/` -> 200) and 308-redirects the slashless URL
+ * (`/about` -> `/about/`). Canonicals, og:url and sitemap <loc> entries must
+ * therefore point at the trailing-slash URL that actually returns 200, or
+ * every canonical ends up pointing at a redirect.
+ */
+function canonicalUrl(base, path) {
+  if (!path) return `${base}/`;
+  if (/^https?:\/\//i.test(path)) return path;
+  if (path === '/') return `${base}/`;
+  return `${base}${String(path).replace(/\/+$/, '')}/`;
+}
+
 /* ------------------------------------------------------------------ */
 /* 1. Map source asset names to Vite's hashed output paths             */
 /* ------------------------------------------------------------------ */
@@ -124,7 +138,7 @@ function assembleHtml(entry, route) {
     publishedTime,
     modifiedTime,
   } = route;
-  const pageUrl = canonical ? `${entry.SITE.url}${canonical}` : entry.SITE.url;
+  const pageUrl = canonical ? canonicalUrl(entry.SITE.url, canonical) : `${entry.SITE.url}/`;
   const desc = description || entry.SITE.description;
   const pageOgImage = ogImage || entry.SITE.ogImage;
   const imageAlt = ogImageAlt || title;
@@ -205,7 +219,7 @@ function buildSitemap(entry, published) {
   for (const r of staticRoutes) {
     lines.push(
       '  <url>',
-      `    <loc>${entry.SITE.url}${r.loc}</loc>`,
+      `    <loc>${canonicalUrl(entry.SITE.url, r.loc)}</loc>`,
       `    <lastmod>${r.lastmod}</lastmod>`,
       `    <changefreq>${r.freq}</changefreq>`,
       `    <priority>${r.priority}</priority>`,
@@ -215,7 +229,7 @@ function buildSitemap(entry, published) {
   for (const area of practiceAreas) {
     lines.push(
       '  <url>',
-      `    <loc>${entry.SITE.url}/practice-areas/${area.id}</loc>`,
+      `    <loc>${canonicalUrl(entry.SITE.url, `/practice-areas/${area.id}`)}</loc>`,
       `    <lastmod>${today}</lastmod>`,
       '    <changefreq>monthly</changefreq>',
       '    <priority>0.8</priority>',
@@ -226,7 +240,7 @@ function buildSitemap(entry, published) {
   for (const s of serviceRoutes) {
     lines.push(
       '  <url>',
-      `    <loc>${entry.SITE.url}/services/${s.slug}</loc>`,
+      `    <loc>${canonicalUrl(entry.SITE.url, `/services/${s.slug}`)}</loc>`,
       `    <lastmod>${today}</lastmod>`,
       '    <changefreq>monthly</changefreq>',
       '    <priority>0.8</priority>',
@@ -237,7 +251,7 @@ function buildSitemap(entry, published) {
     const lastmod = (a.modifiedAt || a.date || today).substring(0, 10);
     lines.push(
       '  <url>',
-      `    <loc>${entry.SITE.url}/publications/${a.slug}</loc>`,
+      `    <loc>${canonicalUrl(entry.SITE.url, `/publications/${a.slug}`)}</loc>`,
       `    <lastmod>${lastmod}</lastmod>`,
       '    <changefreq>monthly</changefreq>',
       '    <priority>0.7</priority>',

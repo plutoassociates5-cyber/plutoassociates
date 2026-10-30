@@ -81,8 +81,8 @@ export default function HomePage() {
               <h1 className="font-serif text-[clamp(2.5rem,6vw,4.2rem)] text-white font-bold leading-[1.1] mb-5">{hp.hero.headline}</h1>
               <p className="text-[1.05rem] text-white/80 max-w-[540px] leading-relaxed mb-8">{hp.hero.subheadline}</p>
               <div className="flex gap-4 flex-wrap">
-                <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">{hp.hero.ctaPrimary} →</Link>
-                <Link to="/practice-areas" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-white font-sans text-sm font-semibold border-2 border-white/30 cursor-pointer transition-all duration-300 hover:border-gold hover:text-gold no-underline">{hp.hero.ctaSecondary}</Link>
+                <Link to="/contact/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">{hp.hero.ctaPrimary} →</Link>
+                <Link to="/practice-areas/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-white font-sans text-sm font-semibold border-2 border-white/30 cursor-pointer transition-all duration-300 hover:border-gold hover:text-gold no-underline">{hp.hero.ctaSecondary}</Link>
               </div>
             </div>
           </div>
@@ -100,7 +100,7 @@ export default function HomePage() {
               <h2 className="font-serif text-[clamp(1.6rem,3vw,2.2rem)] text-navy leading-tight mb-6">Trusted Legal Advisors Committed to Your Success</h2>
               <p className="mb-5 text-text-body leading-relaxed">Pluto Associates is a premier law firm in Kathmandu, Nepal, recognized for our depth of expertise across corporate law, foreign investment, litigation, and regulatory compliance. Our team brings together decades of experience, academic rigor, and a client-first approach to deliver outcomes that matter.</p>
               <p className="mb-5 text-text-body leading-relaxed">From multinational corporations navigating Nepal's FDI landscape to startups seeking incorporation and individuals requiring family law counsel, we provide bespoke legal solutions tailored to each client's unique needs.</p>
-              <Link to="/about" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-gold hover:text-navy no-underline self-start">Learn More About Us →</Link>
+              <Link to="/about/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-gold hover:text-navy no-underline self-start">Learn More About Us →</Link>
             </div>
           </div>
         </div>
@@ -114,32 +114,32 @@ export default function HomePage() {
             Comprehensive legal services across key practice areas
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link to="/practice-areas/fdi" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+            <Link to="/practice-areas/fdi/" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
               <div className="text-3xl mb-4">🌐</div>
               <h3 className="font-serif text-xl text-navy mb-3">FDI & Investment</h3>
               <p className="text-sm text-text-body leading-relaxed">Navigate Nepal's foreign investment landscape with expert guidance on regulations, approvals, and structuring.</p>
             </Link>
-            <Link to="/practice-areas/corporate" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+            <Link to="/practice-areas/corporate/" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
               <div className="text-3xl mb-4">🏢</div>
               <h3 className="font-serif text-xl text-navy mb-3">Corporate Law</h3>
               <p className="text-sm text-text-body leading-relaxed">Comprehensive corporate services from company registration to mergers, acquisitions, and governance.</p>
             </Link>
-            <Link to="/practice-areas/energy" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+            <Link to="/practice-areas/energy/" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
               <div className="text-3xl mb-4">⚡</div>
               <h3 className="font-serif text-xl text-navy mb-3">Energy Law</h3>
               <p className="text-sm text-text-body leading-relaxed">Legal advisory for energy projects, power purchase agreements, regulatory compliance, and dispute resolution.</p>
             </Link>
-            <Link to="/practice-areas/litigation" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+            <Link to="/practice-areas/litigation/" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
               <div className="text-3xl mb-4">⚖️</div>
               <h3 className="font-serif text-xl text-navy mb-3">Litigation</h3>
               <p className="text-sm text-text-body leading-relaxed">Representation across all tiers of the Nepali judiciary with a track record of favorable outcomes.</p>
             </Link>
-            <Link to="/practice-areas/ip" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+            <Link to="/practice-areas/ip/" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
               <div className="text-3xl mb-4">💡</div>
               <h3 className="font-serif text-xl text-navy mb-3">Intellectual Property</h3>
               <p className="text-sm text-text-body leading-relaxed">Protect your innovations with trademark registration, patent filing, copyright enforcement, and IP litigation.</p>
             </Link>
-            <Link to="/practice-areas/licensing" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
+            <Link to="/practice-areas/licensing/" className="bg-white border border-light-gray p-6 lg:p-8 transition-all duration-400 cursor-pointer hover:shadow-lg hover:-translate-y-1 hover:border-gold reveal-anim">
               <div className="text-3xl mb-4">📄</div>
               <h3 className="font-serif text-xl text-navy mb-3">Licensing</h3>
               <p className="text-sm text-text-body leading-relaxed">Secure the licences and approvals your business needs, including real estate project approvals and business operating permits.</p>
@@ -157,13 +157,13 @@ export default function HomePage() {
                 <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight font-semibold reveal-anim">{hp.servicesSection.title}</h2>
                 <p className="text-base text-text-light max-w-[620px] leading-relaxed mt-3 reveal-anim">{hp.servicesSection.subtitle}</p>
               </div>
-              <Link to="/services" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all self-start md:self-auto reveal-anim">{hp.servicesSection.ctaLabel || 'View All Services'} →</Link>
+              <Link to="/services/" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all self-start md:self-auto reveal-anim">{hp.servicesSection.ctaLabel || 'View All Services'} →</Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {servicesGroups.map((g) => (
                 <Link
                   key={g.id}
-                  to={'/services#group-' + g.id}
+                  to={'/services/#group-' + g.id}
                   className="group bg-white border border-light-gray p-7 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-gold no-underline block reveal-anim"
                 >
                   <div className="flex items-center justify-between mb-4">
@@ -206,7 +206,7 @@ export default function HomePage() {
               <span className="text-[0.75rem] font-semibold tracking-[3px] uppercase text-gold mb-4 inline-block reveal-anim">From Our Team</span>
               <h2 className="font-serif text-[clamp(2rem,4vw,2.8rem)] text-navy leading-tight font-semibold reveal-anim">Legal Updates & Insights</h2>
             </div>
-            <Link to="/publications" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all self-start md:self-auto reveal-anim">View All Publications →</Link>
+            <Link to="/publications/" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all self-start md:self-auto reveal-anim">View All Publications →</Link>
           </div>
 
           {latest.length === 0 ? (
@@ -214,7 +214,7 @@ export default function HomePage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {latest.map((a) => (
-                <Link key={a.id} to={`/publications/${a.slug}`} className="group bg-white border border-light-gray p-7 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-gold no-underline block reveal-anim">
+                <Link key={a.id} to={`/publications/${a.slug}/`} className="group bg-white border border-light-gray p-7 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-gold no-underline block reveal-anim">
                   <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-3">{catLabel(a.category)}</div>
                   <h3 className="font-serif text-lg text-navy mb-2 leading-snug group-hover:text-gold">{a.title}</h3>
                   <p className="text-sm text-text-body leading-relaxed">{a.excerpt || (a.content ? a.content.replace(/<[^>]*>/g, '').substring(0, 120) : '')}…</p>
@@ -270,7 +270,7 @@ export default function HomePage() {
           <h2 className="font-serif text-[clamp(1.8rem,3.5vw,2.6rem)] text-white font-semibold mb-4 reveal-anim">Ready to Resolve Your Legal Matters?</h2>
           <p className="text-white/70 text-base mb-8 max-w-2xl mx-auto reveal-anim">Schedule a confidential consultation with our experienced legal team today.</p>
           <div className="flex justify-center gap-4 flex-wrap relative z-10 reveal-anim">
-            <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Book a Consultation →</Link>
+            <Link to="/contact/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Book a Consultation →</Link>
             <a href="tel:+977-9802356987" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-white font-sans text-sm font-semibold border-2 border-white/30 cursor-pointer transition-all duration-300 hover:border-gold hover:text-gold no-underline">Call Us Now</a>
           </div>
         </div>

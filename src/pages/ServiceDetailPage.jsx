@@ -37,7 +37,7 @@ export default function ServiceDetailPage() {
           <div className="text-center px-4">
             <h1 className="font-serif text-navy text-3xl mb-3">Service not found</h1>
             <p className="text-text-body mb-6">The service you're looking for may have moved or been unpublished.</p>
-            <Link to="/services" className="inline-flex px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline">← Back to Our Services</Link>
+            <Link to="/services/" className="inline-flex px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline">← Back to Our Services</Link>
           </div>
         </section>
         <PublicFooter />
@@ -59,7 +59,7 @@ export default function ServiceDetailPage() {
           <nav className="text-[0.72rem] text-white/60 mb-4" aria-label="Breadcrumb">
             <Link to="/" className="hover:text-gold no-underline">Home</Link>
             <span className="mx-2">/</span>
-            <Link to="/services" className="hover:text-gold no-underline">Our Services</Link>
+            <Link to="/services/" className="hover:text-gold no-underline">Our Services</Link>
             <span className="mx-2">/</span>
             <span className="text-gold">{service.name}</span>
           </nav>
@@ -74,7 +74,7 @@ export default function ServiceDetailPage() {
             <a href="#consult" className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-white transition-colors duration-300">
               {service.ctaLabel || 'Schedule Consultation'}
             </a>
-            <Link to="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-transparent text-white font-sans text-sm font-semibold border border-white/30 no-underline hover:border-gold hover:text-gold transition-colors duration-300">
+            <Link to="/contact/" className="inline-flex items-center gap-2 px-6 py-3 bg-transparent text-white font-sans text-sm font-semibold border border-white/30 no-underline hover:border-gold hover:text-gold transition-colors duration-300">
               {service.contactLabel || 'Contact Us'}
             </Link>
           </div>
@@ -247,7 +247,7 @@ export default function ServiceDetailPage() {
               <p className="text-white/70 text-sm leading-relaxed mb-5">
                 Share a few details and our team will get back to you within one working day.
               </p>
-              <Link to="/contact" className="block text-center px-5 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-white transition-colors duration-300 mb-3">
+              <Link to="/contact/" className="block text-center px-5 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-white transition-colors duration-300 mb-3">
                 Request Consultation
               </Link>
               <a href="tel:+977-9802356987" className="block text-center px-5 py-3 bg-transparent text-white font-sans text-sm font-semibold border border-white/30 no-underline hover:border-gold hover:text-gold transition-colors duration-300">
@@ -262,7 +262,7 @@ export default function ServiceDetailPage() {
                 {getServiceGroups().map((g) => (
                   <Link
                     key={g.id}
-                    to={'/services#group-' + g.id}
+                    to={'/services/#group-' + g.id}
                     className="flex items-center gap-2.5 text-sm text-text-body no-underline hover:text-gold py-2 border-b border-light-gray last:border-b-0 transition-colors"
                   >
                     <span className="text-base">{g.icon}</span>

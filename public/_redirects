@@ -5,8 +5,9 @@
 # Admin is prerendered to dist/admin/index.html like every public route, so
 # /admin serves directly (Cloudflare auto-redirects /admin -> /admin/ -> 200).
 # Only legacy .html URLs need explicit rules.
-/about.html          /about          301
-/practice-areas.html /practice-areas 301
-/team.html           /teams          301
-/publications.html   /publications   301
-/contact.html        /contact        301
+# Point legacy .html URLs straight at the trailing-slash canonical (single hop).
+/about.html          /about/          301
+/practice-areas.html /practice-areas/ 301
+/team.html           /teams/          301
+/publications.html   /publications/   301
+/contact.html        /contact/        301

@@ -85,8 +85,8 @@ function toFaqCard(f, baseUrl) {
     answer: stripHtml(f.answer),
     category: f.category,
     keywords: (f.tags || []).slice(0, 5),
-    href: `${baseUrl}/faq${anchor}`,
-    faqHref: `${baseUrl}/faq`,
+    href: `${baseUrl}/faq/${anchor}`,
+    faqHref: `${baseUrl}/faq/`,
   };
 }
 
@@ -94,16 +94,16 @@ function toAreaCard(a) {
   return {
     id: a.id,
     title: a.title || a.name,
-    href: `/practice-areas/${a.id}#faqs`,
+    href: `/practice-areas/${a.id}/#faqs`,
   };
 }
 
 function toServiceCard(s) {
-  return { id: s.id || s.slug, name: s.name, href: `/services/${s.slug}` };
+  return { id: s.id || s.slug, name: s.name, href: `/services/${s.slug}/` };
 }
 
 function toArticleCard(a) {
-  return { id: a.slug, title: a.title, href: `/publications/${a.slug}` };
+  return { id: a.slug, title: a.title, href: `/publications/${a.slug}/` };
 }
 
 function toTeamCard(t) {
@@ -112,7 +112,7 @@ function toTeamCard(t) {
     name: t.name,
     designation: t.designation || 'Legal Professional',
     focus: t.focus || t.bio || '',
-    href: '/teams',
+    href: '/teams/',
   };
 }
 
@@ -319,10 +319,10 @@ export function answerFromKnowledgeBase(question, kb = {}, baseUrl = '') {
 
 function aggregateLinks(bin) {
   return {
-    faq: bin.faqs.length ? { label: 'FAQs', href: '/faq', count: bin.faqs.length } : null,
-    practice: bin.areas.length ? { label: 'Practice Areas', href: '/practice-areas', count: bin.areas.length } : null,
-    services: bin.services.length ? { label: 'Our Services', href: '/services', count: bin.services.length } : null,
-    publications: bin.articles.length ? { label: 'Publications', href: '/publications', count: bin.articles.length } : null,
-    team: bin.team.length ? { label: 'Our Team', href: '/teams', count: bin.team.length } : null,
+    faq: bin.faqs.length ? { label: 'FAQs', href: '/faq/', count: bin.faqs.length } : null,
+    practice: bin.areas.length ? { label: 'Practice Areas', href: '/practice-areas/', count: bin.areas.length } : null,
+    services: bin.services.length ? { label: 'Our Services', href: '/services/', count: bin.services.length } : null,
+    publications: bin.articles.length ? { label: 'Publications', href: '/publications/', count: bin.articles.length } : null,
+    team: bin.team.length ? { label: 'Our Team', href: '/teams/', count: bin.team.length } : null,
   };
 }

@@ -100,7 +100,7 @@ export default function PublicationsPage() {
               {filtered.map((article) => (
                 <Link
                   key={article.id}
-                  to={`/publications/${article.slug}`}
+                  to={`/publications/${article.slug}/`}
                   className="bg-white border border-light-gray p-6 transition-all duration-400 hover:shadow-md hover:-translate-y-0.5 reveal-anim text-left w-full no-underline block"
                 >
                   <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-2">{getCategoryLabel(article.category)}</div>
@@ -121,7 +121,7 @@ export default function PublicationsPage() {
           <h2 className="font-serif text-[clamp(1.8rem,3.5vw,2.6rem)] text-white font-semibold mb-4 reveal-anim">Stay Informed</h2>
           <p className="text-white/70 text-base mb-8 max-w-2xl mx-auto reveal-anim">Get the latest legal insights delivered to your inbox.</p>
           <div className="flex justify-center gap-4 flex-wrap relative z-10 reveal-anim">
-            <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Subscribe →</Link>
+            <Link to="/contact/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Subscribe →</Link>
           </div>
         </div>
       </section>

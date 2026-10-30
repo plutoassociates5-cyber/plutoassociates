@@ -50,7 +50,7 @@ export default function TeamsPage() {
               <h3 className="font-serif text-2xl text-navy mb-1">Adv. Sudeep Nepal</h3>
               <div className="text-xs text-gold font-semibold tracking-[1px] uppercase mb-4">Founder & Senior Partner</div>
               <p className="text-sm leading-relaxed mb-4 text-text-body">
-                Adv. Sudeep Nepal is the founding partner of Pluto Associates, bringing years of extensive experience in <Link to="/practice-areas" className="text-navy underline underline-offset-2 hover:text-gold">corporate law, FDI, litigation, and regulatory affairs</Link>. He has represented clients before the Supreme Court of Nepal, appellate courts, and various tribunals. His practice focuses on cross-border investments, commercial litigation, and strategic legal advisory for multinational corporations operating in Nepal.
+                Adv. Sudeep Nepal is the founding partner of Pluto Associates, bringing years of extensive experience in <Link to="/practice-areas/" className="text-navy underline underline-offset-2 hover:text-gold">corporate law, FDI, litigation, and regulatory affairs</Link>. He has represented clients before the Supreme Court of Nepal, appellate courts, and various tribunals. His practice focuses on cross-border investments, commercial litigation, and strategic legal advisory for multinational corporations operating in Nepal.
               </p>
               <p className="text-sm leading-relaxed mb-4 text-text-body">
                 A recognized thought leader in Nepali legal circles, Adv. Nepal has authored numerous articles on corporate law and investment regulations. He is committed to mentoring the next generation of legal professionals and advancing the rule of law in Nepal.
@@ -90,7 +90,7 @@ export default function TeamsPage() {
           <h2 className="font-serif text-[clamp(1.8rem,3.5vw,2.6rem)] text-white font-semibold mb-4 reveal-anim">Have a Legal Matter?</h2>
           <p className="text-white/70 text-base mb-8 max-w-2xl mx-auto reveal-anim">Our team is ready to assist you with expert legal counsel.</p>
           <div className="flex justify-center gap-4 flex-wrap relative z-10 reveal-anim">
-            <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Get in Touch →</Link>
+            <Link to="/contact/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Get in Touch →</Link>
           </div>
         </div>
       </section>

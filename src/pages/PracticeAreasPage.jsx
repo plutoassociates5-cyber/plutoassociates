@@ -46,7 +46,7 @@ export default function PracticeAreasPage() {
             {AREAS.map((area, idx) => (
               <Link
                 key={area.id}
-                to={`/practice-areas/${area.id}`}
+                to={`/practice-areas/${area.id}/`}
                 className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col no-underline reveal-anim"
               >
                 <div className="relative h-52 overflow-hidden">
@@ -88,7 +88,7 @@ export default function PracticeAreasPage() {
           <h2 className="font-serif text-[clamp(1.8rem,3.5vw,2.6rem)] text-white font-semibold mb-4 reveal-anim">Need Legal Assistance?</h2>
           <p className="text-white/70 text-base mb-8 max-w-2xl mx-auto reveal-anim">Our experienced team is ready to help you navigate your legal challenges.</p>
           <div className="flex justify-center gap-4 flex-wrap relative z-10 reveal-anim">
-            <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Schedule a Consultation →</Link>
+            <Link to="/contact/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Schedule a Consultation →</Link>
             <a href="tel:+977-9802356987" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-white font-sans text-sm font-semibold border-2 border-white/30 cursor-pointer transition-all duration-300 hover:border-gold hover:text-gold no-underline">Call Us</a>
           </div>
         </div>

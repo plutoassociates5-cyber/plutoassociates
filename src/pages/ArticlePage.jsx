@@ -37,7 +37,7 @@ export default function ArticlePage() {
               This publication may have been moved or is no longer available.
             </p>
             <Link
-              to="/publications"
+              to="/publications/"
               className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-navy hover:text-gold transition-colors duration-300"
             >
               ← Back to Publications
@@ -75,7 +75,7 @@ export default function ArticlePage() {
           <nav aria-label="Breadcrumb" className="text-[0.75rem] text-white/60 mb-4">
             <Link to="/" className="text-white/60 no-underline hover:text-gold">Home</Link>
             <span className="mx-2">/</span>
-            <Link to="/publications" className="text-white/60 no-underline hover:text-gold">Publications</Link>
+            <Link to="/publications/" className="text-white/60 no-underline hover:text-gold">Publications</Link>
             <span className="mx-2">/</span>
             <span className="text-gold" aria-current="page">{article.title}</span>
           </nav>
@@ -137,7 +137,7 @@ export default function ArticlePage() {
             <div className="mt-12 pt-6 border-t border-light-gray grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 {prevArticle && (
-                  <Link to={`/publications/${prevArticle.slug}`} className="group no-underline">
+                  <Link to={`/publications/${prevArticle.slug}/`} className="group no-underline">
                     <div className="text-[0.72rem] text-text-light uppercase tracking-[1px] mb-1 group-hover:text-gold">← Previous Article</div>
                     <div className="font-serif text-navy text-base leading-snug group-hover:text-gold">{prevArticle.title}</div>
                   </Link>
@@ -145,7 +145,7 @@ export default function ArticlePage() {
               </div>
               <div className="sm:text-right">
                 {nextArticle && (
-                  <Link to={`/publications/${nextArticle.slug}`} className="group no-underline">
+                  <Link to={`/publications/${nextArticle.slug}/`} className="group no-underline">
                     <div className="text-[0.72rem] text-text-light uppercase tracking-[1px] mb-1 group-hover:text-gold">Next Article →</div>
                     <div className="font-serif text-navy text-base leading-snug group-hover:text-gold">{nextArticle.title}</div>
                   </Link>
@@ -175,7 +175,7 @@ export default function ArticlePage() {
               {relatedPool.map((rel) => (
                 <Link
                   key={rel.id}
-                  to={`/publications/${rel.slug}`}
+                  to={`/publications/${rel.slug}/`}
                   className="bg-white border border-light-gray p-6 transition-all duration-400 hover:shadow-md hover:-translate-y-0.5 no-underline block"
                 >
                   <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-2">{getCategoryLabel(rel.category)}</div>
@@ -200,10 +200,10 @@ export default function ArticlePage() {
             Our team provides practical legal advice tailored to your situation in Nepal.
           </p>
           <div className="flex justify-center gap-4 flex-wrap relative z-10">
-            <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">
+            <Link to="/contact/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">
               Request a Consultation →
             </Link>
-            <Link to="/publications" className="inline-flex items-center gap-3 px-8 py-3.5 border-2 border-gold text-gold font-sans text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-gold hover:text-navy no-underline">
+            <Link to="/publications/" className="inline-flex items-center gap-3 px-8 py-3.5 border-2 border-gold text-gold font-sans text-sm font-semibold cursor-pointer transition-all duration-300 hover:bg-gold hover:text-navy no-underline">
               All Publications
             </Link>
           </div>

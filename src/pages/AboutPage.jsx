@@ -133,7 +133,7 @@ export default function AboutPage() {
           <p className="text-white/70 text-base mb-8 max-w-2xl mx-auto reveal-anim">Whether you are seeking legal guidance for yourself, your business, or your organization, Pluto Associates is here to help you understand your options and move forward with greater clarity.</p>
           <p className="text-white/70 text-base mb-8 max-w-2xl mx-auto reveal-anim">Get in touch with our team to discuss your matter and explore how we can assist.</p>
           <div className="flex justify-center gap-4 flex-wrap relative z-10 reveal-anim">
-            <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Contact Us →</Link>
+            <Link to="/contact/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Contact Us →</Link>
           </div>
         </div>
       </section>

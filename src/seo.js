@@ -354,6 +354,16 @@ function normalizePath(path) {
   return path.replace(/\/+$/, '');
 }
 
+/**
+ * Cloudflare Pages serves prerendered routes at their trailing-slash URL
+ * (`/about/` -> 200) and 308-redirects the slashless form. Canonicals must
+ * point at the URL that actually returns 200 so they never point at a redirect.
+ */
+function withTrailingSlash(path) {
+  if (!path || path === '/') return '/';
+  return path.replace(/\/+$/, '') + '/';
+}
+
 /* ------------------------------------------------------------------ */
 /* JSON-LD structured data builders                                    */
 /* ------------------------------------------------------------------ */
@@ -909,7 +919,7 @@ function applyRoute(route) {
   const canonical = route.canonical
     ? route.canonical.startsWith('http')
       ? route.canonical
-      : `${I.url}${route.canonical}`
+      : `${I.url}${withTrailingSlash(route.canonical)}`
     : null;
   const ogImage = route.ogImage || I.ogImage;
 

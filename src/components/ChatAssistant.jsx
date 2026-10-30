@@ -329,19 +329,19 @@ export default function ChatAssistant() {
 
                       <div className="mt-2 pl-1 flex flex-wrap gap-2">
                         {m.faqs?.length > 0 && (
-                          <Link to="/faq" className="text-xs bg-gold/10 text-gold-dark border border-gold/25 px-3 py-1.5 rounded-full no-underline hover:bg-gold/20 transition-colors">❓ FAQs ({m.faqs.length})</Link>
+                          <Link to="/faq/" className="text-xs bg-gold/10 text-gold-dark border border-gold/25 px-3 py-1.5 rounded-full no-underline hover:bg-gold/20 transition-colors">❓ FAQs ({m.faqs.length})</Link>
                         )}
                         {m.areas?.length > 0 && (
-                          <Link to="/practice-areas" className="text-xs bg-navy/5 text-navy border border-navy/15 px-3 py-1.5 rounded-full no-underline hover:bg-navy/10 transition-colors">🌍 Practice Areas ({m.areas.length})</Link>
+                          <Link to="/practice-areas/" className="text-xs bg-navy/5 text-navy border border-navy/15 px-3 py-1.5 rounded-full no-underline hover:bg-navy/10 transition-colors">🌍 Practice Areas ({m.areas.length})</Link>
                         )}
                         {m.services?.length > 0 && (
-                          <Link to="/services" className="text-xs bg-navy/5 text-navy border border-navy/15 px-3 py-1.5 rounded-full no-underline hover:bg-navy/10 transition-colors">📚 Services ({m.services.length})</Link>
+                          <Link to="/services/" className="text-xs bg-navy/5 text-navy border border-navy/15 px-3 py-1.5 rounded-full no-underline hover:bg-navy/10 transition-colors">📚 Services ({m.services.length})</Link>
                         )}
                         {m.articles?.length > 0 && (
-                          <Link to="/publications" className="text-xs bg-navy/5 text-navy border border-navy/15 px-3 py-1.5 rounded-full no-underline hover:bg-navy/10 transition-colors">📰 Insights ({m.articles.length})</Link>
+                          <Link to="/publications/" className="text-xs bg-navy/5 text-navy border border-navy/15 px-3 py-1.5 rounded-full no-underline hover:bg-navy/10 transition-colors">📰 Insights ({m.articles.length})</Link>
                         )}
                         {m.team?.length > 0 && (
-                          <Link to="/teams" className="text-xs bg-navy/5 text-navy border border-navy/15 px-3 py-1.5 rounded-full no-underline hover:bg-navy/10 transition-colors">👥 Team ({m.team.length})</Link>
+                          <Link to="/teams/" className="text-xs bg-navy/5 text-navy border border-navy/15 px-3 py-1.5 rounded-full no-underline hover:bg-navy/10 transition-colors">👥 Team ({m.team.length})</Link>
                         )}
                       </div>
 
@@ -350,7 +350,7 @@ export default function ChatAssistant() {
                           {m.team.slice(0, 3).map((t) => (
                             <Link
                               key={t.id}
-                              to="/teams"
+                              to="/teams/"
                               className="block text-xs text-text-body no-underline border-l-2 border-teal/50 bg-white px-3 py-2 rounded-r-lg hover:bg-teal/5 transition-colors"
                             >
                               <span className="block font-semibold text-navy">{t.name}</span>
@@ -365,7 +365,7 @@ export default function ChatAssistant() {
                           {m.faqs.slice(0, 2).map((f) => (
                             <Link
                               key={f.id}
-                              to={f.href.replace(typeof window !== 'undefined' && window.location.origin, '') || '/faq'}
+                              to={f.href.replace(typeof window !== 'undefined' && window.location.origin, '') || '/faq/'}
                               className="text-xs text-text-body no-underline border-l-2 border-gold/40 bg-white px-3 py-2 rounded-r-lg hover:bg-gold/5 transition-colors"
                             >
                               <span className="font-semibold text-navy">{f.question.slice(0, 70)}{f.question.length > 70 ? '…' : ''}</span>
@@ -396,9 +396,9 @@ export default function ChatAssistant() {
 
             {!hasRecommendations && messages.length > 1 && (
               <div className="text-center text-xs text-text-light mt-4">
-                <Link to="/faq" className="text-gold-dark no-underline hover:underline">Browse all FAQs</Link>
+                <Link to="/faq/" className="text-gold-dark no-underline hover:underline">Browse all FAQs</Link>
                 <span className="mx-2">·</span>
-                <Link to="/contact" className="text-gold-dark no-underline hover:underline">Ask our team</Link>
+                <Link to="/contact/" className="text-gold-dark no-underline hover:underline">Ask our team</Link>
               </div>
             )}
           </div>

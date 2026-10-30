@@ -146,7 +146,7 @@ export default function FaqPage() {
             <h3 className="font-serif text-xl mb-2">Couldn't find your question?</h3>
             <p className="text-white/75 text-sm mb-6 max-w-md mx-auto">Our team gives clear, practical answers over a short call or message.</p>
             <div className="flex justify-center gap-4 flex-wrap">
-              <Link to="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-white transition-colors duration-300">Ask Our Team →</Link>
+              <Link to="/contact/" className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-white transition-colors duration-300">Ask Our Team →</Link>
               <a href="tel:+977-9802356987" className="inline-flex items-center gap-2 px-6 py-3 bg-transparent text-white font-sans text-sm font-semibold border border-white/30 no-underline hover:border-gold hover:text-gold transition-colors duration-300">Call Us Now</a>
             </div>
           </div>

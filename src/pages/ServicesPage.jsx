@@ -76,7 +76,7 @@ export default function ServicesPage() {
             <h2 className="font-serif text-white text-2xl mb-2">Not sure where to start?</h2>
             <p className="text-white/70 text-sm mb-6 max-w-md mx-auto">Tell us what you are trying to achieve and we will point you to the right service.</p>
             <div className="flex justify-center gap-3 flex-wrap">
-              <Link to="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-white transition-colors duration-300">Ask Our Team</Link>
+              <Link to="/contact/" className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-white transition-colors duration-300">Ask Our Team</Link>
               <a href="tel:+977-9802356987" className="inline-flex items-center gap-2 px-6 py-3 bg-transparent text-white font-sans text-sm font-semibold border border-white/30 no-underline hover:border-gold hover:text-gold transition-colors duration-300">Call Us Now</a>
             </div>
           </div>

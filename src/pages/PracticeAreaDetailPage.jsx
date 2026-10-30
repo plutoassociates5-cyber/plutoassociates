@@ -50,7 +50,7 @@ export default function PracticeAreaDetailPage() {
           <div>
             <h1 className="font-serif text-3xl text-navy mb-3">Practice area not found</h1>
             <p className="text-text-body mb-6 max-w-md mx-auto">This practice area may have been moved or renamed.</p>
-            <Link to="/practice-areas" className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-navy hover:text-gold transition-colors duration-300">
+            <Link to="/practice-areas/" className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-navy hover:text-gold transition-colors duration-300">
               ← Back to All Practice Areas
             </Link>
           </div>
@@ -74,7 +74,7 @@ export default function PracticeAreaDetailPage() {
           <nav aria-label="Breadcrumb" className="text-[0.75rem] text-white/60 mb-6">
             <Link to="/" className="text-white/60 no-underline hover:text-gold">Home</Link>
             <span className="mx-2">/</span>
-            <Link to="/practice-areas" className="text-white/60 no-underline hover:text-gold">Practice Areas</Link>
+            <Link to="/practice-areas/" className="text-white/60 no-underline hover:text-gold">Practice Areas</Link>
             <span className="mx-2">/</span>
             <span className="text-gold">{area.title}</span>
           </nav>
@@ -141,7 +141,7 @@ export default function PracticeAreaDetailPage() {
             <div className="bg-navy text-white rounded-2xl p-7">
               <h3 className="font-serif text-lg mb-3">Get Advice on This</h3>
               <p className="text-sm text-white/75 leading-relaxed mb-5">Tell us about your {area.title.toLowerCase()} matter and we will get back to you with clear, practical advice.</p>
-              <Link to="/contact" className="block text-center px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-white transition-colors duration-300 mb-3">
+              <Link to="/contact/" className="block text-center px-6 py-3 bg-gold text-navy font-sans text-sm font-semibold no-underline hover:bg-white transition-colors duration-300 mb-3">
                 Schedule a Consultation →
               </Link>
               <a href="tel:+977-9802356987" className="block text-center px-6 py-3 bg-transparent text-white font-sans text-sm font-semibold border border-white/30 no-underline hover:border-gold hover:text-gold transition-colors duration-300">
@@ -155,7 +155,7 @@ export default function PracticeAreaDetailPage() {
                 <ul className="list-none p-0 m-0 flex flex-col gap-1">
                   {others.map((o) => (
                     <li key={o.id}>
-                      <Link to={`/practice-areas/${o.id}`} className="flex items-center gap-3 px-2 py-2 rounded-lg no-underline hover:bg-gold/10 transition-colors">
+                      <Link to={`/practice-areas/${o.id}/`} className="flex items-center gap-3 px-2 py-2 rounded-lg no-underline hover:bg-gold/10 transition-colors">
                         <span className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center text-base shrink-0">{o.icon}</span>
                         <span className="text-sm text-navy">{o.title}</span>
                       </Link>
@@ -177,7 +177,7 @@ export default function PracticeAreaDetailPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {related.map((a) => (
-                <Link key={a.slug} to={`/publications/${a.slug}`} className="group bg-white border border-gray p-6 no-underline block hover:shadow-md transition-shadow">
+                <Link key={a.slug} to={`/publications/${a.slug}/`} className="group bg-white border border-gray p-6 no-underline block hover:shadow-md transition-shadow">
                   <div className="text-xs text-gold font-semibold uppercase tracking-[1px] mb-2">{a.category}</div>
                   <h3 className="font-serif text-navy text-base leading-snug mb-2 group-hover:text-gold">{a.title}</h3>
                   {a.date && <div className="text-xs text-text-light">{formatDate(a.date)}</div>}
@@ -185,7 +185,7 @@ export default function PracticeAreaDetailPage() {
               ))}
             </div>
           )}
-          <Link to="/publications" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all mt-6">View All Publications →</Link>
+          <Link to="/publications/" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all mt-6">View All Publications →</Link>
         </div>
       </section>
 
@@ -196,7 +196,7 @@ export default function PracticeAreaDetailPage() {
           {areaFaqs.length === 0 ? (
             <div className="flex items-center justify-between flex-wrap gap-4 bg-off-white border border-light-gray rounded-xl p-6">
               <p className="text-text-light">No FAQs published for this area yet.</p>
-              <Link to="/faq" className="inline-flex items-center gap-2 text-sm font-semibold text-gold no-underline border-b-2 border-gold hover:gap-3 transition-all">See all FAQs →</Link>
+              <Link to="/faq/" className="inline-flex items-center gap-2 text-sm font-semibold text-gold no-underline border-b-2 border-gold hover:gap-3 transition-all">See all FAQs →</Link>
             </div>
           ) : (
             <>
@@ -211,7 +211,7 @@ export default function PracticeAreaDetailPage() {
                   </details>
                 ))}
               </div>
-              <Link to="/faq" className="inline-flex items-center gap-2 text-sm font-semibold text-gold no-underline border-b-2 border-gold hover:gap-3 transition-all mt-6">See all FAQs →</Link>
+              <Link to="/faq/" className="inline-flex items-center gap-2 text-sm font-semibold text-gold no-underline border-b-2 border-gold hover:gap-3 transition-all mt-6">See all FAQs →</Link>
             </>
           )}
         </div>
@@ -222,7 +222,7 @@ export default function PracticeAreaDetailPage() {
           <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between gap-4">
             <div>
               {prev && (
-                <Link to={`/practice-areas/${prev.id}`} className="group no-underline">
+                <Link to={`/practice-areas/${prev.id}/`} className="group no-underline">
                   <div className="text-[0.72rem] text-text-light uppercase tracking-[1px] mb-1 group-hover:text-gold">← Previous</div>
                   <div className="font-serif text-navy group-hover:text-gold">{prev.title}</div>
                 </Link>
@@ -230,7 +230,7 @@ export default function PracticeAreaDetailPage() {
             </div>
             <div className="sm:text-right">
               {next && (
-                <Link to={`/practice-areas/${next.id}`} className="group no-underline">
+                <Link to={`/practice-areas/${next.id}/`} className="group no-underline">
                   <div className="text-[0.72rem] text-text-light uppercase tracking-[1px] mb-1 group-hover:text-gold">Next →</div>
                   <div className="font-serif text-navy group-hover:text-gold">{next.title}</div>
                 </Link>
@@ -238,7 +238,7 @@ export default function PracticeAreaDetailPage() {
             </div>
           </div>
           <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 text-center mt-6">
-            <Link to="/practice-areas" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all">← Back to All Practice Areas</Link>
+            <Link to="/practice-areas/" className="inline-flex items-center gap-2 text-sm font-semibold text-navy no-underline border-b-2 border-gold hover:gap-3 transition-all">← Back to All Practice Areas</Link>
           </div>
         </section>
       )}
@@ -248,7 +248,7 @@ export default function PracticeAreaDetailPage() {
           <h2 className="font-serif text-[clamp(1.8rem,3.5vw,2.6rem)] text-white font-semibold mb-4 reveal-anim">Need Legal Assistance?</h2>
           <p className="text-white/70 text-base mb-8 max-w-2xl mx-auto reveal-anim">Our experienced team is ready to help you with {heading}.</p>
           <div className="flex justify-center gap-4 flex-wrap relative z-10 reveal-anim">
-            <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Schedule a Consultation →</Link>
+            <Link to="/contact/" className="inline-flex items-center gap-3 px-8 py-3.5 bg-gold text-navy font-sans text-sm font-semibold border-2 border-gold cursor-pointer transition-all duration-300 hover:bg-navy hover:text-gold no-underline">Schedule a Consultation →</Link>
             <a href="tel:+977-9802356987" className="inline-flex items-center gap-3 px-8 py-3.5 bg-transparent text-white font-sans text-sm font-semibold border-2 border-white/30 cursor-pointer transition-all duration-300 hover:border-gold hover:text-gold no-underline">Call Us</a>
           </div>
         </div>

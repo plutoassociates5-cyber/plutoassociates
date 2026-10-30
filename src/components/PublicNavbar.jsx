@@ -5,11 +5,11 @@ import SmartLogo from './SmartLogo';
 
 const NAV_ITEMS = [
   { to: '/', label: 'Home' },
-  { to: '/about', label: 'About Us' },
-  { to: '/practice-areas', label: 'Practice Areas' },
-  { to: '/services', label: 'Our Services' },
-  { to: '/teams', label: 'Our Teams' },
-  { to: '/publications', label: 'Publications' },
+  { to: '/about/', label: 'About Us' },
+  { to: '/practice-areas/', label: 'Practice Areas' },
+  { to: '/services/', label: 'Our Services' },
+  { to: '/teams/', label: 'Our Teams' },
+  { to: '/publications/', label: 'Publications' },
 ];
 
 export default function PublicNavbar() {
@@ -69,7 +69,7 @@ export default function PublicNavbar() {
 
             <div className="hidden lg:flex items-center gap-3">
               <Link
-                to="/contact"
+                to="/contact/"
                 className="inline-flex items-center px-5 py-2.5 bg-gold text-navy text-sm font-semibold no-underline transition-all duration-300 hover:bg-navy hover:text-gold border-2 border-gold"
               >
                 Get Consultation
@@ -118,8 +118,8 @@ export default function PublicNavbar() {
           ))}
           <li>
             <Link
-              to="/contact"
-              className={`block py-3 px-4 text-sm no-underline transition-colors duration-300 ${location.pathname === '/contact' ? 'text-gold' : 'text-text-light hover:text-gold'}`}
+              to="/contact/"
+              className={`block py-3 px-4 text-sm no-underline transition-colors duration-300 ${location.pathname === '/contact/' ? 'text-gold' : 'text-text-light hover:text-gold'}`}
               onClick={() => setMobileOpen(false)}
             >
               Get Consultation

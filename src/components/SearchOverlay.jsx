@@ -118,7 +118,7 @@ export default function SearchOverlay({ open, onClose }) {
                 <p className="text-3xl mb-3">🤔</p>
                 <p className="font-serif text-navy text-lg mb-1">No results for “{query.trim()}”</p>
                 <p className="text-sm text-text-light">Try a shorter keyword, or contact our team for guidance.</p>
-                <Link to="/contact" onClick={onClose} className="inline-block mt-4 px-5 py-2.5 bg-gold text-navy text-sm font-semibold no-underline">Ask Us Instead</Link>
+                <Link to="/contact/" onClick={onClose} className="inline-block mt-4 px-5 py-2.5 bg-gold text-navy text-sm font-semibold no-underline">Ask Us Instead</Link>
               </div>
             )}
 
